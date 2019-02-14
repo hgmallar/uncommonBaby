@@ -24,6 +24,10 @@ input {
   margin-left: 10px !important;
 }
 
-a:visited{
+a {
+  color: #e962c1;
+}
+
+a:visited, a:hover{
   color: inherit;
 }
