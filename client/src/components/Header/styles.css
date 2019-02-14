@@ -1,0 +1,12 @@
+.navbar {
+    grid-column: 1 / 4;
+    justify-content: center;
+}
+
+.text1 {
+    font-family: 'Gloria Hallelujah', cursive;
+}
+
+.text2 {
+    font-family: 'Luckiest Guy', cursive;
+}
