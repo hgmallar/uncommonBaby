@@ -16,6 +16,10 @@ class App extends Component {
     this.setState({ rows: rows });
   }
 
+  handleSubmit = () => {
+    console.log("HERE");
+  }
+
   render() {
     return (
       <Wrapper>
@@ -35,7 +39,7 @@ class App extends Component {
           </label>
         </div>
         <div className="addOn">
-          <a href="#" onClick={this.handleClick}>+ More Search Terms</a><button type="button" className="btn btn-secondary">Submit</button>
+          <a href="#" onClick={this.handleClick}>+ More Search Terms</a><button type="button" className="btn btn-secondary" onClick={this.handleSubmit}>Submit</button>
         </div>
 
       </Wrapper>
