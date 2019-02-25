@@ -1,31 +1,31 @@
 module.exports = function(sequelize, DataTypes) {
   var Name = sequelize.define("Name", {
-    gender: {
+    Gender: {
       type: DataTypes.STRING(1)
     },
-    name: {
+    Name: {
       type: DataTypes.STRING(15),
       allowNull: false
     },
-    count_alltime: {
+    Count_AllTime: {
       type: DataTypes.INTEGER
     },
-    rank_alltime: {
+    Rank_AllTime: {
       type: DataTypes.INTEGER
     },
-    percentile_alltime: {
+    Percentile_AllTime: {
       type: DataTypes.INTEGER,
     },
-    count_188x: {
+    Count_188x: {
       type: DataTypes.INTEGER,
     },
-    count_201x: {
+    Count_201x: {
       type: DataTypes.INTEGER,
     },
-    rank_188x: {
+    Rank_188x: {
       type: DataTypes.INTEGER,
     },
-    rank_201x: {
+    Rank_201x: {
       type: DataTypes.INTEGER,
     },
     Percentile_188x: {
@@ -37,4 +37,3 @@ module.exports = function(sequelize, DataTypes) {
   });
   return Name;
 };
-//this is the user's model!
