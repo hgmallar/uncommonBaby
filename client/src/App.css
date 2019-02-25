@@ -3,9 +3,38 @@ body {
   color: #e962c1;
 }
 
-.addOn {
+.fullLine {
+  grid-column: 1 / 5;
+  justify-content: center;
+  justify-self: center;
+  align-items: center;
+}
+
+.subhead {
+  grid-column: 1 / 5;
+  justify-self: center;
+  color:#ffffff;
+}
+
+.letterAddOn {
   grid-column: 2 / 3;
-  grid-row: auto;
+  justify-self: center;
+}
+
+.letterRows {
+  grid-column: 2 / 3;
+  grid-row: 3 /4;
+  justify-self: center;
+}
+
+.numberAddOn {
+  grid-column: 3 / 4;
+  justify-self: center;
+}
+
+.numberRows {
+  grid-column: 3 / 4;
+  grid-row: 3 /4;
   justify-self: center;
 }
 
@@ -20,14 +49,45 @@ body {
   border-color: #e962c1 !important;
 }
 
-input {
+label, input {
   margin-left: 10px !important;
 }
 
-a {
+.input-range__label {
+  font-weight: bold;
+}
+
+a, .input-range__label {
   color: #e962c1;
 }
 
 a:visited, a:hover{
   color: inherit;
+}
+
+a:hover {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.letter-input {
+  width: 100px !important;
+}
+
+.input-range__track--active {
+  background-color: #e962c1;
+}
+
+.input-range__slider {
+  background-color: #e962c1;
+  border: 1px solid #e962c1;
+}
+
+.input-range {
+  width: 200px !important;
+  margin-left: 10px !important;
+}
+
+.white-text{
+  color: white;
 }

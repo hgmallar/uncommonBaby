@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS namesdb;
+CREATE DATABASE namesdb;
