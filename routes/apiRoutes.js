@@ -30,7 +30,7 @@ module.exports = function (app) {
           Gender: req.body.gender, 
           $and: req.body.numbers
         },
-        limit: 10
+        limit: 100
       })
       .then(names => res.json(names))
       .catch(err => res.status(422).json(err));

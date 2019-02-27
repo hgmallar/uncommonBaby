@@ -14,7 +14,8 @@ class App extends Component {
     numberrows: [0],
     results: [],
     letterInputs: [],
-    numberInputs: []
+    numberInputs: [],
+    showResults: 10
   }
 
   handleClickLetter = () => {
@@ -46,7 +47,7 @@ class App extends Component {
   }
 
   handleSubmit = () => {
-    //query API with everything in letterInputs and numberInputs
+    this.setState({showResults: 10});
     let query = {letters: this.state.letterInputs, gender: {$in : ["F", "M"]}, numbers: this.state.numberInputs};
     if (this.state.female && !this.state.male) {
       query = { letters: this.state.letterInputs, gender: "F", numbers: this.state.numberInputs }
@@ -62,6 +63,11 @@ class App extends Component {
       console.log("find names error: ");
       console.log(err);
     });
+  }
+
+  increaseCount = () => {
+    let newCount = this.state.showResults + 10;
+    this.setState({showResults: newCount});
   }
 
   render() {
@@ -100,7 +106,7 @@ class App extends Component {
         <div className="centerLine"><button type="button" className="btn btn-secondary" onClick={this.handleSubmit}>Submit</button></div>
 
         <div className="centerLine">
-          <List results={this.state.results}></List>
+          <List results={this.state.results} count={this.state.showResults} increaseCount={this.increaseCount}></List>
         </div>
       </Wrapper>
     );
