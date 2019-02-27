@@ -27,7 +27,8 @@ module.exports = function (app) {
           Name: {
             $and: req.body.letters
           },
-          Gender: req.body.gender
+          Gender: req.body.gender, 
+          $and: req.body.numbers
         },
         limit: 10
       })

@@ -11,26 +11,29 @@ class NumberForm extends Component {
         yearCol: "210x",
         startMinVal: 20,
         startMaxVal: 80,
+        value: { min: 20, max: 80 },
         minValue: 1,
         maxValue: 100,
-        dropdown: "",
-        slider: "", 
-        output: ""
+        slider: "",
+        output: {}
     }
 
-    updateNumericalOptions = (input, evt) => {
+    updateNumericalOptions = (input, input2, evt) => {
         evt.preventDefault();
         let max = 100;
         let startMin = 20;
         let startMax = 80;
-        let query = input + "_" + this.state.yearCol;
+        let query = input + "_" + input2;
+        let outputVal = {[query]: {$between: [startMin, startMax] } };
         if (input === "Rank") {
             //set max to the highest number in the column for that rank decade
             API.getCount(query).then(res => {
                 max = res.data;
                 startMin = Math.round(res.data * .2);
                 startMax = Math.round(res.data * .8);
-                this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax })
+                outputVal = {[query]: {$between: [startMin, startMax] } };
+                this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
+                this.props.appendOutput(this.props.className, outputVal);
             }).catch(err => {
                 console.log("count error: ");
                 console.log(err);
@@ -42,32 +45,33 @@ class NumberForm extends Component {
                 max = res.data;
                 startMin = Math.round(res.data * .2);
                 startMax = Math.round(res.data * .8);
-                this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax })
+                outputVal = {[query]: {$between: [startMin, startMax] } };
+                this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
+                this.props.appendOutput(this.props.className, outputVal);
             }).catch(err => {
                 console.log("count error: ");
                 console.log(err);
             });
         }
         else {
-            this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax })
+            this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
+            this.props.appendOutput(this.props.className, outputVal);
         }
     }
 
     updateYearOptions = (input1, input2, evt) => {
         evt.preventDefault();
-        let output = input2 + "_" + this.state.dropdown + "_" + this.state.slider;
-        this.setState({ years: input1, yearCol: input2, output: output})
-        this.props.appendOutput(this.props.className, output);
+        let outputVal = {};
+        if (this.state.numericalOptions !== "Numerical Options") {
+            let query = this.state.numericalOptions + "_" + input2;
+            outputVal = { [query]: { $between: [this.state.value.min, this.state.value.max] } };
+        }
+        this.setState({ years: input1, yearCol: input2, output: outputVal })
+        this.props.appendOutput(this.props.className, outputVal);
+        if (this.state.numericalOptions !== "Numerical Options") {
+            this.updateNumericalOptions(this.state.numericalOptions, input2, evt);
+        }
     }
-
-    updateOutput = (evt) => {
-        evt.preventDefault();
-        let input = evt.target.value;
-        let output = this.state.dropdown + "_" + input;
-        this.setState({input: input, output: output});
-        this.props.appendOutput(this.props.className, output);
-    }
-
 
     render() {
 
@@ -101,9 +105,9 @@ class NumberForm extends Component {
                             {this.state.numericalOptions}
                         </button>
                         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a className="dropdown-item" href="#" onClick={e => this.updateNumericalOptions("Rank", e)}>Rank</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateNumericalOptions("Percentile", e)}>Percentile</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateNumericalOptions("Count", e)}>Count</a>
+                            <a className="dropdown-item" href="#" onClick={e => this.updateNumericalOptions("Rank", this.state.yearCol, e)}>Rank</a>
+                            <a className="dropdown-item" href="#" onClick={e => this.updateNumericalOptions("Percentile", this.state.yearCol, e)}>Percentile</a>
+                            <a className="dropdown-item" href="#" onClick={e => this.updateNumericalOptions("Count", this.state.yearCol, e)}>Count</a>
                         </div>
                     </div>
 
@@ -111,9 +115,16 @@ class NumberForm extends Component {
                         className="slider"
                         maxValue={this.state.maxValue}
                         minValue={this.state.minValue}
-                        value={{ min: this.state.startMinVal, max: this.state.startMaxVal }}
-                        onChange={value => this.setState({ value })} />
-
+                        value={this.state.value}
+                        onChange={value => {
+                            let outputVal = {};
+                            if (this.state.numericalOptions !== "Numerical Options") {
+                                let query = this.state.numericalOptions + "_" + this.state.yearCol;
+                                outputVal = { [query]: { $between: [value.min, value.max] } };
+                            }
+                            this.setState({ value: value, output: outputVal }); 
+                            this.props.appendOutput(this.props.className, outputVal);                   
+                        }} />
                 </form>
             </div>
 

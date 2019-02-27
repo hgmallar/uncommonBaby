@@ -1,15 +1,16 @@
 import React from "react";
+import "./styles.css";
 
 function List(props) {
 
     return (
-        <ul>
+        <ol>
             {props.results.map(result => (
                 <li key={result.id}>
-                    <h4 className="text-center">{result.Name}</h4>
+                    <h4 className="text-center">{result.Name} {(result.Gender === "M") ? "- male" : "- female"}</h4>
                 </li>
             ))}
-        </ul>
+        </ol>
     );
 }
 

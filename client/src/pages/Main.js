@@ -47,12 +47,12 @@ class App extends Component {
 
   handleSubmit = () => {
     //query API with everything in letterInputs and numberInputs
-    let query = {letters: this.state.letterInputs, gender: {$in : ["F", "M"]}};
+    let query = {letters: this.state.letterInputs, gender: {$in : ["F", "M"]}, numbers: this.state.numberInputs};
     if (this.state.female && !this.state.male) {
-      query = { letters: this.state.letterInputs, gender: "F" }
+      query = { letters: this.state.letterInputs, gender: "F", numbers: this.state.numberInputs }
     }
     else if (!this.state.female && this.state.male) {
-      query = { letters: this.state.letterInputs, gender: "M" }
+      query = { letters: this.state.letterInputs, gender: "M", numbers: this.state.numberInputs }
     }
     console.log(query)
     API.findNames(query).then(res => {
@@ -90,11 +90,11 @@ class App extends Component {
         
           <label>
             Male
-          <input type="checkbox" onClick={e => this.setState({male: !this.state.male})} checked={this.state.male} />
+          <input type="checkbox" onChange={e => this.setState({male: !this.state.male})} checked={this.state.male} />
           </label>
           <label>
             Female
-          <input type="checkbox" onClick={e => this.setState({female: !this.state.female})} checked={this.state.female} />
+          <input type="checkbox" onChange={e => this.setState({female: !this.state.female})} checked={this.state.female} />
           </label>
         </div>
         <div className="centerLine"><button type="button" className="btn btn-secondary" onClick={this.handleSubmit}>Submit</button></div>
