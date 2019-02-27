@@ -1,29 +1,46 @@
 import React, { Component } from "react";
-import InputRange from "react-input-range";
 import "./styles.css";
 import "react-input-range/lib/css/index.css";
 
 class LetterForm extends Component {
     state = {
         letterOptions: "Letter Options",
-        numericalOptions: "Numerical Options",
-        years: "Year(s)",
-        value: { min: 500, max: 2000 }
+        dropdown: "",
+        input: "",
+        output: ""
     }
 
-    updateLetterOptions = (input, evt) => {
+    updateLetterOptions = (letterInput, evt) => {
         evt.preventDefault();
-        this.setState({ letterOptions: input })
+        let output = "";
+        if (letterInput === "Contains") {
+            output = {$like: "%" + this.state.input + "%"}
+        }
+        else if (letterInput === "Starts With") {
+            output = {$like: this.state.input + "%"}
+        }
+        else if (letterInput === "Ends With") {
+            output = {$like: "%" + this.state.input}
+        }
+        this.setState({ letterOptions: letterInput, dropdown: letterInput, output: output });
+        this.props.appendOutput(this.props.className, output);
     }
 
-    updateNumericalOptions = (input, evt) => {
+    updateOutput = (evt) => {
         evt.preventDefault();
-        this.setState({ numericalOptions: input })
-    }
-
-    updateYearOptions = (input, evt) => {
-        evt.preventDefault();
-        this.setState({ years: input })
+        let input = evt.target.value;
+        let output = "";
+        if (this.state.dropdown === "Contains") {
+            output = {$like: "%" + input + "%"}
+        }
+        else if (this.state.dropdown === "Starts With") {
+            output = {$like: input + "%"}
+        }
+        else if (this.state.dropdown === "Ends With") {
+            output = {$like: "%" + input}
+        }
+        this.setState({input: input, output: output});
+        this.props.appendOutput(this.props.className, output);
     }
 
     render() {
@@ -32,7 +49,7 @@ class LetterForm extends Component {
             <div className="letter-form">
                 <form className="form-inline">
                     <div className="dropdown">
-                        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button className={`btn btn-secondary dropdown-toggle ${this.props.className}`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {this.state.letterOptions}
                         </button>
                         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -43,7 +60,7 @@ class LetterForm extends Component {
                     </div>
 
                     <label>
-                        <input type="text" className="form-control letter-input" id={this.props.id} placeholder="Letter(s)" />
+                        <input type="text" className={`form-control letter-input ${this.props.className}`} onChange={e => this.updateOutput(e)} placeholder="Letter(s)" />
                     </label>
                 </form>
             </div>

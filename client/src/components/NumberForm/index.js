@@ -6,19 +6,16 @@ import "react-input-range/lib/css/index.css";
 
 class NumberForm extends Component {
     state = {
-        letterOptions: "Letter Options",
         numericalOptions: "Numerical Options",
         years: "Year(s)",
         yearCol: "210x",
         startMinVal: 20,
         startMaxVal: 80,
         minValue: 1,
-        maxValue: 100
-    }
-
-    updateLetterOptions = (input, evt) => {
-        evt.preventDefault();
-        this.setState({ letterOptions: input })
+        maxValue: 100,
+        dropdown: "",
+        slider: "", 
+        output: ""
     }
 
     updateNumericalOptions = (input, evt) => {
@@ -58,8 +55,19 @@ class NumberForm extends Component {
 
     updateYearOptions = (input1, input2, evt) => {
         evt.preventDefault();
-        this.setState({ years: input1, yearCol: input2 })
+        let output = input2 + "_" + this.state.dropdown + "_" + this.state.slider;
+        this.setState({ years: input1, yearCol: input2, output: output})
+        this.props.appendOutput(this.props.className, output);
     }
+
+    updateOutput = (evt) => {
+        evt.preventDefault();
+        let input = evt.target.value;
+        let output = this.state.dropdown + "_" + input;
+        this.setState({input: input, output: output});
+        this.props.appendOutput(this.props.className, output);
+    }
+
 
     render() {
 

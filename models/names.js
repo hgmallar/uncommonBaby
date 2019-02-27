@@ -34,6 +34,6 @@ module.exports = function(sequelize, DataTypes) {
     Percentile_201x: {
       type: DataTypes.DOUBLE,
     }
-  });
+  }, {timestamps: false});
   return Name;
 };

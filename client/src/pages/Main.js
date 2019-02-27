@@ -1,31 +1,67 @@
 import React, { Component } from "react";
 import Wrapper from "../components/Wrapper";
+import List from "../components/List";
 import Header from "../components/Header";
 import LetterForm from "../components/LetterForm";
 import NumberForm from "../components/NumberForm";
+import API from "../utils/API";
 
 class App extends Component {
   state = {
-    letterrows: ["input-0"],
-    numberrows: ["input-0"],
+    male: false,
+    female: false,
+    letterrows: [0],
+    numberrows: [0],
+    results: [],
+    letterInputs: [],
+    numberInputs: []
   }
 
   handleClickLetter = () => {
     let rows = this.state.letterrows;
     let index = rows.length;
-    rows.push(`input-${index}`);
+    rows.push(index);
     this.setState({ letterrows: rows });
+  }
+
+  grabLetterInput = (index, output) => {
+    let newArray = this.state.letterInputs;
+    newArray[index] = output;
+    console.log(newArray);
+    this.setState({ letterInputs: newArray });
   }
 
   handleClickNumber = () => {
     let rows = this.state.numberrows;
     let index = rows.length;
-    rows.push(`input-${index}`);
+    rows.push(index);
     this.setState({ numberrows: rows });
   }
 
+  grabNumberInput = (index, output) => {
+    let newArray = this.state.numberInputs;
+    newArray[index] = output;
+    console.log(newArray);
+    this.setState({ numberInputs: newArray });
+  }
+
   handleSubmit = () => {
-    console.log("HERE");
+    //query API with everything in letterInputs and numberInputs
+    let query = {letters: this.state.letterInputs, gender: {$in : ["F", "M"]}};
+    if (this.state.female && !this.state.male) {
+      query = { letters: this.state.letterInputs, gender: "F" }
+    }
+    else if (!this.state.female && this.state.male) {
+      query = { letters: this.state.letterInputs, gender: "M" }
+    }
+    console.log(query)
+    API.findNames(query).then(res => {
+      console.log(res.data);
+      this.setState({ results: res.data });
+    }).catch(err => {
+      console.log("find names error: ");
+      console.log(err);
+    });
   }
 
   render() {
@@ -36,12 +72,12 @@ class App extends Component {
 
         <div className="letterRows">
           {this.state.letterrows.map((r) => (
-            <LetterForm key={r} id={r} />))}
+            <LetterForm key={r} className={r} appendOutput={this.grabLetterInput} />))}
         </div>
 
         <div className="numberRows">
           {this.state.numberrows.map((r) => (
-            <NumberForm key={r} id={r} />))}
+            <NumberForm key={r} className={r} appendOutput={this.grabNumberInput} />))}
         </div>
 
         <div className="letterAddOn text-center white-text">
@@ -50,17 +86,22 @@ class App extends Component {
         <div className="numberAddOn text-center white-text">
           <a to="#" onClick={this.handleClickNumber}>+ More Number Search Terms</a>
         </div>
-        <div className="form-check form-check-inline fullLine">
+        <div className="form-check form-check-inline centerLine">
+        
           <label>
             Male
-          <input type="checkbox" className="form-check-input" id="male" value="male" />
+          <input type="checkbox" onClick={e => this.setState({male: !this.state.male})} checked={this.state.male} />
           </label>
           <label>
             Female
-          <input type="checkbox" className="form-check-input" id="female" value="female" />
+          <input type="checkbox" onClick={e => this.setState({female: !this.state.female})} checked={this.state.female} />
           </label>
         </div>
-        <div className="fullLine"><button type="button" className="btn btn-secondary" onClick={this.handleSubmit}>Submit</button></div>
+        <div className="centerLine"><button type="button" className="btn btn-secondary" onClick={this.handleSubmit}>Submit</button></div>
+
+        <div className="centerLine">
+          <List results={this.state.results}></List>
+        </div>
       </Wrapper>
     );
   }
