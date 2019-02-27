@@ -87,10 +87,10 @@ class App extends Component {
         </div>
 
         <div className="letterAddOn text-center white-text">
-          <a to="#" onClick={this.handleClickLetter}>+ More Letter Search Terms</a>
+          <button className="link-button" onClick={this.handleClickLetter}>+ More Letter Search Terms</button>
         </div>
         <div className="numberAddOn text-center white-text">
-          <a to="#" onClick={this.handleClickNumber}>+ More Number Search Terms</a>
+          <button className="link-button" onClick={this.handleClickNumber}>+ More Number Search Terms</button>
         </div>
         <div className="form-check form-check-inline centerLine">
         

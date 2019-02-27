@@ -53,9 +53,9 @@ class LetterForm extends Component {
                             {this.state.letterOptions}
                         </button>
                         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a className="dropdown-item" href="#" onClick={e => this.updateLetterOptions("Contains", e)}>Contains</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateLetterOptions("Starts With", e)}>Starts With</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateLetterOptions("Ends With", e)}>Ends With</a>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateLetterOptions("Contains", e)}>Contains</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateLetterOptions("Starts With", e)}>Starts With</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateLetterOptions("Ends With", e)}>Ends With</button>
                         </div>
                     </div>
 

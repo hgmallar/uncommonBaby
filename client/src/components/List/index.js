@@ -14,7 +14,7 @@ function List(props) {
             </ol>
             {((props.results.length > 0) && (props.results.length > props.count)) ?
                 (<div className="text-center white-text">
-                    <a to="#" onClick={props.increaseCount}>+ More Results</a>
+                    <button className="link-button" onClick={props.increaseCount}>+ More Results</button>
                 </div>) : 
                 (<div></div>)
             }

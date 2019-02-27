@@ -83,20 +83,20 @@ class NumberForm extends Component {
                             {this.state.years}
                         </button>
                         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1880", "188x", e)}>1880s</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1890", "189x", e)}>1890s</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1900", "190x", e)}>1900s</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1910", "191x", e)}>1910s</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1920", "192x", e)}>1920s</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1930", "193x", e)}>1930s</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1940", "194x", e)}>1940s</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1950", "195x", e)}>1950s</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1960", "196x", e)}>1960s</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1970", "197x", e)}>1970s</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1980", "198x", e)}>1980s</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1990", "199x", e)}>1990s</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateYearOptions("2000", "200x", e)}>2000s</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateYearOptions("2010", "201x", e)}>2010s</a>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1880", "188x", e)}>1880s</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1890", "189x", e)}>1890s</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1900", "190x", e)}>1900s</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1910", "191x", e)}>1910s</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1920", "192x", e)}>1920s</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1930", "193x", e)}>1930s</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1940", "194x", e)}>1940s</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1950", "195x", e)}>1950s</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1960", "196x", e)}>1960s</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1970", "197x", e)}>1970s</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1980", "198x", e)}>1980s</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1990", "199x", e)}>1990s</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("2000", "200x", e)}>2000s</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("2010", "201x", e)}>2010s</button>
                         </div>
                     </div>
 
@@ -105,9 +105,9 @@ class NumberForm extends Component {
                             {this.state.numericalOptions}
                         </button>
                         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a className="dropdown-item" href="#" onClick={e => this.updateNumericalOptions("Rank", this.state.yearCol, e)}>Rank</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateNumericalOptions("Percentile", this.state.yearCol, e)}>Percentile</a>
-                            <a className="dropdown-item" href="#" onClick={e => this.updateNumericalOptions("Count", this.state.yearCol, e)}>Count</a>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateNumericalOptions("Rank", this.state.yearCol, e)}>Rank</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateNumericalOptions("Percentile", this.state.yearCol, e)}>Percentile</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateNumericalOptions("Count", this.state.yearCol, e)}>Count</button>
                         </div>
                     </div>
 

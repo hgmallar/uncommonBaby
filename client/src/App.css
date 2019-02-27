@@ -91,3 +91,19 @@ a:hover {
 .white-text{
   color: white;
 }
+
+.link-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+.link-button:hover {
+  color: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
