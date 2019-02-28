@@ -76,7 +76,7 @@ class NumberForm extends Component {
     render() {
 
         return (
-            <div className="form col-md-6 justify-content-center">
+            <div className="form row justify-content-center">
                 <form className="form-inline">
                     <div className="dropdown">
                         <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -97,6 +97,7 @@ class NumberForm extends Component {
                             <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("1990", "199x", e)}>1990s</button>
                             <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("2000", "200x", e)}>2000s</button>
                             <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("2010", "201x", e)}>2010s</button>
+                            <button className="dropdown-item" href="#" onClick={e => this.updateYearOptions("All Time", "AllTime", e)}>All Time</button>
                         </div>
                     </div>
 

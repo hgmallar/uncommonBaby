@@ -46,7 +46,7 @@ class LetterForm extends Component {
     render() {
 
         return (
-            <div className="letter-form col-md-4 justify-content-center">
+            <div className="letter-form row justify-content-center">
                 <form className="form-inline">
                     <div className="dropdown">
                         <button className={`btn btn-secondary dropdown-toggle ${this.props.className}`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

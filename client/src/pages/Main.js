@@ -47,8 +47,8 @@ class App extends Component {
   }
 
   handleSubmit = () => {
-    this.setState({showResults: 10});
-    let query = {letters: this.state.letterInputs, gender: {$in : ["F", "M"]}, numbers: this.state.numberInputs};
+    this.setState({ showResults: 10 });
+    let query = { letters: this.state.letterInputs, gender: { $in: ["F", "M"] }, numbers: this.state.numberInputs };
     if (this.state.female && !this.state.male) {
       query = { letters: this.state.letterInputs, gender: "F", numbers: this.state.numberInputs }
     }
@@ -67,7 +67,7 @@ class App extends Component {
 
   increaseCount = () => {
     let newCount = this.state.showResults + 10;
-    this.setState({showResults: newCount});
+    this.setState({ showResults: newCount });
   }
 
   render() {
@@ -76,12 +76,15 @@ class App extends Component {
         <Header />
         <h4 className="subhead text-center col-12">A tool to find names based on popularity</h4>
 
-        <div className="row justify-content-center">
-          {this.state.letterrows.map((r) => (
-            <LetterForm key={r} className={r} appendOutput={this.grabLetterInput} />))}
-      
-          {this.state.numberrows.map((r) => (
-            <NumberForm key={r} className={r} appendOutput={this.grabNumberInput} />))}
+        <div className="text-center row justify-content-center">
+          <div className="col-md-4">
+            {this.state.letterrows.map((r) => (
+              <LetterForm key={r} className={r} appendOutput={this.grabLetterInput} />))}
+          </div>
+          <div className="col-md-6">
+            {this.state.numberrows.map((r) => (
+              <NumberForm key={r} className={r} appendOutput={this.grabNumberInput} />))}
+          </div>
         </div>
 
         <div className="text-center white-text row justify-content-center">
@@ -89,14 +92,14 @@ class App extends Component {
           <button className="link-button col-md-6" onClick={this.handleClickNumber}>+ More Number Search Terms</button>
         </div>
         <div className="form-check form-check-inline row justify-content-center col-12">
-        
+
           <label>
             Male
-          <input type="checkbox" onChange={e => this.setState({male: !this.state.male})} checked={this.state.male} />
+          <input type="checkbox" onChange={e => this.setState({ male: !this.state.male })} checked={this.state.male} />
           </label>
           <label>
             Female
-          <input type="checkbox" onChange={e => this.setState({female: !this.state.female})} checked={this.state.female} />
+          <input type="checkbox" onChange={e => this.setState({ female: !this.state.female })} checked={this.state.female} />
           </label>
         </div>
         <div className="row justify-content-center col-12"><button type="button" className="btn btn-secondary" onClick={this.handleSubmit}>Submit</button></div>
