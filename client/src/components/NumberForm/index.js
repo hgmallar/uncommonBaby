@@ -76,7 +76,7 @@ class NumberForm extends Component {
     render() {
 
         return (
-            <div className="form">
+            <div className="form col-md-6 justify-content-center">
                 <form className="form-inline">
                     <div className="dropdown">
                         <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

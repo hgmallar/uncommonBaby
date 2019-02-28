@@ -74,25 +74,21 @@ class App extends Component {
     return (
       <Wrapper>
         <Header />
-        <h4 className="subhead text-center">A tool to find names based on popularity</h4>
+        <h4 className="subhead text-center col-12">A tool to find names based on popularity</h4>
 
-        <div className="letterRows">
+        <div className="row justify-content-center">
           {this.state.letterrows.map((r) => (
             <LetterForm key={r} className={r} appendOutput={this.grabLetterInput} />))}
-        </div>
-
-        <div className="numberRows">
+      
           {this.state.numberrows.map((r) => (
             <NumberForm key={r} className={r} appendOutput={this.grabNumberInput} />))}
         </div>
 
-        <div className="letterAddOn text-center white-text">
-          <button className="link-button" onClick={this.handleClickLetter}>+ More Letter Search Terms</button>
+        <div className="text-center white-text row justify-content-center">
+          <button className="link-button col-md-4" onClick={this.handleClickLetter}>+ More Letter Search Terms</button>
+          <button className="link-button col-md-6" onClick={this.handleClickNumber}>+ More Number Search Terms</button>
         </div>
-        <div className="numberAddOn text-center white-text">
-          <button className="link-button" onClick={this.handleClickNumber}>+ More Number Search Terms</button>
-        </div>
-        <div className="form-check form-check-inline centerLine">
+        <div className="form-check form-check-inline row justify-content-center col-12">
         
           <label>
             Male
@@ -103,9 +99,9 @@ class App extends Component {
           <input type="checkbox" onChange={e => this.setState({female: !this.state.female})} checked={this.state.female} />
           </label>
         </div>
-        <div className="centerLine"><button type="button" className="btn btn-secondary" onClick={this.handleSubmit}>Submit</button></div>
+        <div className="row justify-content-center col-12"><button type="button" className="btn btn-secondary" onClick={this.handleSubmit}>Submit</button></div>
 
-        <div className="centerLine">
+        <div className="row justify-content-center col-12">
           <List results={this.state.results} count={this.state.showResults} increaseCount={this.increaseCount}></List>
         </div>
       </Wrapper>
