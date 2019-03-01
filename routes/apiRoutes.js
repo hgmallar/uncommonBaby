@@ -18,6 +18,15 @@ module.exports = function (app) {
       .catch(err => res.status(422).json(err));
   });
 
+  // GET route for getting the endpoints of the slider
+  app.get("/count/:col/:gender", function (req, res) {
+    db.Name
+      .max(req.params.col,
+        { where: { Gender: req.params.gender } })
+      .then(max => res.json(max))
+      .catch(err => res.status(422).json(err));
+  });
+
   // GET route for getting the names
   app.post("/names", function (req, res) {
     console.log(req.body);
@@ -27,7 +36,7 @@ module.exports = function (app) {
           Name: {
             $and: req.body.letters
           },
-          Gender: req.body.gender, 
+          Gender: req.body.gender,
           $and: req.body.numbers
         },
         limit: 100

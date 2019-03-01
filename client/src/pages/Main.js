@@ -90,7 +90,7 @@ class App extends Component {
           </div>
           <div className="col-md-6">
             {this.state.numberrows.map((r) => (
-              <NumberForm key={r} className={r} appendOutput={this.grabNumberInput} />))}
+              <NumberForm key={r} className={r} appendOutput={this.grabNumberInput} male={this.state.male} female={this.state.female}/>))}
           </div>
         </div>
 
@@ -112,7 +112,7 @@ class App extends Component {
         <div className="row justify-content-center col-12"><button type="button" className="btn btn-secondary" onClick={this.handleSubmit}>Submit</button></div>
 
         <div className="row justify-content-center col-12">
-          {(this.state.displayNoResults) ? <h4>No results found!</h4> : <h4></h4>}
+          {(this.state.displayNoResults) ? <h4>No results found!</h4> : <h4> </h4>}
           <List results={this.state.results} count={this.state.showResults} increaseCount={this.increaseCount}></List>
         </div>
       </Wrapper>

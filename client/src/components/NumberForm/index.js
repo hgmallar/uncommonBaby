@@ -18,40 +18,87 @@ class NumberForm extends Component {
         output: {}
     }
 
+    componentWillReceiveProps(nextProps) {
+        if ((this.props.male !== nextProps.male) || (this.props.female !== nextProps.female)) {
+            this.updateNumbers(this.state.numericalOptions, this.state.yearCol, nextProps.male, nextProps.female);
+        }
+    }
+
     updateNumericalOptions = (input, input2, evt) => {
         evt.preventDefault();
+        this.updateNumbers(input, input2, this.props.male, this.props.female);
+    }
+
+    updateNumbers = (input, input2, male, female) => {
         let max = 100;
         let startMin = 20;
         let startMax = 80;
         let query = input + "_" + input2;
-        let outputVal = {[query]: {$between: [startMin, startMax] } };
+        let gender = "";
+        if (male && !female) {
+            gender = "M";
+        }
+        else if (!male && female) {
+            gender = "F";
+        }
+        let outputVal = { [query]: { $between: [startMin, startMax] } };
         if (input === "Rank") {
             //set max to the highest number in the column for that rank decade
-            API.getCount(query).then(res => {
-                max = res.data;
-                startMin = Math.round(res.data * .2);
-                startMax = Math.round(res.data * .8);
-                outputVal = {[query]: {$between: [startMin, startMax] } };
-                this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
-                this.props.appendOutput(this.props.className, outputVal);
-            }).catch(err => {
-                console.log("count error: ");
-                console.log(err);
-            });
+            if ((male && !female) || (!male && female)) {
+                API.getCountMF(query, gender).then(res => {
+                    max = res.data;
+                    startMin = Math.round(res.data * .2);
+                    startMax = Math.round(res.data * .8);
+                    outputVal = { [query]: { $between: [startMin, startMax] } };
+                    this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
+                    this.props.appendOutput(this.props.className, outputVal);
+                }).catch(err => {
+                    console.log("count error: ");
+                    console.log(err);
+                });
+            }
+            else {
+                API.getCount(query).then(res => {
+                    max = res.data;
+                    startMin = Math.round(res.data * .2);
+                    startMax = Math.round(res.data * .8);
+                    outputVal = { [query]: { $between: [startMin, startMax] } };
+                    this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
+                    this.props.appendOutput(this.props.className, outputVal);
+                }).catch(err => {
+                    console.log("count error: ");
+                    console.log(err);
+                });
+            }
         }
         else if (input === "Count") {
             //set max to the highest number in the column for that count decade
-            API.getCount(query).then(res => {
-                max = res.data;
-                startMin = Math.round(res.data * .2);
-                startMax = Math.round(res.data * .8);
-                outputVal = {[query]: {$between: [startMin, startMax] } };
-                this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
-                this.props.appendOutput(this.props.className, outputVal);
-            }).catch(err => {
-                console.log("count error: ");
-                console.log(err);
-            });
+            if ((male && !female) || (!male && female)) {
+                API.getCountMF(query, gender).then(res => {
+                    max = res.data;
+                    startMin = Math.round(res.data * .2);
+                    startMax = Math.round(res.data * .8);
+                    outputVal = { [query]: { $between: [startMin, startMax] } };
+                    this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
+                    this.props.appendOutput(this.props.className, outputVal);
+                }).catch(err => {
+                    console.log("count error: ");
+                    console.log(err);
+                });
+            }
+            else {
+                API.getCount(query).then(res => {
+                    max = res.data;
+                    startMin = Math.round(res.data * .2);
+                    startMax = Math.round(res.data * .8);
+                    outputVal = { [query]: { $between: [startMin, startMax] } };
+                    this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
+                    this.props.appendOutput(this.props.className, outputVal);
+                }).catch(err => {
+                    console.log("count error: ");
+                    console.log(err);
+                });
+            }
         }
         else {
             this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
@@ -123,8 +170,8 @@ class NumberForm extends Component {
                                 let query = this.state.numericalOptions + "_" + this.state.yearCol;
                                 outputVal = { [query]: { $between: [value.min, value.max] } };
                             }
-                            this.setState({ value: value, output: outputVal }); 
-                            this.props.appendOutput(this.props.className, outputVal);                   
+                            this.setState({ value: value, output: outputVal });
+                            this.props.appendOutput(this.props.className, outputVal);
                         }} />
                 </form>
             </div>
