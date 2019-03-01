@@ -38,7 +38,7 @@ module.exports = function (app) {
           Gender: req.body.gender,
           $and: req.body.numbers
         },
-        limit: 100
+        limit: req.body.limit
       })
       .then(result => {
         res.json({count: result.count, rows: result.rows})})

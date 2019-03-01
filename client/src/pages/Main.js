@@ -16,7 +16,7 @@ class App extends Component {
     letterInputs: [],
     numberInputs: [],
     showResults: 10,
-    displayNoResults: false,
+    moreResults: 100,
     totalCount: -1,
   }
 
@@ -48,14 +48,14 @@ class App extends Component {
     this.setState({ numberInputs: newArray });
   }
 
-  handleSubmit = () => {
-    this.setState({ showResults: 10, displayNoResults: false });
-    let query = { letters: this.state.letterInputs, gender: { $in: ["F", "M"] }, numbers: this.state.numberInputs };
+  handleSubmit = (results, moreResults) => {
+    this.setState({ showResults: results });
+    let query = { letters: this.state.letterInputs, gender: { $in: ["F", "M"] }, numbers: this.state.numberInputs, limit: moreResults };
     if (this.state.female && !this.state.male) {
-      query = { letters: this.state.letterInputs, gender: "F", numbers: this.state.numberInputs }
+      query = { letters: this.state.letterInputs, gender: { $in: ["F"] }, numbers: this.state.numberInputs, limit: moreResults }
     }
     else if (!this.state.female && this.state.male) {
-      query = { letters: this.state.letterInputs, gender: "M", numbers: this.state.numberInputs }
+      query = { letters: this.state.letterInputs, gender: { $in: ["M"] }, numbers: this.state.numberInputs, limit: moreResults }
     }
     console.log(query)
     API.findNames(query).then(res => {
@@ -65,7 +65,7 @@ class App extends Component {
         this.setState({ results: res.data.rows });
       }
       else {
-        this.setState({ results: res.data.rows, displayNoResults: true });
+        this.setState({ results: res.data.rows });
       }
 
     }).catch(err => {
@@ -77,6 +77,12 @@ class App extends Component {
   increaseCount = () => {
     let newCount = this.state.showResults + 10;
     this.setState({ showResults: newCount });
+  }
+
+  increaseResults = () => {
+    let newCount = this.state.moreResults + 100;
+    this.setState({ moreResults: newCount });
+    this.handleSubmit(newCount-90, newCount);
   }
 
   render() {
@@ -112,16 +118,12 @@ class App extends Component {
           </label>
         </div>
         <div className="row justify-content-center col-12">
-          <button type="button" className="btn btn-secondary my-auto" onClick={this.handleSubmit}>Submit</button>
-          {(this.state.totalCount > 0) ? (<h4 className="ml-2 my-auto text-white"> {this.state.totalCount}</h4>) : [
-            (this.state.totalCount === 0) ?
-              (<h4 className="ml-2 my-auto text-white"> No results found!</h4>) :
-              (<h4 className="ml-2 my-auto text-white"> </h4>)]
-          }
+          <button type="button" className="btn btn-secondary my-auto" onClick={e => this.handleSubmit(10, this.state.moreResults)}>Submit</button>
+          {(this.state.totalCount < 0) ? (<h4> </h4>) : (<h4 className="ml-2 my-auto text-white"> {this.state.totalCount}</h4>)}
         </div>
 
         <div className="row justify-content-center col-12">
-          <List results={this.state.results} count={this.state.showResults} increaseCount={this.increaseCount}></List>
+          <List results={this.state.results} count={this.state.showResults} increaseCount={this.increaseCount} increaseResults={this.increaseResults}></List>
         </div>
       </Wrapper>
     );

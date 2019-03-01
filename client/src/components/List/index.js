@@ -16,7 +16,13 @@ function List(props) {
                 (<div className="text-center white-text">
                     <button className="link-button" onClick={props.increaseCount}>+ More Results</button>
                 </div>) : 
-                (<div></div>)
+                (<div> </div>)
+            }
+            {((props.results.length > 0) && (props.results.length === props.count)) ?
+                (<div className="text-center white-text">
+                    <button className="link-button" onClick={props.increaseResults}>+ More Results</button>
+                </div>) : 
+                (<div> </div>)
             }
         </div>
     );
