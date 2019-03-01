@@ -29,9 +29,8 @@ module.exports = function (app) {
 
   // GET route for getting the names
   app.post("/names", function (req, res) {
-    console.log(req.body);
     db.Name
-      .findAll({
+      .findAndCountAll({
         where: {
           Name: {
             $and: req.body.letters
@@ -41,7 +40,8 @@ module.exports = function (app) {
         },
         limit: 100
       })
-      .then(names => res.json(names))
+      .then(result => {
+        res.json({count: result.count, rows: result.rows})})
       .catch(err => res.status(422).json(err));
   });
 

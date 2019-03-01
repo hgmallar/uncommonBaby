@@ -17,6 +17,7 @@ class App extends Component {
     numberInputs: [],
     showResults: 10,
     displayNoResults: false,
+    totalCount: -1,
   }
 
   handleClickLetter = () => {
@@ -58,12 +59,13 @@ class App extends Component {
     }
     console.log(query)
     API.findNames(query).then(res => {
-      console.log(res.data);
-      if (res.data.length) {
-        this.setState({ results: res.data });
+      console.log(res.data.count);
+      this.setState({ totalCount: res.data.count });
+      if (res.data.count) {
+        this.setState({ results: res.data.rows });
       }
       else {
-        this.setState({ results: res.data, displayNoResults: true });
+        this.setState({ results: res.data.rows, displayNoResults: true });
       }
 
     }).catch(err => {
@@ -90,7 +92,7 @@ class App extends Component {
           </div>
           <div className="col-md-6">
             {this.state.numberrows.map((r) => (
-              <NumberForm key={r} className={r} appendOutput={this.grabNumberInput} male={this.state.male} female={this.state.female}/>))}
+              <NumberForm key={r} className={r} appendOutput={this.grabNumberInput} male={this.state.male} female={this.state.female} />))}
           </div>
         </div>
 
@@ -109,10 +111,16 @@ class App extends Component {
           <input type="checkbox" onChange={e => this.setState({ female: !this.state.female })} checked={this.state.female} />
           </label>
         </div>
-        <div className="row justify-content-center col-12"><button type="button" className="btn btn-secondary" onClick={this.handleSubmit}>Submit</button></div>
+        <div className="row justify-content-center col-12">
+          <button type="button" className="btn btn-secondary my-auto" onClick={this.handleSubmit}>Submit</button>
+          {(this.state.totalCount > 0) ? (<h4 className="ml-2 my-auto text-white"> {this.state.totalCount}</h4>) : [
+            (this.state.totalCount === 0) ?
+              (<h4 className="ml-2 my-auto text-white"> No results found!</h4>) :
+              (<h4 className="ml-2 my-auto text-white"> </h4>)]
+          }
+        </div>
 
         <div className="row justify-content-center col-12">
-          {(this.state.displayNoResults) ? <h4>No results found!</h4> : <h4> </h4>}
           <List results={this.state.results} count={this.state.showResults} increaseCount={this.increaseCount}></List>
         </div>
       </Wrapper>
