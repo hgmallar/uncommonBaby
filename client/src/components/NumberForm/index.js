@@ -20,7 +20,9 @@ class NumberForm extends Component {
 
     componentWillReceiveProps(nextProps) {
         if ((this.props.male !== nextProps.male) || (this.props.female !== nextProps.female)) {
-            this.updateNumbers(this.state.numericalOptions, this.state.yearCol, nextProps.male, nextProps.female);
+            if (this.state.numericalOptions !== "Numerical Options") {
+                this.updateNumbers(this.state.numericalOptions, this.state.yearCol, nextProps.male, nextProps.female);
+            }
         }
     }
 

@@ -52,10 +52,10 @@ class App extends Component {
     this.setState({ showResults: results });
     let query = { letters: this.state.letterInputs, gender: { $in: ["F", "M"] }, numbers: this.state.numberInputs, limit: moreResults };
     if (this.state.female && !this.state.male) {
-      query = { letters: this.state.letterInputs, gender: { $in: ["F"] }, numbers: this.state.numberInputs, limit: moreResults }
+      query = { letters: this.state.letterInputs, gender: "F", numbers: this.state.numberInputs, limit: moreResults }
     }
     else if (!this.state.female && this.state.male) {
-      query = { letters: this.state.letterInputs, gender: { $in: ["M"] }, numbers: this.state.numberInputs, limit: moreResults }
+      query = { letters: this.state.letterInputs, gender: "M", numbers: this.state.numberInputs, limit: moreResults }
     }
     console.log(query)
     API.findNames(query).then(res => {
