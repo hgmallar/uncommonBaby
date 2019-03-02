@@ -1,31 +1,45 @@
-import React from "react";
+import React, { Component } from "react";
+import InfiniteLoader from 'react-infinite-loader'
 import "./styles.css";
 
-function List(props) {
-    let newArray = props.results.slice(0, props.count);
-    return (
-        <div>
-            <ol>
-                {newArray.map(result => (
-                    <li key={result.id}>
-                        <h4 className="text-center">{result.Name} {(result.Gender === "M") ? "- male" : "- female"}</h4>
-                    </li>
-                ))}
-            </ol>
-            {((props.results.length > 0) && (props.results.length > props.count)) ?
-                (<div className="text-center white-text">
-                    <button className="link-button" onClick={props.increaseCount}>+ More Results</button>
-                </div>) : 
-                (<div> </div>)
-            }
-            {((props.results.length > 0) && (props.results.length === props.count)) ?
-                (<div className="text-center white-text">
-                    <button className="link-button" onClick={props.increaseResults}>+ More Results</button>
-                </div>) : 
-                (<div> </div>)
-            }
-        </div>
-    );
+class List extends Component {
+    renderList() {
+        let newArray = this.props.results.slice(0, this.props.count);
+        return (
+            <div>
+                <ol>
+                    {newArray.map(result => (
+                        <li key={result.id}>
+                            <h4 className="text-center">{result.Name} {(result.Gender === "M") ? "- male" : "- female"}</h4>
+                        </li>
+                    ))}
+                </ol>
+            </div>
+        )
+    }
+
+    render() {
+
+        return (
+            <div>
+                {this.renderList()}
+                {(this.props.loading) &&
+                    <InfiniteLoader rowCount={this.props.total} onVisited={() => {
+                        if ((this.props.results.length > 0) && (this.props.results.length > this.props.count)) {
+                            this.props.increaseCount();
+                            this.renderList();
+                        }
+                        else if ((this.props.results.length > 0) && (this.props.results.length === this.props.count)) {
+                            this.props.increaseResults();
+                            this.renderList();
+                        }
+                        else {
+                            this.props.updateLoad();
+                        }
+                    }} />}
+            </div>
+        );
+    }
 }
 
 export default List;

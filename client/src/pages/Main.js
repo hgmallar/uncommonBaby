@@ -10,12 +10,13 @@ class App extends Component {
   state = {
     male: false,
     female: false,
+    isLoading: false,
     letterrows: [0],
     numberrows: [0],
     results: [],
     letterInputs: [],
     numberInputs: [],
-    showResults: 10,
+    showResults: 20,
     moreResults: 100,
     totalCount: -1,
   }
@@ -60,14 +61,12 @@ class App extends Component {
     console.log(query)
     API.findNames(query).then(res => {
       console.log(res.data.count);
-      this.setState({ totalCount: res.data.count });
       if (res.data.count) {
-        this.setState({ results: res.data.rows });
+        this.setState({ totalCount: res.data.count, results: res.data.rows, isLoading: true });
       }
       else {
-        this.setState({ results: res.data.rows });
+        this.setState({ totalCount: res.data.count, results: res.data.rows });
       }
-
     }).catch(err => {
       console.log("find names error: ");
       console.log(err);
@@ -75,14 +74,18 @@ class App extends Component {
   }
 
   increaseCount = () => {
-    let newCount = this.state.showResults + 10;
+    let newCount = this.state.showResults + 20;
     this.setState({ showResults: newCount });
   }
 
   increaseResults = () => {
     let newCount = this.state.moreResults + 100;
     this.setState({ moreResults: newCount });
-    this.handleSubmit(newCount-90, newCount);
+    this.handleSubmit(newCount - 80, newCount);
+  }
+
+  updateLoad = () => {
+    this.setState({ isLoading: false });
   }
 
   render() {
@@ -118,12 +121,12 @@ class App extends Component {
           </label>
         </div>
         <div className="row justify-content-center col-12">
-          <button type="button" className="btn btn-secondary my-auto" onClick={e => this.handleSubmit(10, this.state.moreResults)}>Submit</button>
+          <button type="button" className="btn btn-secondary my-auto" onClick={e => this.handleSubmit(20, this.state.moreResults)}>Submit</button>
           {(this.state.totalCount < 0) ? (<h4> </h4>) : (<h4 className="ml-2 my-auto text-white"> {this.state.totalCount}</h4>)}
         </div>
 
         <div className="row justify-content-center col-12">
-          <List results={this.state.results} count={this.state.showResults} increaseCount={this.increaseCount} increaseResults={this.increaseResults}></List>
+          <List results={this.state.results} total={this.state.totalCount} count={this.state.showResults} increaseCount={this.increaseCount} increaseResults={this.increaseResults} updateLoad={this.updateLoad} loading={this.state.isLoading}></List>
         </div>
       </Wrapper>
     );
