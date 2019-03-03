@@ -11,6 +11,7 @@ body {
   margin: 0px 0px 10px 10px;
   background-color: #e962c1;
   border-color: #e962c1;
+  min-width: 85px;
 }
 
 .btn:hover, .btn:visited, .btn:active, .btn:link, .btn:focus {
