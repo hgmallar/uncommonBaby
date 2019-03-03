@@ -94,6 +94,18 @@ class App extends Component {
         <Header />
         <h4 className="subhead text-center col-12">A tool to find names based on popularity</h4>
 
+        <div className="form-check form-check-inline row justify-content-center col-12">
+
+          <label>
+            Male
+            <input type="checkbox" onChange={e => this.setState({ male: !this.state.male })} checked={this.state.male} />
+          </label>
+          <label>
+            Female
+            <input type="checkbox" onChange={e => this.setState({ female: !this.state.female })} checked={this.state.female} />
+          </label>
+        </div>
+        
         <div className="text-center row justify-content-center">
           <div className="col-md-4">
             {this.state.letterrows.map((r) => (
@@ -109,24 +121,14 @@ class App extends Component {
           <button className="link-button col-md-4" onClick={this.handleClickLetter}>+ More Letter Search Terms</button>
           <button className="link-button col-md-6" onClick={this.handleClickNumber}>+ More Number Search Terms</button>
         </div>
-        <div className="form-check form-check-inline row justify-content-center col-12">
-
-          <label>
-            Male
-          <input type="checkbox" onChange={e => this.setState({ male: !this.state.male })} checked={this.state.male} />
-          </label>
-          <label>
-            Female
-          <input type="checkbox" onChange={e => this.setState({ female: !this.state.female })} checked={this.state.female} />
-          </label>
-        </div>
-        <div className="row justify-content-center col-12">
-          <button type="button" className="btn btn-secondary my-auto" onClick={e => this.handleSubmit(20, this.state.moreResults)}>Submit</button>
-          {(this.state.totalCount < 0) ? (<h4> </h4>) : (<h4 className="ml-2 my-auto text-white"> {this.state.totalCount}</h4>)}
-        </div>
 
         <div className="row justify-content-center col-12">
           <List results={this.state.results} total={this.state.totalCount} count={this.state.showResults} increaseCount={this.increaseCount} increaseResults={this.increaseResults} updateLoad={this.updateLoad} loading={this.state.isLoading}></List>
+        </div>
+
+        <div className="row justify-content-center col-12">
+          <button type="button" className="btn btn-secondary my-auto" onClick={e => this.handleSubmit(20, this.state.moreResults)}>Submit</button>
+          {(this.state.totalCount < 0) ? (<h4> </h4>) : (<h4 className="ml-2 my-auto text-white"> {this.state.totalCount}</h4>)}
         </div>
       </Wrapper>
     );

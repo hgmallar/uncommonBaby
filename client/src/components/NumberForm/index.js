@@ -9,8 +9,6 @@ class NumberForm extends Component {
         numericalOptions: "Numerical Options",
         years: "Year(s)",
         yearCol: "210x",
-        startMinVal: 20,
-        startMaxVal: 80,
         value: { min: 20, max: 80 },
         minValue: 1,
         maxValue: 100,
@@ -29,6 +27,23 @@ class NumberForm extends Component {
     updateNumericalOptions = (input, input2, evt) => {
         evt.preventDefault();
         this.updateNumbers(input, input2, this.props.male, this.props.female);
+    }
+
+    checkSliderMinMax = (max, input, startMin, startMax, outputVal, query) => {
+        if ((this.state.value.min < max) && (this.state.value.max < max)) {
+            //don't update slider values because they fall within range
+            outputVal = { [query]: { $between: [this.state.value.min, this.state.value.max] } };
+            this.setState({ numericalOptions: input, maxValue: max, output: outputVal });
+        }
+        else if (this.state.value.min < max) {
+            //update max only
+            outputVal = { [query]: { $between: [this.state.value.min, startMax] } };
+            this.setState({ numericalOptions: input, maxValue: max, value: { min: this.state.value.min, max: startMax }, output: outputVal });
+        }
+        else {
+            //update both
+            this.setState({ numericalOptions: input, maxValue: max, value: { min: startMin, max: startMax }, output: outputVal });
+        }
     }
 
     updateNumbers = (input, input2, male, female) => {
@@ -52,7 +67,7 @@ class NumberForm extends Component {
                     startMin = Math.round(res.data * .2);
                     startMax = Math.round(res.data * .8);
                     outputVal = { [query]: { $between: [startMin, startMax] } };
-                    this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
+                    this.checkSliderMinMax(max, input, startMin, startMax, outputVal, query);
                     this.props.appendOutput(this.props.className, outputVal);
                 }).catch(err => {
                     console.log("count error: ");
@@ -65,7 +80,7 @@ class NumberForm extends Component {
                     startMin = Math.round(res.data * .2);
                     startMax = Math.round(res.data * .8);
                     outputVal = { [query]: { $between: [startMin, startMax] } };
-                    this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
+                    this.checkSliderMinMax(max, input, startMin, startMax, outputVal, query);
                     this.props.appendOutput(this.props.className, outputVal);
                 }).catch(err => {
                     console.log("count error: ");
@@ -81,7 +96,7 @@ class NumberForm extends Component {
                     startMin = Math.round(res.data * .2);
                     startMax = Math.round(res.data * .8);
                     outputVal = { [query]: { $between: [startMin, startMax] } };
-                    this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
+                    this.checkSliderMinMax(max, input, startMin, startMax, outputVal, query);
                     this.props.appendOutput(this.props.className, outputVal);
                 }).catch(err => {
                     console.log("count error: ");
@@ -94,7 +109,7 @@ class NumberForm extends Component {
                     startMin = Math.round(res.data * .2);
                     startMax = Math.round(res.data * .8);
                     outputVal = { [query]: { $between: [startMin, startMax] } };
-                    this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
+                    this.checkSliderMinMax(max, input, startMin, startMax, outputVal, query);
                     this.props.appendOutput(this.props.className, outputVal);
                 }).catch(err => {
                     console.log("count error: ");
@@ -103,7 +118,9 @@ class NumberForm extends Component {
             }
         }
         else {
-            this.setState({ numericalOptions: input, maxValue: max, startMinVal: startMin, startMaxVal: startMax, value: { min: startMin, max: startMax }, output: outputVal });
+            this.checkSliderMinMax(max, input, startMin, startMax, outputVal, query);
+            outputVal = { [query]: { $between: [this.state.value.min, this.state.value.max] } };
+            this.setState({ numericalOptions: input, maxValue: max, output: outputVal });
             this.props.appendOutput(this.props.className, outputVal);
         }
     }
