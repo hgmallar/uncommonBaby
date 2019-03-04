@@ -131,7 +131,6 @@ class App extends Component {
           <List results={this.state.results} total={this.state.totalCount} count={this.state.showResults} increaseCount={this.increaseCount} increaseResults={this.increaseResults} updateLoad={this.updateLoad} loading={this.state.isLoading}></List>
         </div>
 
-        
       </Wrapper>
     );
   }
