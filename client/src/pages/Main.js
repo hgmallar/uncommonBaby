@@ -123,13 +123,15 @@ class App extends Component {
         </div>
 
         <div className="row justify-content-center col-12">
-          <List results={this.state.results} total={this.state.totalCount} count={this.state.showResults} increaseCount={this.increaseCount} increaseResults={this.increaseResults} updateLoad={this.updateLoad} loading={this.state.isLoading}></List>
-        </div>
-
-        <div className="row justify-content-center col-12">
           <button type="button" className="btn btn-secondary my-auto" onClick={e => this.handleSubmit(20, this.state.moreResults)}>Submit</button>
           {(this.state.totalCount < 0) ? (<h4> </h4>) : (<h4 className="ml-2 my-auto text-white"> {this.state.totalCount}</h4>)}
         </div>
+
+        <div className="row justify-content-center col-12">
+          <List results={this.state.results} total={this.state.totalCount} count={this.state.showResults} increaseCount={this.increaseCount} increaseResults={this.increaseResults} updateLoad={this.updateLoad} loading={this.state.isLoading}></List>
+        </div>
+
+        
       </Wrapper>
     );
   }
