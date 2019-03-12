@@ -139,10 +139,14 @@ class NumberForm extends Component {
         }
     }
 
+    hideForm = () => {
+        this.props.removeNumberRow(this.props.className);
+    }
+
     render() {
 
         return (
-            <div className="form row justify-content-center">
+            <div className="form row justify-content-center" style={{ display: this.state.showHideStyle }}>
                 <form className="form-inline">
                     <div className="dropdown">
                         <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -192,6 +196,7 @@ class NumberForm extends Component {
                             this.setState({ value: value, output: outputVal });
                             this.props.appendOutput(this.props.className, outputVal);
                         }} />
+                    <button type="button" className="close text-white ml-2" onClick={this.hideForm}> &times;</button>
                 </form>
             </div>
 

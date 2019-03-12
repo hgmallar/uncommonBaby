@@ -43,6 +43,11 @@ class LetterForm extends Component {
         this.props.appendOutput(this.props.className, output);
     }
 
+
+    hideForm = () => {
+        this.props.removeLetterRow(this.props.className);
+    }
+
     render() {
 
         return (
@@ -62,6 +67,7 @@ class LetterForm extends Component {
                     <label>
                         <input type="text" className={`form-control letter-input ${this.props.className}`} onChange={e => this.updateOutput(e)} placeholder="Letter(s)" />
                     </label>
+                    <button type="button" className="close text-white ml-2" onClick={this.hideForm}> &times;</button>
                 </form>
             </div>
 

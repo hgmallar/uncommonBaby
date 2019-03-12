@@ -13,33 +13,35 @@ class App extends Component {
     isLoading: false,
     letterrows: [0],
     numberrows: [0],
+    letterRowLength: 0,
+    numberRowLength: 0,
     results: [],
     letterInputs: [],
     numberInputs: [],
     showResults: 20,
     moreResults: 100,
-    totalCount: -1,
+    totalCount: -1
   }
 
   handleClickLetter = () => {
     let rows = this.state.letterrows;
-    let index = rows.length;
+    let index = this.state.letterRowLength + 1;
     rows.push(index);
-    this.setState({ letterrows: rows });
+    this.setState({ letterrows: rows, letterRowLength: index });
   }
 
   grabLetterInput = (index, output) => {
     let newArray = this.state.letterInputs;
     newArray[index] = output;
     console.log(newArray);
-    this.setState({ letterInputs: newArray });
+        this.setState({ letterInputs: newArray });
   }
 
   handleClickNumber = () => {
     let rows = this.state.numberrows;
-    let index = rows.length;
+    let index = this.state.numberRowLength + 1;
     rows.push(index);
-    this.setState({ numberrows: rows });
+    this.setState({ numberrows: rows, numberRowLength: index });
   }
 
   grabNumberInput = (index, output) => {
@@ -88,6 +90,32 @@ class App extends Component {
     this.setState({ isLoading: false });
   }
 
+  removeLetterRow = (index) => {
+    let newArray = this.state.letterInputs;
+    newArray[index]= {$like: "%%"};
+    let newRows = this.state.letterrows;
+    for (let i=0; i < newRows.length; i++) {
+      if (newRows[i] === index) {
+        newRows.splice(i, 1);
+      }
+    }
+    this.setState({ letterInputs: newArray, letterrows: newRows });
+    this.handleSubmit(20, this.state.moreResults);
+  }
+
+  removeNumberRow = (index) => {
+    let newArray = this.state.numberInputs;
+    newArray.splice(index, 1);
+    let newRows = this.state.numberrows;
+    for (let i=0; i < newRows.length; i++) {
+      if (newRows[i] === index) {
+        newRows.splice(i, 1);
+      }
+    }
+    this.setState({ numberInputs: newArray, numberrows: newRows });
+    this.handleSubmit(20, this.state.moreResults);
+  }
+
   render() {
     return (
       <Wrapper>
@@ -109,11 +137,11 @@ class App extends Component {
         <div className="text-center row justify-content-center">
           <div className="col-md-4">
             {this.state.letterrows.map((r) => (
-              <LetterForm key={r} className={r} appendOutput={this.grabLetterInput} />))}
+              <LetterForm key={r} className={r} appendOutput={this.grabLetterInput} removeLetterRow={this.removeLetterRow}/>))}
           </div>
           <div className="col-md-6">
             {this.state.numberrows.map((r) => (
-              <NumberForm key={r} className={r} appendOutput={this.grabNumberInput} male={this.state.male} female={this.state.female} />))}
+              <NumberForm key={r} className={r} appendOutput={this.grabNumberInput} male={this.state.male} female={this.state.female} removeNumberRow={this.removeNumberRow}/>))}
           </div>
         </div>
 
