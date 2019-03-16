@@ -17,7 +17,11 @@ class App extends Component {
     numberRowLength: 0,
     results: [],
     letterInputs: [],
+    letterInputClasses: [],
+    letterDropdownClasses: [],
     numberInputs: [],
+    numberDropdownClassesA: [],
+    numberDropdownClassesB: [],
     showResults: 20,
     moreResults: 100,
     totalCount: -1
@@ -34,7 +38,7 @@ class App extends Component {
     let newArray = this.state.letterInputs;
     newArray[index] = output;
     console.log(newArray);
-        this.setState({ letterInputs: newArray });
+    this.setState({ letterInputs: newArray });
   }
 
   handleClickNumber = () => {
@@ -49,6 +53,64 @@ class App extends Component {
     newArray[index] = output;
     console.log(newArray);
     this.setState({ numberInputs: newArray });
+  }
+
+  checkErroroneousInputs = () => {
+    let submit = true;
+    let letterInputs = this.state.letterInputClasses;
+    let letterDropdowns = this.state.letterDropdownClasses;
+    let dropdownA = this.state.numberDropdownClassesA;
+    let dropdownB = this.state.numberDropdownClassesB;
+    //loop through letterInputs
+    for (let i = 0; i < this.state.letterInputs.length; i++) {
+      console.log(this.state.letterInputs[i]);
+      if ((this.state.letterInputs[i].$like === "%%") || (this.state.letterInputs[i].$like === "%")) {
+        //change border of letter-input-#
+        submit = false;
+        letterInputs[i] = "red-border";
+        letterDropdowns[i] = "no-border";
+      }
+      else if ((this.state.letterInputs[i] === "")) {
+        //change border of dropdown-toggle-#
+        submit = false;
+        letterInputs[i] = "no-border";
+        letterDropdowns[i] = "red-border";
+      }
+      else {
+        letterInputs[i] = "no-border";
+        letterDropdowns[i] = "no-border";
+      }
+    }
+    //loop through numberInputs
+    for (let i = 0; i < this.state.numberInputs.length; i++) {
+      if (this.state.numberInputs[i]) {
+        if (Object.getOwnPropertyNames(this.state.numberInputs[i]).length === 0) {
+          submit = false;
+          dropdownB[i] = "red-border";
+        }
+        else {
+          dropdownA[i] = "no-border";
+          dropdownB[i] = "no-border";
+        }
+      }
+    }
+    let newResults = this.state.results;
+    let count = this.state.totalCount;
+    if (!submit) {
+      newResults = [];
+      count = "";
+    }
+    this.setState({
+      letterInputClasses: letterInputs,
+      letterDropdownClasses: letterDropdowns,
+      numberDropdownClassesA: dropdownA,
+      numberDropdownClassesB: dropdownB, 
+      results: newResults,
+      totalCount: count
+    });
+    if (submit) {
+      this.handleSubmit(20, this.state.moreResults);
+    }
   }
 
   handleSubmit = (results, moreResults) => {
@@ -92,9 +154,9 @@ class App extends Component {
 
   removeLetterRow = (index) => {
     let newArray = this.state.letterInputs;
-    newArray[index]= {$like: "%%"};
+    newArray[index] = { $like: "%%" };
     let newRows = this.state.letterrows;
-    for (let i=0; i < newRows.length; i++) {
+    for (let i = 0; i < newRows.length; i++) {
       if (newRows[i] === index) {
         newRows.splice(i, 1);
       }
@@ -107,7 +169,7 @@ class App extends Component {
     let newArray = this.state.numberInputs;
     newArray.splice(index, 1);
     let newRows = this.state.numberrows;
-    for (let i=0; i < newRows.length; i++) {
+    for (let i = 0; i < newRows.length; i++) {
       if (newRows[i] === index) {
         newRows.splice(i, 1);
       }
@@ -133,15 +195,15 @@ class App extends Component {
             <input type="checkbox" onChange={e => this.setState({ female: !this.state.female })} checked={this.state.female} />
           </label>
         </div>
-        
+
         <div className="text-center row justify-content-center">
           <div className="col-md-4">
             {this.state.letterrows.map((r) => (
-              <LetterForm key={r} className={r} appendOutput={this.grabLetterInput} removeLetterRow={this.removeLetterRow}/>))}
+              <LetterForm key={r} className={r} inputClass={this.state.letterInputClasses[r]} dropdownClass={this.state.letterDropdownClasses[r]} appendOutput={this.grabLetterInput} removeLetterRow={this.removeLetterRow} />))}
           </div>
           <div className="col-md-6">
             {this.state.numberrows.map((r) => (
-              <NumberForm key={r} className={r} appendOutput={this.grabNumberInput} male={this.state.male} female={this.state.female} removeNumberRow={this.removeNumberRow}/>))}
+              <NumberForm key={r} className={r} dropdownClassA={this.state.numberDropdownClassesA[r]} dropdownClassB={this.state.numberDropdownClassesB[r]} appendOutput={this.grabNumberInput} male={this.state.male} female={this.state.female} removeNumberRow={this.removeNumberRow} />))}
           </div>
         </div>
 
@@ -151,7 +213,7 @@ class App extends Component {
         </div>
 
         <div className="row justify-content-center col-12">
-          <button type="button" className="btn btn-secondary my-auto" onClick={e => this.handleSubmit(20, this.state.moreResults)}>Submit</button>
+          <button type="button" className="btn btn-secondary my-auto" onClick={e => this.checkErroroneousInputs()}>Submit</button>
           {(this.state.totalCount < 0) ? (<h4> </h4>) : (<h4 className="ml-2 my-auto text-white"> {this.state.totalCount}</h4>)}
         </div>
 

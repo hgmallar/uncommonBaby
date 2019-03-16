@@ -30,12 +30,12 @@ class NumberForm extends Component {
     }
 
     checkSliderMinMax = (max, input, startMin, startMax, outputVal, query) => {
-        if ((this.state.value.min < max) && (this.state.value.max < max) && (this.state.value.min != 20) && (this.state.value.max !=80))  {
+        if ((this.state.value.min < max) && (this.state.value.max < max) && (this.state.value.min !== 20) && (this.state.value.max !== 80))  {
             //don't update slider values because they fall within range
             outputVal = { [query]: { $between: [this.state.value.min, this.state.value.max] } };
             this.setState({ numericalOptions: input, maxValue: max, output: outputVal });
         }
-        else if ((this.state.value.min < max) && (this.state.value.min != 20) && (this.state.value.max !=80)) {
+        else if ((this.state.value.min < max) && (this.state.value.min !== 20) && (this.state.value.max !== 80)) {
             //update max only
             outputVal = { [query]: { $between: [this.state.value.min, startMax] } };
             this.setState({ numericalOptions: input, maxValue: max, value: { min: this.state.value.min, max: startMax }, output: outputVal });
@@ -149,7 +149,7 @@ class NumberForm extends Component {
             <div className="form row justify-content-center" style={{ display: this.state.showHideStyle }}>
                 <form className="form-inline">
                     <div className="dropdown">
-                        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button className={`btn btn-secondary dropdown-toggle ${this.props.dropdownClassA}`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {this.state.years}
                         </button>
                         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -172,7 +172,7 @@ class NumberForm extends Component {
                     </div>
 
                     <div className="dropdown">
-                        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button className={`btn btn-secondary dropdown-toggle ${this.props.dropdownClassB}`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {this.state.numericalOptions}
                         </button>
                         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">

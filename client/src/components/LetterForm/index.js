@@ -54,7 +54,7 @@ class LetterForm extends Component {
             <div className="letter-form row justify-content-center">
                 <form className="form-inline">
                     <div className="dropdown">
-                        <button className={`btn btn-secondary dropdown-toggle ${this.props.className}`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button className={`btn btn-secondary dropdown-toggle-${this.props.className} ${this.props.dropdownClass}`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {this.state.letterOptions}
                         </button>
                         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -65,7 +65,7 @@ class LetterForm extends Component {
                     </div>
 
                     <label>
-                        <input type="text" className={`form-control letter-input ${this.props.className}`} onChange={e => this.updateOutput(e)} placeholder="Letter(s)" />
+                        <input type="text" className={`form-control letter-input letter-input-${this.props.className} ${this.props.inputClass}`} onChange={e => this.updateOutput(e)} placeholder="Letter(s)" />
                     </label>
                     <button type="button" className="close text-white ml-2" onClick={this.hideForm}> &times;</button>
                 </form>
