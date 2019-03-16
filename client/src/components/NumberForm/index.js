@@ -30,12 +30,12 @@ class NumberForm extends Component {
     }
 
     checkSliderMinMax = (max, input, startMin, startMax, outputVal, query) => {
-        if ((this.state.value.min < max) && (this.state.value.max < max)) {
+        if ((this.state.value.min < max) && (this.state.value.max < max) && (this.state.value.min != 20) && (this.state.value.max !=80))  {
             //don't update slider values because they fall within range
             outputVal = { [query]: { $between: [this.state.value.min, this.state.value.max] } };
             this.setState({ numericalOptions: input, maxValue: max, output: outputVal });
         }
-        else if (this.state.value.min < max) {
+        else if ((this.state.value.min < max) && (this.state.value.min != 20) && (this.state.value.max !=80)) {
             //update max only
             outputVal = { [query]: { $between: [this.state.value.min, startMax] } };
             this.setState({ numericalOptions: input, maxValue: max, value: { min: this.state.value.min, max: startMax }, output: outputVal });
