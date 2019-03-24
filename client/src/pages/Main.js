@@ -201,7 +201,7 @@ class App extends Component {
             {this.state.letterrows.map((r) => (
               <LetterForm key={r} className={r} inputClass={this.state.letterInputClasses[r]} dropdownClass={this.state.letterDropdownClasses[r]} appendOutput={this.grabLetterInput} removeLetterRow={this.removeLetterRow} />))}
           </div>
-          <div className="col-md-6">
+          <div className="col-md-8">
             {this.state.numberrows.map((r) => (
               <NumberForm key={r} className={r} dropdownClassA={this.state.numberDropdownClassesA[r]} dropdownClassB={this.state.numberDropdownClassesB[r]} appendOutput={this.grabNumberInput} male={this.state.male} female={this.state.female} removeNumberRow={this.removeNumberRow} />))}
           </div>
@@ -209,7 +209,7 @@ class App extends Component {
 
         <div className="text-center white-text row justify-content-center">
           <button className="link-button col-md-4" onClick={this.handleClickLetter}>+ More Letter Search Terms</button>
-          <button className="link-button col-md-6" onClick={this.handleClickNumber}>+ More Number Search Terms</button>
+          <button className="link-button col-md-8" onClick={this.handleClickNumber}>+ More Number Search Terms</button>
         </div>
 
         <div className="row justify-content-center col-12">

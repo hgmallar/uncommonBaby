@@ -147,7 +147,7 @@ class NumberForm extends Component {
 
         return (
             <div className="form row justify-content-center" style={{ display: this.state.showHideStyle }}>
-                <form className="form-inline">
+                <form className="form-inline number-form">
                     <div className="dropdown">
                         <button className={`btn btn-secondary dropdown-toggle ${this.props.dropdownClassA}`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {this.state.years}

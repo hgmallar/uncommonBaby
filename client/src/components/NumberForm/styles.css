@@ -5,3 +5,9 @@
 .form{
   margin-bottom: 10px;
 }
+
+.form-inline{
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+}

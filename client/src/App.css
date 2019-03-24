@@ -75,6 +75,10 @@ a:hover {
   color: white;
 }
 
+.letter-input {
+  margin: 0 !important;
+}
+
 .link-button {
   background-color: transparent;
   border: none;
@@ -89,4 +93,30 @@ a:hover {
   color: inherit;
   font-weight: bold;
   cursor: pointer;
+}
+
+.number-form {
+  width: 90%;
+  max-width: 90%;
+}
+
+.input-range {
+  max-width: 90%;
+}
+
+@media only screen and (min-width:0px) and (max-width:830px){
+  .input-range {
+    min-width: 70%;
+    max-width: 80%;
+  }
+
+}
+
+@media only screen and (min-width:0px) and (max-width:768px){
+  .letters {
+    flex-wrap: wrap;
+  }
+  .form-inline {
+    max-width:95%;
+  }
 }
