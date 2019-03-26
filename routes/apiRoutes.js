@@ -38,7 +38,9 @@ module.exports = function (app) {
           Gender: req.body.gender,
           $and: req.body.numbers
         },
-        limit: req.body.limit
+        limit: req.body.limit,
+        order: req.body.sort
+      //}).sort(sortQuery)
       })
       .then(result => {
         res.json({count: result.count, rows: result.rows})})

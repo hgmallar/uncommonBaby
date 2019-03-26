@@ -24,7 +24,8 @@ class App extends Component {
     numberDropdownClassesB: [],
     showResults: 20,
     moreResults: 100,
-    totalCount: -1
+    totalCount: -1,
+    sort: "Sort By"
   }
 
   handleClickLetter = () => {
@@ -57,6 +58,7 @@ class App extends Component {
 
   checkErroroneousInputs = () => {
     let submit = true;
+    let errorArray = [];
     let letterInputs = this.state.letterInputClasses;
     let letterDropdowns = this.state.letterDropdownClasses;
     let dropdownA = this.state.numberDropdownClassesA;
@@ -93,6 +95,28 @@ class App extends Component {
           dropdownB[i] = "no-border";
         }
       }
+      //check for 2 of the same inputs
+      if (i+1 < this.state.numberInputs.length) {
+        for (let j=i+1; j < this.state.numberInputs.length; j++) {
+          if(this.state.numberInputs[i] && this.state.numberInputs[j]) {
+            console.log(Object.getOwnPropertyNames(this.state.numberInputs[i])[0]);
+            console.log(Object.getOwnPropertyNames(this.state.numberInputs[j])[0]);
+            if ((Object.getOwnPropertyNames(this.state.numberInputs[i])[0]) === (Object.getOwnPropertyNames(this.state.numberInputs[j])[0])) {
+              console.log("HERE");
+              errorArray.push(i);
+              errorArray.push(j);
+              submit = false;
+            }
+          }
+        }
+      }
+      console.log(errorArray)
+      if (errorArray) {
+        for (let k = 0; k < errorArray.length; k++) {
+          dropdownA[errorArray[k]] = "red-border";
+          dropdownB[errorArray[k]] = "red-border";
+        }
+      }
     }
     let newResults = this.state.results;
     let count = this.state.totalCount;
@@ -109,22 +133,41 @@ class App extends Component {
       totalCount: count
     });
     if (submit) {
+      for (let l = 0; l < this.state.numberInputs.length; l++) {
+        dropdownA[l] = "no-border";
+        dropdownB[l] = "no-border";
+      }
       this.handleSubmit(20, this.state.moreResults);
     }
+    errorArray = [];
   }
 
   handleSubmit = (results, moreResults) => {
     this.setState({ showResults: results });
-    let query = { letters: this.state.letterInputs, gender: { $in: ["F", "M"] }, numbers: this.state.numberInputs, limit: moreResults };
+    let sortQuery = [["id", "ASC"]];
+    if (this.state.sort === "A-Z") {
+      sortQuery = [["Name", "ASC"]];
+    }
+    else if (this.state.sort === "Z-A") {
+      sortQuery = [["Name", "DESC"]];
+    }
+    else if (this.state.sort === "1-Final") {
+      sortQuery = [["id", "ASC"]];
+    }
+    else if (this.state.sort === "Final-1") {
+      sortQuery = [["id", "DESC"]];
+    }
+    let query = { letters: this.state.letterInputs, gender: { $in: ["F", "M"] }, numbers: this.state.numberInputs, limit: moreResults, sort: sortQuery };
     if (this.state.female && !this.state.male) {
-      query = { letters: this.state.letterInputs, gender: "F", numbers: this.state.numberInputs, limit: moreResults }
+      query = { letters: this.state.letterInputs, gender: "F", numbers: this.state.numberInputs, limit: moreResults, sort: sortQuery }
     }
     else if (!this.state.female && this.state.male) {
-      query = { letters: this.state.letterInputs, gender: "M", numbers: this.state.numberInputs, limit: moreResults }
+      query = { letters: this.state.letterInputs, gender: "M", numbers: this.state.numberInputs, limit: moreResults, sort: sortQuery }
     }
     console.log(query)
     API.findNames(query).then(res => {
       console.log(res.data.count);
+      console.log(res.data);
       if (res.data.count) {
         this.setState({ totalCount: res.data.count, results: res.data.rows, isLoading: true });
       }
@@ -162,7 +205,8 @@ class App extends Component {
       }
     }
     this.setState({ letterInputs: newArray, letterrows: newRows });
-    this.handleSubmit(20, this.state.moreResults);
+    this.checkErroroneousInputs()
+    //this.handleSubmit(20, this.state.moreResults);
   }
 
   removeNumberRow = (index) => {
@@ -175,7 +219,13 @@ class App extends Component {
       }
     }
     this.setState({ numberInputs: newArray, numberrows: newRows });
-    this.handleSubmit(20, this.state.moreResults);
+    this.checkErroroneousInputs();
+    //this.handleSubmit(20, this.state.moreResults);
+  }
+
+  updateDropdownOptions = (input, evt) => {
+    evt.preventDefault();
+    this.setState({ sort: input })
   }
 
   render() {
@@ -215,6 +265,14 @@ class App extends Component {
         <div className="row justify-content-center col-12">
           <button type="button" className="btn btn-secondary my-auto" onClick={e => this.checkErroroneousInputs()}>Submit</button>
           {(this.state.totalCount < 0) ? (<h4> </h4>) : (<h4 className="ml-2 my-auto text-white"> {this.state.totalCount}</h4>)}
+          {(this.state.totalCount <= 1) ? (<h4> </h4>) : (
+            <div><button className={`btn btn-secondary dropdown-toggle my-auto`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{this.state.sort}</button>
+            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <button className="dropdown-item" href="#" onClick={e => this.updateDropdownOptions("A-Z", e)}>A-Z</button>
+              <button className="dropdown-item" href="#" onClick={e => this.updateDropdownOptions("Z-A", e)}>Z-A</button>
+              <button className="dropdown-item" href="#" onClick={e => this.updateDropdownOptions("1-Final", e)}>1-Final</button>
+              <button className="dropdown-item" href="#" onClick={e => this.updateDropdownOptions("Final-1", e)}>Final-1</button>
+            </div></div>)}
         </div>
 
         <div className="row justify-content-center col-12">

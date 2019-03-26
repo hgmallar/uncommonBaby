@@ -7,7 +7,7 @@ export default {
     getCountMF: function (col, gender) {
         return axios.get("/count/" + col + "/" + gender);
     },
-    findNames: function (query) {
+    findNames: function (query, sortQuery) {
         console.log(query);
         return axios.post("/names", query);
     }
