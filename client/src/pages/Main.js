@@ -25,7 +25,7 @@ class App extends Component {
     showResults: 20,
     moreResults: 100,
     totalCount: -1,
-    sort: "Sort By"
+    sort: "Most - Least Popular"
   }
 
   handleClickLetter = () => {
@@ -145,16 +145,16 @@ class App extends Component {
   handleSubmit = (results, moreResults) => {
     this.setState({ showResults: results });
     let sortQuery = [["id", "ASC"]];
-    if (this.state.sort === "A-Z") {
+    if (this.state.sort === "A - Z") {
       sortQuery = [["Name", "ASC"]];
     }
-    else if (this.state.sort === "Z-A") {
+    else if (this.state.sort === "Z - A") {
       sortQuery = [["Name", "DESC"]];
     }
-    else if (this.state.sort === "1-Final") {
+    else if (this.state.sort === "Most - Least Popular") {
       sortQuery = [["id", "ASC"]];
     }
-    else if (this.state.sort === "Final-1") {
+    else if (this.state.sort === "Least - Most Popular") {
       sortQuery = [["id", "DESC"]];
     }
     let query = { letters: this.state.letterInputs, gender: { $in: ["F", "M"] }, numbers: this.state.numberInputs, limit: moreResults, sort: sortQuery };
@@ -268,10 +268,10 @@ class App extends Component {
           {(this.state.totalCount <= 1) ? (<h4> </h4>) : (
             <div><button className={`btn btn-secondary dropdown-toggle my-auto`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{this.state.sort}</button>
             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <button className="dropdown-item" href="#" onClick={e => this.updateDropdownOptions("A-Z", e)}>A-Z</button>
-              <button className="dropdown-item" href="#" onClick={e => this.updateDropdownOptions("Z-A", e)}>Z-A</button>
-              <button className="dropdown-item" href="#" onClick={e => this.updateDropdownOptions("1-Final", e)}>1-Final</button>
-              <button className="dropdown-item" href="#" onClick={e => this.updateDropdownOptions("Final-1", e)}>Final-1</button>
+              <button className="dropdown-item" href="#" onClick={e => this.updateDropdownOptions("A - Z", e)}>A - Z</button>
+              <button className="dropdown-item" href="#" onClick={e => this.updateDropdownOptions("Z - A", e)}>Z - A</button>
+              <button className="dropdown-item" href="#" onClick={e => this.updateDropdownOptions("Most - Least Popular", e)}>Most - Least Popular</button>
+              <button className="dropdown-item" href="#" onClick={e => this.updateDropdownOptions("Least - Most Popular", e)}>Least - Most Popular</button>
             </div></div>)}
         </div>
 
