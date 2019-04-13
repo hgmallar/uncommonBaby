@@ -19,4 +19,4 @@
  * Google Fonts
  * Responsive Bootstrap design
 
- ![frontpage image](/client/public/assets/images/baby.PNG)
+ ![frontpage image](/client/public/assets/images/unpopbaby.png)
