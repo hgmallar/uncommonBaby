@@ -172,7 +172,7 @@ class App extends Component {
         this.setState({ totalCount: res.data.count, results: res.data.rows, isLoading: true });
       }
       else {
-        this.setState({ totalCount: res.data.count, results: res.data.rows });
+        this.setState({ totalCount: res.data.count, results: res.data.rows, isLoading: false });
       }
     }).catch(err => {
       console.log("find names error: ");
