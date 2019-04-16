@@ -130,7 +130,8 @@ class App extends Component {
       numberDropdownClassesA: dropdownA,
       numberDropdownClassesB: dropdownB, 
       results: newResults,
-      totalCount: count
+      totalCount: count,
+      isLoading: submit
     });
     if (submit) {
       for (let l = 0; l < this.state.numberInputs.length; l++) {
