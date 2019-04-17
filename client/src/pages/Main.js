@@ -86,9 +86,14 @@ class App extends Component {
     //loop through numberInputs
     for (let i = 0; i < this.state.numberInputs.length; i++) {
       if (this.state.numberInputs[i]) {
+        console.log(Object.getOwnPropertyNames(this.state.numberInputs[i])[0]);
         if (Object.getOwnPropertyNames(this.state.numberInputs[i]).length === 0) {
           submit = false;
           dropdownB[i] = "red-border";
+        }
+        else if ((Object.getOwnPropertyNames(this.state.numberInputs[i])[0] === "Rank_Year(s)") || (Object.getOwnPropertyNames(this.state.numberInputs[i])[0] === "Count_Year(s)") || (Object.getOwnPropertyNames(this.state.numberInputs[i])[0] === "Percentile_Year(s)")) {
+          submit = false;
+          dropdownA[i] = "red-border";
         }
         else {
           dropdownA[i] = "no-border";
@@ -101,7 +106,7 @@ class App extends Component {
           if(this.state.numberInputs[i] && this.state.numberInputs[j]) {
             console.log(Object.getOwnPropertyNames(this.state.numberInputs[i])[0]);
             console.log(Object.getOwnPropertyNames(this.state.numberInputs[j])[0]);
-            if ((Object.getOwnPropertyNames(this.state.numberInputs[i])[0]) === (Object.getOwnPropertyNames(this.state.numberInputs[j])[0])) {
+            if (((Object.getOwnPropertyNames(this.state.numberInputs[i])[0]) === (Object.getOwnPropertyNames(this.state.numberInputs[j])[0])) && (Object.getOwnPropertyNames(this.state.numberInputs[i])[0])) {
               console.log("HERE");
               errorArray.push(i);
               errorArray.push(j);

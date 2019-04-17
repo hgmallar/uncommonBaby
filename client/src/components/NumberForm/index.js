@@ -8,7 +8,7 @@ class NumberForm extends Component {
     state = {
         numericalOptions: "Numerical Options",
         years: "Year(s)",
-        yearCol: "210x",
+        yearCol: "Year(s)",
         value: { min: 20, max: 80 },
         minValue: 1,
         maxValue: 100,
@@ -30,7 +30,7 @@ class NumberForm extends Component {
     }
 
     checkSliderMinMax = (max, input, startMin, startMax, outputVal, query) => {
-        if ((this.state.value.min < max) && (this.state.value.max < max) && (this.state.value.min !== 20) && (this.state.value.max !== 80))  {
+        if ((this.state.value.min < max) && (this.state.value.max < max) && (this.state.value.min !== 20) && (this.state.value.max !== 80)) {
             //don't update slider values because they fall within range
             outputVal = { [query]: { $between: [this.state.value.min, this.state.value.max] } };
             this.setState({ numericalOptions: input, maxValue: max, output: outputVal });
@@ -59,7 +59,7 @@ class NumberForm extends Component {
             gender = "F";
         }
         let outputVal = { [query]: { $between: [startMin, startMax] } };
-        if (input === "Rank") {
+        if ((input === "Rank") && (input2 !== "Year(s)")) {
             //set max to the highest number in the column for that rank decade
             if ((male && !female) || (!male && female)) {
                 API.getCountMF(query, gender).then(res => {
@@ -88,7 +88,7 @@ class NumberForm extends Component {
                 });
             }
         }
-        else if (input === "Count") {
+        else if ((input === "Count") && (input2 !== "Year(s)")) {
             //set max to the highest number in the column for that count decade
             if ((male && !female) || (!male && female)) {
                 API.getCountMF(query, gender).then(res => {
@@ -117,10 +117,14 @@ class NumberForm extends Component {
                 });
             }
         }
-        else {
+        else if ((input === "Percentile") && (input2 !== "Year(s)")) {
             this.checkSliderMinMax(max, input, startMin, startMax, outputVal, query);
             outputVal = { [query]: { $between: [this.state.value.min, this.state.value.max] } };
             this.setState({ numericalOptions: input, maxValue: max, output: outputVal });
+            this.props.appendOutput(this.props.className, outputVal);
+        }
+        else {
+            this.setState({ numericalOptions: input, output: outputVal });
             this.props.appendOutput(this.props.className, outputVal);
         }
     }
