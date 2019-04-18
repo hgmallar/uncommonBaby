@@ -54,7 +54,7 @@ class LetterForm extends Component {
             <div className="form row justify-content-center">
                 <form className="form-inline letters">
                     <div className="dropdown ml-md-2 ml-xs-1">
-                        <button className={`btn btn-secondary dropdown-toggle`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button className={`btn btn-secondary dropdown-toggle ${this.props.dropdownClass}`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {this.state.letterOptions}
                         </button>
                         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
