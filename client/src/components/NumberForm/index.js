@@ -150,10 +150,10 @@ class NumberForm extends Component {
     render() {
 
         return (
-            <div className="form row justify-content-center" style={{ display: this.state.showHideStyle }}>
+            <div className="form row justify-content-center">
                 <form className="form-inline number-form">
                     <div className="dropdown">
-                        <button className={`btn btn-secondary dropdown-toggle ${this.props.dropdownClassA}`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button className={`btn btn-secondary dropdown-toggle`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {this.state.years}
                         </button>
                         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -176,7 +176,7 @@ class NumberForm extends Component {
                     </div>
 
                     <div className="dropdown">
-                        <button className={`btn btn-secondary dropdown-toggle ${this.props.dropdownClassB}`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button className={`btn btn-secondary dropdown-toggle`} type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {this.state.numericalOptions}
                         </button>
                         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">

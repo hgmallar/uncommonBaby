@@ -11,7 +11,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Switch>
-          <Route exact path="/" render={(props) => <Main {...props} />} />
+          <Route exact path="/" component={Main} />
           <Route component={ErrorPage} />
         </Switch>
       </BrowserRouter>
