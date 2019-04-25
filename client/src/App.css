@@ -2,6 +2,11 @@
   border: 2px solid red !important;
 }
 
+.red-text {
+  font-weight: bold;
+  color: red;
+}
+
 .no-border {
   border:none;
 }

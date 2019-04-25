@@ -25,7 +25,9 @@ class App extends Component {
     showResults: 20,
     moreResults: 100,
     totalCount: -1,
-    sort: "Most - Least Popular"
+    sort: "Most - Least Popular",
+    letterErrorMessage: [],
+    numberErrorMessage: []
   }
 
   handleClickLetter = () => {
@@ -61,8 +63,10 @@ class App extends Component {
     let errorArray = [];
     let letterInputs = this.state.letterInputClasses;
     let letterDropdowns = this.state.letterDropdownClasses;
+    let letterError = this.state.letterErrorMessage;
     let dropdownA = this.state.numberDropdownClassesA;
     let dropdownB = this.state.numberDropdownClassesB;
+    let numberError = this.state.numberErrorMessage;
     //loop through letterInputs
     for (let i = 0; i < this.state.letterInputs.length; i++) {
       console.log(this.state.letterInputs[i]);
@@ -71,16 +75,19 @@ class App extends Component {
         submit = false;
         letterInputs[i] = "red-border";
         letterDropdowns[i] = "no-border";
+        letterError[i] = "*Input a value.*"
       }
       else if ((this.state.letterInputs[i] === "")) {
         //change border of dropdown-toggle-#
         submit = false;
         letterInputs[i] = "no-border";
         letterDropdowns[i] = "red-border";
+        letterError[i] = "*Make a selection.*"
       }
       else {
         letterInputs[i] = "no-border";
         letterDropdowns[i] = "no-border";
+        letterError[i] = "";
       }
     }
     //loop through numberInputs
@@ -90,14 +97,17 @@ class App extends Component {
         if (Object.getOwnPropertyNames(this.state.numberInputs[i]).length === 0) {
           submit = false;
           dropdownB[i] = "red-border";
+          numberError[i] = "*Make a selection.*"
         }
         else if ((Object.getOwnPropertyNames(this.state.numberInputs[i])[0] === "Rank_Year(s)") || (Object.getOwnPropertyNames(this.state.numberInputs[i])[0] === "Count_Year(s)") || (Object.getOwnPropertyNames(this.state.numberInputs[i])[0] === "Percentile_Year(s)")) {
           submit = false;
           dropdownA[i] = "red-border";
+          numberError[i] = "*Make a selection.*"
         }
         else {
           dropdownA[i] = "no-border";
           dropdownB[i] = "no-border";
+          numberError[i] = "";
         }
       }
       //check for 2 of the same inputs
@@ -107,7 +117,6 @@ class App extends Component {
             console.log(Object.getOwnPropertyNames(this.state.numberInputs[i])[0]);
             console.log(Object.getOwnPropertyNames(this.state.numberInputs[j])[0]);
             if (((Object.getOwnPropertyNames(this.state.numberInputs[i])[0]) === (Object.getOwnPropertyNames(this.state.numberInputs[j])[0])) && (Object.getOwnPropertyNames(this.state.numberInputs[i])[0])) {
-              console.log("HERE");
               errorArray.push(i);
               errorArray.push(j);
               submit = false;
@@ -120,6 +129,7 @@ class App extends Component {
         for (let k = 0; k < errorArray.length; k++) {
           dropdownA[errorArray[k]] = "red-border";
           dropdownB[errorArray[k]] = "red-border";
+          numberError[i] = "*Make a selection.*"
         }
       }
     }
@@ -132,8 +142,10 @@ class App extends Component {
     this.setState({
       letterInputClasses: letterInputs,
       letterDropdownClasses: letterDropdowns,
+      letterErrorMessage: letterError,
       numberDropdownClassesA: dropdownA,
       numberDropdownClassesB: dropdownB, 
+      numberErrorMessage: numberError,
       results: newResults,
       totalCount: count,
       isLoading: submit
@@ -142,6 +154,7 @@ class App extends Component {
       for (let l = 0; l < this.state.numberInputs.length; l++) {
         dropdownA[l] = "no-border";
         dropdownB[l] = "no-border";
+        numberError[l] = "";
       }
       this.handleSubmit(20, this.state.moreResults);
     }
@@ -255,11 +268,11 @@ class App extends Component {
         <div className="text-center row justify-content-center">
           <div className="col-md-4">
             {this.state.letterrows.map((r) => (
-              <LetterForm key={r} className={r} inputClass={this.state.letterInputClasses[r]} dropdownClass={this.state.letterDropdownClasses[r]} appendOutput={this.grabLetterInput} removeLetterRow={this.removeLetterRow} />))}
+              <LetterForm key={r} className={r} errorMessage={this.state.letterErrorMessage[r]} inputClass={this.state.letterInputClasses[r]} dropdownClass={this.state.letterDropdownClasses[r]} appendOutput={this.grabLetterInput} removeLetterRow={this.removeLetterRow} />))}
           </div>
           <div className="col-md-8">
             {this.state.numberrows.map((r) => (
-              <NumberForm key={r} className={r} dropdownClassA={this.state.numberDropdownClassesA[r]} dropdownClassB={this.state.numberDropdownClassesB[r]} appendOutput={this.grabNumberInput} male={this.state.male} female={this.state.female} removeNumberRow={this.removeNumberRow} />))}
+              <NumberForm key={r} className={r} errorMessage={this.state.numberErrorMessage[r]} dropdownClassA={this.state.numberDropdownClassesA[r]} dropdownClassB={this.state.numberDropdownClassesB[r]} appendOutput={this.grabNumberInput} male={this.state.male} female={this.state.female} removeNumberRow={this.removeNumberRow} />))}
           </div>
         </div>
 
