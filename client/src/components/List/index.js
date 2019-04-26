@@ -18,6 +18,10 @@ class List extends Component {
         )
     }
 
+    componentWillUnmount() {
+        this.props.updateLoad();
+    }
+
     render() {
 
         return (
