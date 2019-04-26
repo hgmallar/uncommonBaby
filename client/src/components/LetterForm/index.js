@@ -49,12 +49,12 @@ class LetterForm extends Component {
 
   render() {
     return (
-      <div>
-        <div className="row justify-content-center">
+      <div className="max-width">
+        <div className="row justify-content-center mx-auto">
           <form className="form-inline letters mb-0">
             <div className="dropdown ml-md-2 ml-xs-1">
               <button
-                className={`btn btn-secondary dropdown-toggle ${
+                className={`btn btn-secondary dropdown-toggle ml-0 px-1 ${
                   this.props.dropdownClass
                 }`}
                 type="button"

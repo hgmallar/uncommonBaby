@@ -300,7 +300,7 @@ class App extends Component {
           A tool to find names based on popularity
         </h4>
 
-        <div className="form-check form-check-inline row justify-content-center col-12">
+        <div className="form-check form-check-inline row justify-content-center col-12 mx-0 px-0 text-center">
           <label>
             Male
             <input
@@ -319,8 +319,8 @@ class App extends Component {
           </label>
         </div>
 
-        <div className="text-center row justify-content-center">
-          <div className="col-md-4">
+        <div className="text-center row justify-content-center mx-auto">
+          <div className="col-md-4 px-0">
             {this.state.letterrows.map(r => (
               <LetterForm
                 key={r}
@@ -333,7 +333,7 @@ class App extends Component {
               />
             ))}
           </div>
-          <div className="col-md-8">
+          <div className="col-md-8 px-0">
             {this.state.numberrows.map(r => (
               <NumberForm
                 key={r}
@@ -350,7 +350,7 @@ class App extends Component {
           </div>
         </div>
 
-        <div className="text-center white-text row justify-content-center">
+        <div className="text-center white-text row justify-content-center mx-auto">
           <button
             className="link-button col-md-4"
             onClick={this.handleClickLetter}
@@ -365,7 +365,7 @@ class App extends Component {
           </button>
         </div>
 
-        <div className="row justify-content-center col-12">
+        <div className="row justify-content-center col-12 mx-auto">
           <button
             type="button"
             className="btn btn-secondary my-auto"
@@ -436,7 +436,7 @@ class App extends Component {
           )}
         </div>
 
-        <div className="row justify-content-center col-12">
+        <div className="row justify-content-center col-12 mx-auto">
           <List
             results={this.state.results}
             total={this.state.totalCount}

@@ -1,3 +1,11 @@
+.row {
+  max-width: 100%;
+}
+
+.max-width {
+  width: 100%;
+}
+
 .red-border {
   border: 2px solid red !important;
 }
@@ -29,7 +37,6 @@ body {
   margin: 0px 0px 10px 10px;
   background-color: #e962c1;
   border-color: #e962c1;
-  min-width: 85px;
 }
 
 .btn:hover, .btn:visited, .btn:active, .btn:link, .btn:focus {
@@ -72,8 +79,9 @@ a:hover {
 }
 
 .input-range {
-  width: 200px !important;
+  min-width: 200px !important;
   margin-left: 10px !important;
+  width: 85% !important;
 }
 
 .white-text{
@@ -105,23 +113,12 @@ a:hover {
   max-width: 90%;
 }
 
-.input-range {
-  max-width: 90%;
+.form-inline {
+  flex-wrap: nowrap;
 }
 
-@media only screen and (min-width:0px) and (max-width:830px){
-  .input-range {
-    min-width: 70%;
-    max-width: 80%;
-  }
-
-}
-
-@media only screen and (min-width:0px) and (max-width:768px){
-  .letters {
-    flex-wrap: wrap;
-  }
+@media only screen and (min-width:0px) and (max-width:600px){
   .form-inline {
-    max-width:95%;
+    flex-wrap: wrap;
   }
 }

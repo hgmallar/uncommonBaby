@@ -218,12 +218,12 @@ class NumberForm extends Component {
 
   render() {
     return (
-      <div>
-        <div className="row justify-content-center">
+      <div className="max-width">
+        <div className="row justify-content-center mx-auto">
           <form className="form-inline number-form mb-0">
             <div className="dropdown">
               <button
-                className={`btn btn-secondary dropdown-toggle ${
+                className={`btn btn-secondary dropdown-toggle ml-0 px-1 ${
                   this.props.dropdownClassA
                 }`}
                 type="button"
@@ -350,7 +350,7 @@ class NumberForm extends Component {
 
             <div className="dropdown">
               <button
-                className={`btn btn-secondary dropdown-toggle ${
+                className={`btn btn-secondary dropdown-toggle px-1 ${
                   this.props.dropdownClassB
                 }`}
                 type="button"
@@ -398,7 +398,6 @@ class NumberForm extends Component {
                 </button>
               </div>
             </div>
-
             <InputRange
               className="slider"
               maxValue={this.state.maxValue}
@@ -409,7 +408,9 @@ class NumberForm extends Component {
                 if (this.state.numericalOptions !== "Numerical Options") {
                   let query =
                     this.state.numericalOptions + "_" + this.state.yearCol;
-                  outputVal = { [query]: { $between: [value.min, value.max] } };
+                  outputVal = {
+                    [query]: { $between: [value.min, value.max] }
+                  };
                 }
                 this.setState({ value: value, output: outputVal });
                 this.props.appendOutput(this.props.className, outputVal);
