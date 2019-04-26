@@ -145,7 +145,7 @@ class App extends Component {
         for (let k = 0; k < errorArray.length; k++) {
           dropdownA[errorArray[k]] = "red-border";
           dropdownB[errorArray[k]] = "red-border";
-          numberError[i] = "*Make a selection.*";
+          numberError[errorArray[k]] = "*Make a selection.*";
         }
       }
     }
