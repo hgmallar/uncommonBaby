@@ -368,7 +368,7 @@ class App extends Component {
         <div className="row justify-content-center col-12 mx-auto">
           <button
             type="button"
-            className="btn btn-secondary my-auto"
+            className="btn btn-secondary ml-0 px-1"
             onClick={e => this.checkErroroneousInputs()}
           >
             Submit
@@ -386,7 +386,7 @@ class App extends Component {
           ) : (
             <div>
               <button
-                className={`btn btn-secondary dropdown-toggle my-auto`}
+                className={`btn btn-secondary dropdown-toggle px-1`}
                 type="button"
                 id="dropdownMenuButton"
                 data-toggle="dropdown"
