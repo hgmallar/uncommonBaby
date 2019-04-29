@@ -39,10 +39,10 @@ class App extends Component {
 
   grabLetterInput = (index, output) => {
     let realIndex = index;
-    for (let i=0; i < this.state.letterrows.length; i++) {
+    for (let i = 0; i < this.state.letterrows.length; i++) {
       if (index === this.state.letterrows[i]) {
         realIndex = i;
-        console.log("HERE " + i)
+        console.log("HERE " + i);
       }
     }
     let newArray = this.state.letterInputs;
@@ -59,7 +59,7 @@ class App extends Component {
 
   grabNumberInput = (index, output) => {
     let realIndex = index;
-    for (let i=0; i < this.state.numberrows.length; i++) {
+    for (let i = 0; i < this.state.numberrows.length; i++) {
       if (index === this.state.numberrows[i]) {
         realIndex = i;
       }
@@ -102,8 +102,51 @@ class App extends Component {
           letterError[this.state.letterrows[i]] = "";
         }
       }
+      //check for 2 of the same inputs, or 2 begins withs, or 2 ends with
+      if (i + 1 < this.state.letterInputs.length) {
+        for (let j = i + 1; j < this.state.letterInputs.length; j++) {
+          if (this.state.letterInputs[i] && this.state.letterInputs[j]) {
+            if (
+              (Object.getOwnPropertyNames(this.state.letterInputs[i])[0] ===
+                Object.getOwnPropertyNames(this.state.letterInputs[j])[0] &&
+                this.state.letterInputs[i][
+                  Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
+                ] ===
+                  this.state.letterInputs[j][
+                    Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                  ]) ||
+              (this.state.letterInputs[i][
+                Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
+              ][0] !== "%" &&
+                this.state.letterInputs[j][
+                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                ][0] !== "%") ||
+              (this.state.letterInputs[i][
+                Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
+              ].substr(-1) !== "%" &&
+                this.state.letterInputs[j][
+                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                ].substr(-1) !== "%")
+            ) {
+              errorArray.push(this.state.letterrows[i]);
+              errorArray.push(this.state.letterrows[j]);
+              submit = false;
+            }
+          }
+        }
+      }
+      console.log(errorArray);
+      if (errorArray) {
+        for (let k = 0; k < errorArray.length; k++) {
+          letterInputClasses[errorArray[k]] = "red-border";
+          letterDropdowns[errorArray[k]] = "red-border";
+          letterError[errorArray[k]] = "*Make a selection.*";
+        }
+      }
     }
+
     //loop through numberInputs
+    errorArray = [];
     for (let i = 0; i < this.state.numberInputs.length; i++) {
       if (this.state.numberInputs[i]) {
         console.log(Object.getOwnPropertyNames(this.state.numberInputs[i])[0]);
@@ -134,12 +177,6 @@ class App extends Component {
       if (i + 1 < this.state.numberInputs.length) {
         for (let j = i + 1; j < this.state.numberInputs.length; j++) {
           if (this.state.numberInputs[i] && this.state.numberInputs[j]) {
-            console.log(
-              Object.getOwnPropertyNames(this.state.numberInputs[i])[0]
-            );
-            console.log(
-              Object.getOwnPropertyNames(this.state.numberInputs[j])[0]
-            );
             if (
               Object.getOwnPropertyNames(this.state.numberInputs[i])[0] ===
                 Object.getOwnPropertyNames(this.state.numberInputs[j])[0] &&
@@ -272,7 +309,7 @@ class App extends Component {
 
   removeLetterRow = index => {
     let realIndex = index;
-    for (let j=0; j < this.state.letterrows.length; j++) {
+    for (let j = 0; j < this.state.letterrows.length; j++) {
       if (this.state.letterrows[j] === index) {
         realIndex = j;
       }
