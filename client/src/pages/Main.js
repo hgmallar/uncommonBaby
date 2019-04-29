@@ -54,7 +54,7 @@ class App extends Component {
 
   grabNumberInput = (index, output) => {
     let newArray = this.state.numberInputs;
-    newArray[index] = output;
+    newArray[this.state.numberrows.length - 1] = output;
     console.log(newArray);
     this.setState({ numberInputs: newArray });
   };
@@ -101,8 +101,8 @@ class App extends Component {
           Object.getOwnPropertyNames(this.state.numberInputs[i]).length === 0
         ) {
           submit = false;
-          dropdownB[i] = "red-border";
-          numberError[i] = "*Make a selection.*";
+          dropdownB[this.state.numberrows[i]] = "red-border";
+          numberError[this.state.numberrows[i]] = "*Make a selection.*";
         } else if (
           Object.getOwnPropertyNames(this.state.numberInputs[i])[0] ===
             "Rank_Year(s)" ||
@@ -112,12 +112,12 @@ class App extends Component {
             "Percentile_Year(s)"
         ) {
           submit = false;
-          dropdownA[i] = "red-border";
-          numberError[i] = "*Make a selection.*";
+          dropdownA[this.state.numberrows[i]] = "red-border";
+          numberError[this.state.numberrows[i]] = "*Make a selection.*";
         } else {
-          dropdownA[i] = "no-border";
-          dropdownB[i] = "no-border";
-          numberError[i] = "";
+          dropdownA[this.state.numberrows[i]] = "no-border";
+          dropdownB[this.state.numberrows[i]] = "no-border";
+          numberError[this.state.numberrows[i]] = "";
         }
       }
       //check for 2 of the same inputs
@@ -135,8 +135,8 @@ class App extends Component {
                 Object.getOwnPropertyNames(this.state.numberInputs[j])[0] &&
               Object.getOwnPropertyNames(this.state.numberInputs[i])[0]
             ) {
-              errorArray.push(i);
-              errorArray.push(j);
+              errorArray.push(this.state.numberrows[i]);
+              errorArray.push(this.state.numberrows[j]);
               submit = false;
             }
           }
@@ -273,26 +273,25 @@ class App extends Component {
     newRows.splice(realIndex, 1);
     this.setState({
       letterInputs: newArray,
-      letterrows: newRows,
+      letterrows: newRows
     });
     //this.handleSubmit(20, this.state.moreResults);
   };
 
   removeNumberRow = index => {
-    let newArray = this.state.numberInputs;
-    newArray.splice(index, 1);
-    let newRows = this.state.numberrows;
-    for (let i = 0; i < newRows.length; i++) {
-      if (newRows[i] === index) {
-        newRows.splice(i, 1);
+    let realIndex = index;
+    for (let i = 0; i < this.state.numberrows.length; i++) {
+      if (this.state.numberrows[i] === index) {
+        realIndex = i;
       }
     }
-    let newErrorArray = this.state.numberErrorMessage;
-    newErrorArray.splice(index, 1);
+    let newArray = this.state.numberInputs;
+    newArray.splice(realIndex, 1);
+    let newRows = this.state.numberrows;
+    newRows.splice(realIndex, 1);
     this.setState({
       numberInputs: newArray,
-      numberrows: newRows,
-      numberErrorMessage: newErrorArray
+      numberrows: newRows
     });
     //this.handleSubmit(20, this.state.moreResults);
   };
