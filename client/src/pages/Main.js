@@ -38,10 +38,15 @@ class App extends Component {
   };
 
   grabLetterInput = (index, output) => {
+    let realIndex = index;
+    for (let i=0; i < this.state.letterrows.length; i++) {
+      if (index === this.state.letterrows[i]) {
+        realIndex = i;
+        console.log("HERE " + i)
+      }
+    }
     let newArray = this.state.letterInputs;
-    newArray[this.state.letterrows.length - 1] = output;
-    console.log(this.state.letterrows.length - 1);
-    console.log(this.state.letterrows);
+    newArray[realIndex] = output;
     this.setState({ letterInputs: newArray });
   };
 
@@ -53,9 +58,14 @@ class App extends Component {
   };
 
   grabNumberInput = (index, output) => {
+    let realIndex = index;
+    for (let i=0; i < this.state.numberrows.length; i++) {
+      if (index === this.state.numberrows[i]) {
+        realIndex = i;
+      }
+    }
     let newArray = this.state.numberInputs;
-    newArray[this.state.numberrows.length - 1] = output;
-    console.log(newArray);
+    newArray[realIndex] = output;
     this.setState({ numberInputs: newArray });
   };
 
