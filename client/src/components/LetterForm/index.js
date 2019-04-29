@@ -31,7 +31,7 @@ class LetterForm extends Component {
   updateOutput = evt => {
     evt.preventDefault();
     let input = evt.target.value;
-    let output = "";
+    let output = "string";
     if (this.state.dropdown === "Contains") {
       output = { $like: "%" + input + "%" };
     } else if (this.state.dropdown === "Starts With") {

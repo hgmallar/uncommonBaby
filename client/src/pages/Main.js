@@ -39,8 +39,9 @@ class App extends Component {
 
   grabLetterInput = (index, output) => {
     let newArray = this.state.letterInputs;
-    newArray[index] = output;
-    console.log(newArray);
+    newArray[this.state.letterrows.length - 1] = output;
+    console.log(this.state.letterrows.length - 1);
+    console.log(this.state.letterrows);
     this.setState({ letterInputs: newArray });
   };
 
@@ -61,7 +62,7 @@ class App extends Component {
   checkErroroneousInputs = () => {
     let submit = true;
     let errorArray = [];
-    let letterInputs = this.state.letterInputClasses;
+    let letterInputClasses = this.state.letterInputClasses;
     let letterDropdowns = this.state.letterDropdownClasses;
     let letterError = this.state.letterErrorMessage;
     let dropdownA = this.state.numberDropdownClassesA;
@@ -69,26 +70,27 @@ class App extends Component {
     let numberError = this.state.numberErrorMessage;
     //loop through letterInputs
     for (let i = 0; i < this.state.letterInputs.length; i++) {
-      console.log(this.state.letterInputs[i]);
-      if (
-        this.state.letterInputs[i].$like === "%%" ||
-        this.state.letterInputs[i].$like === "%"
-      ) {
-        //change border of letter-input-#
-        submit = false;
-        letterInputs[i] = "red-border";
-        letterDropdowns[i] = "no-border";
-        letterError[i] = "*Input a value.*";
-      } else if (this.state.letterInputs[i] === "") {
-        //change border of dropdown-toggle-#
-        submit = false;
-        letterInputs[i] = "no-border";
-        letterDropdowns[i] = "red-border";
-        letterError[i] = "*Make a selection.*";
-      } else {
-        letterInputs[i] = "no-border";
-        letterDropdowns[i] = "no-border";
-        letterError[i] = "";
+      if (this.state.letterInputs[i]) {
+        if (
+          this.state.letterInputs[i].$like === "%%" ||
+          this.state.letterInputs[i].$like === "%"
+        ) {
+          //change border of letter-input-#
+          submit = false;
+          letterInputClasses[this.state.letterrows[i]] = "red-border";
+          letterDropdowns[this.state.letterrows[i]] = "no-border";
+          letterError[this.state.letterrows[i]] = "*Input a value.*";
+        } else if (this.state.letterInputs[i] === "string") {
+          //change border of dropdown-toggle-#
+          submit = false;
+          letterInputClasses[this.state.letterrows[i]] = "no-border";
+          letterDropdowns[this.state.letterrows[i]] = "red-border";
+          letterError[this.state.letterrows[i]] = "*Make a selection.*";
+        } else {
+          letterInputClasses[this.state.letterrows[i]] = "no-border";
+          letterDropdowns[this.state.letterrows[i]] = "no-border";
+          letterError[this.state.letterrows[i]] = "";
+        }
       }
     }
     //loop through numberInputs
@@ -156,7 +158,7 @@ class App extends Component {
       count = "";
     }
     this.setState({
-      letterInputClasses: letterInputs,
+      letterInputClasses: letterInputClasses,
       letterDropdownClasses: letterDropdowns,
       letterErrorMessage: letterError,
       numberDropdownClassesA: dropdownA,
@@ -189,8 +191,9 @@ class App extends Component {
     } else if (this.state.sort === "Least - Most Popular") {
       sortQuery = [["id", "DESC"]];
     }
+    let lettersArr = this.state.letterInputs;
     let query = {
-      letters: this.state.letterInputs,
+      letters: lettersArr,
       gender: { $in: ["F", "M"] },
       numbers: this.state.numberInputs,
       limit: moreResults,
@@ -198,7 +201,7 @@ class App extends Component {
     };
     if (this.state.female && !this.state.male) {
       query = {
-        letters: this.state.letterInputs,
+        letters: lettersArr,
         gender: "F",
         numbers: this.state.numberInputs,
         limit: moreResults,
@@ -206,7 +209,7 @@ class App extends Component {
       };
     } else if (!this.state.female && this.state.male) {
       query = {
-        letters: this.state.letterInputs,
+        letters: lettersArr,
         gender: "M",
         numbers: this.state.numberInputs,
         limit: moreResults,
@@ -258,17 +261,20 @@ class App extends Component {
   };
 
   removeLetterRow = index => {
-    let newArray = this.state.letterInputs;
-    newArray[index] = { $like: "%%" };
-    let newRows = this.state.letterrows;
-    for (let i = 0; i < newRows.length; i++) {
-      if (newRows[i] === index) {
-        newRows.splice(i, 1);
+    let realIndex = index;
+    for (let j=0; j < this.state.letterrows.length; j++) {
+      if (this.state.letterrows[j] === index) {
+        realIndex = j;
       }
     }
-    let newErrorArray = this.state.letterErrorMessage;
-    newErrorArray.splice(index, 1);
-    this.setState({ letterInputs: newArray, letterrows: newRows, letterErrorMessage: newErrorArray });
+    let newArray = this.state.letterInputs;
+    newArray.splice(realIndex, 1);
+    let newRows = this.state.letterrows;
+    newRows.splice(realIndex, 1);
+    this.setState({
+      letterInputs: newArray,
+      letterrows: newRows,
+    });
     //this.handleSubmit(20, this.state.moreResults);
   };
 
@@ -283,7 +289,11 @@ class App extends Component {
     }
     let newErrorArray = this.state.numberErrorMessage;
     newErrorArray.splice(index, 1);
-    this.setState({ numberInputs: newArray, numberrows: newRows, numberErrorMessage: newErrorArray });
+    this.setState({
+      numberInputs: newArray,
+      numberrows: newRows,
+      numberErrorMessage: newErrorArray
+    });
     //this.handleSubmit(20, this.state.moreResults);
   };
 
