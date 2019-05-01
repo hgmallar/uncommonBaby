@@ -4,6 +4,7 @@ import List from "../components/List";
 import Header from "../components/Header";
 import LetterForm from "../components/LetterForm";
 import NumberForm from "../components/NumberForm";
+import Modal from "../components/Modal";
 import API from "../utils/API";
 
 class App extends Component {
@@ -27,7 +28,24 @@ class App extends Component {
     totalCount: -1,
     sort: "Most - Least Popular",
     letterErrorMessage: [],
-    numberErrorMessage: []
+    numberErrorMessage: [],
+    showModal: false,
+    modalTitle: "",
+    modalMessage: ""
+  };
+
+  updateModal = type => {
+    let title = "Number Options";
+    let message = `Rank: Returns only the names with the rank in the inputted range for that decade or all time.\nPercentile: Returns only the names with the popularity percentage in the inputted range for that decade or all time.\nCount: Returns only the names with the count in the inputted range for that decade or all time.`;
+    if (type === "letter") {
+      title = "Letter Options"
+      message = "Contains: Returns only names that contain the letter or string inputted.\nStarts With: Returns only names that start with the letter or string inputted.\nEnds With: Returns only names that end with the letter or string inputted.";
+    }
+    this.setState({ showModal: true, modalMessage: message, modalTitle: title });
+  };
+
+  handleClose = () => {
+    this.setState({ showModal: false });
   };
 
   handleClickLetter = () => {
@@ -386,6 +404,7 @@ class App extends Component {
                 dropdownClass={this.state.letterDropdownClasses[r]}
                 appendOutput={this.grabLetterInput}
                 removeLetterRow={this.removeLetterRow}
+                updateModal={this.updateModal}
               />
             ))}
           </div>
@@ -401,6 +420,7 @@ class App extends Component {
                 male={this.state.male}
                 female={this.state.female}
                 removeNumberRow={this.removeNumberRow}
+                updateModal={this.updateModal}
               />
             ))}
           </div>
@@ -503,6 +523,12 @@ class App extends Component {
             loading={this.state.isLoading}
           />
         </div>
+        <Modal
+          show={this.state.showModal}
+          title={this.state.modalTitle}
+          message={this.state.modalMessage}
+          handleClose={this.handleClose}
+        />
       </Wrapper>
     );
   }

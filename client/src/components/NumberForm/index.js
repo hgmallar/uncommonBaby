@@ -425,6 +425,11 @@ class NumberForm extends Component {
               &times;
             </button>
           </form>
+          <sup>
+            <button type="button" className="info text-white">
+              <i className="fas fa-info-circle" onClick={() => this.props.updateModal("number")}/>
+            </button>
+          </sup>
         </div>
         <div className="red-text">{this.props.errorMessage}</div>
       </div>
