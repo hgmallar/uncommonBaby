@@ -38,49 +38,22 @@ class NumberForm extends Component {
   };
 
   checkSliderMinMax = (max, input, startMin, startMax, outputVal, query) => {
-    if (
-      this.state.value.min < max &&
-      this.state.value.max < max &&
-      this.state.value.min !== 20 &&
-      this.state.value.max !== 80
-    ) {
-      //don't update slider values because they fall within range
-      outputVal = {
-        [query]: { $between: [this.state.value.min, this.state.value.max] }
-      };
-      this.setState({
-        numericalOptions: input,
-        maxValue: max,
-        output: outputVal
-      });
-    } else if (
-      this.state.value.min < max &&
-      this.state.value.min !== 20 &&
-      this.state.value.max !== 80
-    ) {
-      //update max only
-      outputVal = { [query]: { $between: [this.state.value.min, startMax] } };
-      this.setState({
-        numericalOptions: input,
-        maxValue: max,
-        value: { min: this.state.value.min, max: startMax },
-        output: outputVal
-      });
-    } else {
-      //update both
-      this.setState({
-        numericalOptions: input,
-        maxValue: max,
-        value: { min: startMin, max: startMax },
-        output: outputVal
-      });
-    }
+    //update both
+    this.setState({
+      numericalOptions: input,
+      maxValue: max,
+      value: { min: startMin, max: startMax },
+      output: outputVal
+    });
   };
 
   updateNumbers = (input, input2, male, female) => {
     let max = 100;
-    let startMin = 20;
-    let startMax = 80;
+    let prevMax = this.state.maxValue;
+    let minPercentage = this.state.value.min / prevMax;
+    let maxPercentage = this.state.value.max / prevMax;
+    let startMin = Math.round(minPercentage * 100);
+    let startMax = Math.round(maxPercentage * 100);
     let query = input + "_" + input2;
     let gender = "";
     if (male && !female) {
@@ -95,8 +68,8 @@ class NumberForm extends Component {
         API.getCountMF(query, gender)
           .then(res => {
             max = res.data;
-            startMin = Math.round(res.data * 0.2);
-            startMax = Math.round(res.data * 0.8);
+            startMin = Math.round(res.data * minPercentage);
+            startMax = Math.round(res.data * maxPercentage);
             outputVal = { [query]: { $between: [startMin, startMax] } };
             this.checkSliderMinMax(
               max,
@@ -116,8 +89,8 @@ class NumberForm extends Component {
         API.getCount(query)
           .then(res => {
             max = res.data;
-            startMin = Math.round(res.data * 0.2);
-            startMax = Math.round(res.data * 0.8);
+            startMin = Math.round(res.data * minPercentage);
+            startMax = Math.round(res.data * maxPercentage);
             outputVal = { [query]: { $between: [startMin, startMax] } };
             this.checkSliderMinMax(
               max,
@@ -140,8 +113,8 @@ class NumberForm extends Component {
         API.getCountMF(query, gender)
           .then(res => {
             max = res.data;
-            startMin = Math.round(res.data * 0.2);
-            startMax = Math.round(res.data * 0.8);
+            startMin = Math.round(res.data * minPercentage);
+            startMax = Math.round(res.data * maxPercentage);
             outputVal = { [query]: { $between: [startMin, startMax] } };
             this.checkSliderMinMax(
               max,
@@ -161,8 +134,8 @@ class NumberForm extends Component {
         API.getCount(query)
           .then(res => {
             max = res.data;
-            startMin = Math.round(res.data * 0.2);
-            startMax = Math.round(res.data * 0.8);
+            startMin = Math.round(res.data * minPercentage);
+            startMax = Math.round(res.data * maxPercentage);
             outputVal = { [query]: { $between: [startMin, startMax] } };
             this.checkSliderMinMax(
               max,
@@ -427,7 +400,10 @@ class NumberForm extends Component {
           </form>
           <sup>
             <button type="button" className="info text-white">
-              <i className="fas fa-info-circle" onClick={() => this.props.updateModal("number")}/>
+              <i
+                className="fas fa-info-circle"
+                onClick={() => this.props.updateModal("number")}
+              />
             </button>
           </sup>
         </div>
