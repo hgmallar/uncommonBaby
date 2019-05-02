@@ -46,9 +46,7 @@ module.exports = function(app) {
       let value = Object.values(req.body.numbers[i])[0];
       let secondval = Object.values(value)[0];
       whereObj[key] = {[between] : secondval};
-    }
-    console.log(numbers[0]);
-    console.log(whereObj);
+    };
     db.Name.findAndCountAll({
       where: whereObj,
       limit: req.body.limit,
