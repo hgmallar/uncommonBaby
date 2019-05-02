@@ -259,7 +259,7 @@ class App extends Component {
     let lettersArr = this.state.letterInputs;
     let query = {
       letters: lettersArr,
-      gender: { $in: ["F", "M"] },
+      gender: ["F", "M"],
       numbers: this.state.numberInputs,
       limit: moreResults,
       sort: sortQuery
@@ -267,7 +267,7 @@ class App extends Component {
     if (this.state.female && !this.state.male) {
       query = {
         letters: lettersArr,
-        gender: "F",
+        gender: ["F"],
         numbers: this.state.numberInputs,
         limit: moreResults,
         sort: sortQuery
@@ -275,7 +275,7 @@ class App extends Component {
     } else if (!this.state.female && this.state.male) {
       query = {
         letters: lettersArr,
-        gender: "M",
+        gender: ["M"],
         numbers: this.state.numberInputs,
         limit: moreResults,
         sort: sortQuery
