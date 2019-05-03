@@ -8,7 +8,7 @@
 var db = require("../models");
 
 var Sequelize = require("sequelize");
-const { and, or, like, between} = Sequelize.Op;
+const { and, or, like, between } = Sequelize.Op;
 
 // Routes =============================================================
 module.exports = function(app) {
@@ -30,7 +30,7 @@ module.exports = function(app) {
   app.post("/names", function(req, res) {
     let letters = [];
     for (let i = 0; i < req.body.letters.length; i++) {
-      letters.push({[like]: req.body.letters[i].$like})
+      letters.push({ [like]: req.body.letters[i].$like });
     }
     let whereObj = {
       Name: {
@@ -38,15 +38,15 @@ module.exports = function(app) {
       },
       Gender: {
         [or]: req.body.gender
-      },
+      }
     };
     let numbers = [];
     for (let i = 0; i < req.body.numbers.length; i++) {
       let key = Object.keys(req.body.numbers[i])[0];
       let value = Object.values(req.body.numbers[i])[0];
       let secondval = Object.values(value)[0];
-      whereObj[key] = {[between] : secondval};
-    };
+      whereObj[key] = { [between]: secondval };
+    }
     db.Name.findAndCountAll({
       where: whereObj,
       limit: req.body.limit,

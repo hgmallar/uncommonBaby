@@ -12,6 +12,7 @@ class App extends Component {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Main} />
+          <Route path="/:savedQuery" component={Main} />
           <Route component={ErrorPage} />
         </Switch>
       </BrowserRouter>

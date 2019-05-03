@@ -7,6 +7,7 @@ import NumberForm from "../components/NumberForm";
 import Modal from "../components/Modal";
 import API from "../utils/API";
 
+
 class App extends Component {
   state = {
     male: false,
@@ -34,14 +35,112 @@ class App extends Component {
     modalMessage: ""
   };
 
+  componentWillMount() {
+    //%25u%25,%25e%25&MF&%5B%7B"Rank_188x":%7B"$between":%5B3,%20500%5D%7D%7D,%7B"Rank_201x":%7B"$between":%5B10,%202000%5D%7D%7D%5D
+    //%25u%25,%25e%25
+    //MF
+    //%5B%7B%22Rank_188x%22:%7B%22$between%22:%5B3,%20500%5D%7D%7D,%7B%22Rank_201x%22:%7B%22$between%22:%5B10,%202000%5D%7D%7D%5D
+    let male = false;
+    let female = false;
+    let lettersArr = [];
+    let genderArr = [];
+    let letterClasses = [];
+    let letterError = [];
+    let letterRow = [];
+    const { savedQuery } = this.props.match.params;
+    console.log(savedQuery);
+    if (savedQuery) {
+      let fields = savedQuery.split("&");
+      fields[0] = fields[0].replace("25", "");
+      let letters = fields[0].split(",");
+      for (let i = 0; i < letters.length; i++) {
+        letterRow[i] = i;
+        lettersArr[i] = { $like: letters[i] };
+        letterClasses[i] = "no-border";
+        letterError[i] = "";
+      }
+      if (fields[1] === "M") {
+        male = true;
+        genderArr = ["M"];
+      } else if (fields[1] === "F") {
+        female = true;
+        genderArr = ["F"];
+      } else if (fields[1] === "MF") {
+        male = true;
+        female = true;
+        genderArr = ["M", "F"];
+      }
+      let numbers = JSON.parse(fields[2]);
+      let numberRow = [];
+      let numDD = [];
+      let numErr = [];
+      for (let i = 0; i < numbers.length; i++) {
+        numberRow[i] = i;
+        numDD[i] = "no-border";
+        numErr[i] = "";
+      }
+      console.log(numbers);
+      this.setState({
+        male: male,
+        female: female,
+        letterrows: letterRow,
+        letterInputs: lettersArr,
+        letterRowLength: lettersArr.length,
+        letterDropdownClasses: letterClasses,
+        letterInputClasses: letterClasses,
+        letterErrorMessage: letterError,
+        numberInputs: numbers,
+        numberRowLength: numbers.length,
+        numberrows: numberRow,
+        numberDropdownClassesA: numDD,
+        numberDropdownClassesB: numDD,
+        numberErrorMessage: numErr
+      });
+      let query = {
+        letters: lettersArr,
+        gender: genderArr,
+        numbers: numbers,
+        limit: 200,
+        sort: [["id", "ASC"]]
+      };
+      API.findNames(query)
+        .then(res => {
+          console.log(res.data.count);
+          console.log(res.data);
+          if (res.data.count >= 20) {
+            this.setState({
+              totalCount: res.data.count,
+              results: res.data.rows,
+              isLoading: true
+            });
+          } else {
+            this.setState({
+              totalCount: res.data.count,
+              results: res.data.rows,
+              isLoading: false
+            });
+          }
+        })
+        .catch(err => {
+          console.log("find names error: ");
+          console.log(err);
+        });
+    }
+  }
+
   updateModal = type => {
     let title = "Number Options";
     let message = `Rank: Returns only the names with the rank in the inputted range for that decade or all time.\nPercentile: Returns only the names with the popularity percentage in the inputted range for that decade or all time.\nCount: Returns only the names with the count in the inputted range for that decade or all time.`;
     if (type === "letter") {
-      title = "Letter Options"
-      message = "Contains: Returns only names that contain the letter or string inputted.\nStarts With: Returns only names that start with the letter or string inputted.\nEnds With: Returns only names that end with the letter or string inputted.";
+      title = "Letter Options";
+      message =
+        "Contains: Returns only names that contain the letter or string inputted.\nStarts With: Returns only names that start with the letter or string inputted.\nEnds With: Returns only names that end with the letter or string inputted.";
     }
-    this.setState({ showModal: true, modalMessage: message, modalTitle: title });
+    this.setState({
+      showModal: true,
+      modalMessage: message,
+      modalTitle: title
+    });
   };
 
   handleClose = () => {
@@ -101,7 +200,8 @@ class App extends Component {
       if (this.state.letterInputs[i]) {
         if (
           this.state.letterInputs[i].$like === "%%" ||
-          this.state.letterInputs[i].$like === "%"
+          this.state.letterInputs[i].$like === "%" || 
+          this.state.letterInputs[i].$like.includes("Letter(s)")
         ) {
           //change border of letter-input-#
           submit = false;
@@ -281,7 +381,7 @@ class App extends Component {
         sort: sortQuery
       };
     }
-    console.log(query);
+    console.log("QUERY = " + query);
     API.findNames(query)
       .then(res => {
         console.log(res.data.count);
@@ -399,6 +499,11 @@ class App extends Component {
               <LetterForm
                 key={r}
                 className={r}
+                inputs={
+                  this.state.letterInputs[r]
+                    ? this.state.letterInputs[r].$like
+                    : "Letter(s)"
+                }
                 errorMessage={this.state.letterErrorMessage[r]}
                 inputClass={this.state.letterInputClasses[r]}
                 dropdownClass={this.state.letterDropdownClasses[r]}
@@ -413,6 +518,7 @@ class App extends Component {
               <NumberForm
                 key={r}
                 className={r}
+                inputs={this.state.numberInputs[r]}
                 errorMessage={this.state.numberErrorMessage[r]}
                 dropdownClassA={this.state.numberDropdownClassesA[r]}
                 dropdownClassB={this.state.numberDropdownClassesB[r]}

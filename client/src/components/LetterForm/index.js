@@ -5,8 +5,8 @@ import "react-input-range/lib/css/index.css";
 class LetterForm extends Component {
   state = {
     letterOptions: "Letter Options",
-    dropdown: "",
-    input: "",
+    dropdown: "Letter Options",
+    input: "Letter(s)",
     output: ""
   };
 
@@ -29,7 +29,6 @@ class LetterForm extends Component {
   };
 
   updateOutput = evt => {
-    evt.preventDefault();
     let input = evt.target.value;
     let output = "string";
     if (this.state.dropdown === "Contains") {
@@ -45,6 +44,30 @@ class LetterForm extends Component {
 
   hideForm = () => {
     this.props.removeLetterRow(this.props.className);
+  };
+
+  componentWillMount = () => {
+    if (
+      this.props.inputs &&
+      !this.props.inputs.includes("Letter(s)") &&
+      this.props.inputs !== "string"
+    ) {
+      let inputs = this.props.inputs.replace(/%/g, "");
+      let dropdowns = "Letter Options";
+      if (
+        this.props.inputs.charAt(0) === "%" &&
+        this.props.inputs.charAt(this.props.inputs.length - 1) === "%"
+      ) {
+        dropdowns = "Contains";
+      } else if (this.props.inputs.charAt(0) === "%") {
+        dropdowns = "Ends With";
+      } else if (
+        this.props.inputs.charAt(this.props.inputs.length - 1) === "%"
+      ) {
+        dropdowns = "Starts With";
+      }
+      this.setState({ input: inputs, dropdown: dropdowns });
+    }
   };
 
   render() {
@@ -63,7 +86,7 @@ class LetterForm extends Component {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                {this.state.letterOptions}
+                {this.state.dropdown}
               </button>
               <div
                 className="dropdown-menu"
@@ -100,7 +123,7 @@ class LetterForm extends Component {
                   this.props.className
                 } ${this.props.inputClass}`}
                 onChange={e => this.updateOutput(e)}
-                placeholder="Letter(s)"
+                placeholder={this.state.input}
               />
             </label>
             <button
@@ -114,7 +137,10 @@ class LetterForm extends Component {
           </form>
           <sup>
             <button type="button" className="info text-white">
-              <i className="fas fa-info-circle" onClick={() => this.props.updateModal("letter")} />
+              <i
+                className="fas fa-info-circle"
+                onClick={() => this.props.updateModal("letter")}
+              />
             </button>
           </sup>
         </div>

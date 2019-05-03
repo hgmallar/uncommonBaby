@@ -32,12 +32,86 @@ class NumberForm extends Component {
     }
   }
 
+  componentWillMount() {
+    let startMin = 20;
+    let startMax = 80;
+    let options = "Numerical Options";
+    let yearCol = "Year(s)";
+    let year = "Year(s)";
+    let max = 100;
+    let outputVal = this.state.output;
+    if (this.props.inputs) {
+      console.log(this.props.inputs);
+      outputVal = this.props.inputs;
+      let key = Object.keys(this.props.inputs)[0];
+      if (!key.includes("Year(s)")) {
+        if (this.props.inputs.hasOwnProperty(key)) {
+          console.log(key);
+          options = key.substr(0, key.indexOf("_"));
+          year = key.substr(key.indexOf("_") + 1);
+          yearCol = year;
+          if (year.includes("x")) {
+            year = year.replace(/x/, "0s");
+          } else {
+            year = "All Time";
+          }
+          startMin = this.props.inputs[key].$between[0];
+          startMax = this.props.inputs[key].$between[1];
+          if (this.props.male && this.props.female) {
+            API.getCount(key)
+              .then(res => {
+                max = res.data;
+                this.checkSliderMinMax(
+                  max,
+                  options,
+                  startMin,
+                  startMax,
+                  outputVal
+                );
+                console.log(`HERE ${res.data}`);
+              })
+              .catch(err => {
+                console.log("count error: ");
+                console.log(err);
+              });
+          } else {
+            let gender = this.props.male ? "M" : "F";
+            API.getCountMF(key, gender)
+              .then(res => {
+                max = res.data;
+                this.checkSliderMinMax(
+                  max,
+                  options,
+                  startMin,
+                  startMax,
+                  outputVal
+                );
+                console.log(`HERE ${res.data}`);
+              })
+              .catch(err => {
+                console.log("count error: ");
+                console.log(err);
+              });
+          }
+        }
+        this.setState({
+          output: outputVal,
+          numericalOptions: options,
+          years: year,
+          yearCol: yearCol,
+          maxValue: max,
+          value: { min: startMin, max: startMax }
+        });
+      }
+    }
+  }
+
   updateNumericalOptions = (input, input2, evt) => {
     evt.preventDefault();
     this.updateNumbers(input, input2, this.props.male, this.props.female);
   };
 
-  checkSliderMinMax = (max, input, startMin, startMax, outputVal, query) => {
+  checkSliderMinMax = (max, input, startMin, startMax, outputVal) => {
     //update both
     this.setState({
       numericalOptions: input,
@@ -71,14 +145,7 @@ class NumberForm extends Component {
             startMin = Math.round(res.data * minPercentage);
             startMax = Math.round(res.data * maxPercentage);
             outputVal = { [query]: { $between: [startMin, startMax] } };
-            this.checkSliderMinMax(
-              max,
-              input,
-              startMin,
-              startMax,
-              outputVal,
-              query
-            );
+            this.checkSliderMinMax(max, input, startMin, startMax, outputVal);
             this.props.appendOutput(this.props.className, outputVal);
           })
           .catch(err => {
@@ -92,14 +159,7 @@ class NumberForm extends Component {
             startMin = Math.round(res.data * minPercentage);
             startMax = Math.round(res.data * maxPercentage);
             outputVal = { [query]: { $between: [startMin, startMax] } };
-            this.checkSliderMinMax(
-              max,
-              input,
-              startMin,
-              startMax,
-              outputVal,
-              query
-            );
+            this.checkSliderMinMax(max, input, startMin, startMax, outputVal);
             this.props.appendOutput(this.props.className, outputVal);
           })
           .catch(err => {
@@ -116,14 +176,7 @@ class NumberForm extends Component {
             startMin = Math.round(res.data * minPercentage);
             startMax = Math.round(res.data * maxPercentage);
             outputVal = { [query]: { $between: [startMin, startMax] } };
-            this.checkSliderMinMax(
-              max,
-              input,
-              startMin,
-              startMax,
-              outputVal,
-              query
-            );
+            this.checkSliderMinMax(max, input, startMin, startMax, outputVal);
             this.props.appendOutput(this.props.className, outputVal);
           })
           .catch(err => {
@@ -137,14 +190,7 @@ class NumberForm extends Component {
             startMin = Math.round(res.data * minPercentage);
             startMax = Math.round(res.data * maxPercentage);
             outputVal = { [query]: { $between: [startMin, startMax] } };
-            this.checkSliderMinMax(
-              max,
-              input,
-              startMin,
-              startMax,
-              outputVal,
-              query
-            );
+            this.checkSliderMinMax(max, input, startMin, startMax, outputVal);
             this.props.appendOutput(this.props.className, outputVal);
           })
           .catch(err => {
@@ -153,7 +199,7 @@ class NumberForm extends Component {
           });
       }
     } else if (input === "Percentile" && input2 !== "Year(s)") {
-      this.checkSliderMinMax(max, input, startMin, startMax, outputVal, query);
+      this.checkSliderMinMax(max, input, startMin, startMax, outputVal);
       outputVal = {
         [query]: { $between: [this.state.value.min, this.state.value.max] }
       };
