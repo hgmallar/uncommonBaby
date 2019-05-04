@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import Wrapper from "../components/Wrapper";
 import List from "../components/List";
 import Header from "../components/Header";
@@ -6,7 +7,6 @@ import LetterForm from "../components/LetterForm";
 import NumberForm from "../components/NumberForm";
 import Modal from "../components/Modal";
 import API from "../utils/API";
-
 
 class App extends Component {
   state = {
@@ -32,7 +32,8 @@ class App extends Component {
     numberErrorMessage: [],
     showModal: false,
     modalTitle: "",
-    modalMessage: ""
+    modalMessage: "",
+    query: ""
   };
 
   componentWillMount() {
@@ -54,10 +55,12 @@ class App extends Component {
       fields[0] = fields[0].replace("25", "");
       let letters = fields[0].split(",");
       for (let i = 0; i < letters.length; i++) {
-        letterRow[i] = i;
-        lettersArr[i] = { $like: letters[i] };
-        letterClasses[i] = "no-border";
-        letterError[i] = "";
+        if (letters[i]) {
+          letterRow[i] = i;
+          lettersArr[i] = { $like: letters[i] };
+          letterClasses[i] = "no-border";
+          letterError[i] = "";
+        }
       }
       if (fields[1] === "M") {
         male = true;
@@ -70,16 +73,22 @@ class App extends Component {
         female = true;
         genderArr = ["M", "F"];
       }
-      let numbers = JSON.parse(fields[2]);
+      let numbers = [];
+      if (fields[2]) {
+        numbers = JSON.parse(fields[2]);
+        console.log(JSON.parse(fields[2]));
+      }
       let numberRow = [];
       let numDD = [];
       let numErr = [];
       for (let i = 0; i < numbers.length; i++) {
-        numberRow[i] = i;
-        numDD[i] = "no-border";
-        numErr[i] = "";
+        if (numbers[i]) {
+          numberRow[i] = i;
+          numDD[i] = "no-border";
+          numErr[i] = "";
+        }
       }
-      console.log(numbers);
+      //console.log(numbers);
       this.setState({
         male: male,
         female: female,
@@ -199,7 +208,7 @@ class App extends Component {
       if (this.state.letterInputs[i]) {
         if (
           this.state.letterInputs[i].$like === "%%" ||
-          this.state.letterInputs[i].$like === "%" || 
+          this.state.letterInputs[i].$like === "%" ||
           this.state.letterInputs[i].$like.includes("Letter(s)")
         ) {
           //change border of letter-input-#
@@ -547,9 +556,19 @@ class App extends Component {
         </div>
 
         <div className="row justify-content-center col-12 mx-auto">
+          {this.state.totalCount < 0 ? (
+            <h4> </h4>
+          ) : (
+            <CopyToClipboard
+              text={window.location.href + this.state.query}
+            >
+              <button type="button"
+            className="btn btn-secondary ml-0 px-1">Save Search</button>
+            </CopyToClipboard>
+          )}
           <button
             type="button"
-            className="btn btn-secondary ml-0 px-1"
+            className="btn btn-secondary px-1"
             onClick={e => this.checkErroroneousInputs()}
           >
             Submit
