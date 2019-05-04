@@ -159,7 +159,6 @@ class App extends Component {
     for (let i = 0; i < this.state.letterrows.length; i++) {
       if (index === this.state.letterrows[i]) {
         realIndex = i;
-        console.log("HERE " + i);
       }
     }
     let newArray = this.state.letterInputs;

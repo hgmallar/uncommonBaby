@@ -68,7 +68,6 @@ class NumberForm extends Component {
                   startMax,
                   outputVal
                 );
-                console.log(`HERE ${res.data}`);
               })
               .catch(err => {
                 console.log("count error: ");
@@ -86,7 +85,6 @@ class NumberForm extends Component {
                   startMax,
                   outputVal
                 );
-                console.log(`HERE ${res.data}`);
               })
               .catch(err => {
                 console.log("count error: ");
