@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import { browserHistory } from "react-router";
 import Wrapper from "../components/Wrapper";
 import List from "../components/List";
 import Header from "../components/Header";
@@ -37,6 +37,9 @@ class App extends Component {
   };
 
   componentWillMount() {
+    //Encode %25u%25,%25e%25&MF&%5B%7B%22Rank_188x%22:%7B%22$between%22:%5B3,%20500%5D%7D%7D,%7B%22Rank_201x%22:%7B%22$between%22:%5B10,%202000%5D%7D%7D%5D&100&%5B%5B%22id%22,%22ASC%22%5D%5D
+    //Decode %u%,%e%&MF&[{"Rank_188x":{"$between":[3, 500]}},{"Rank_201x":{"$between":[10, 2000]}}]&100&[["id","ASC"]]
+    //%25u%25,%25e%25&MF&%5B%7B"Rank_188x":%7B"$between":%5B3,%20500%5D%7D%7D,%7B"Rank_201x":%7B"$between":%5B10,%202000%5D%7D%7D%5D&100&%5B%5B"id","ASC"%5D%5D
     //%25u%25,%25e%25&MF&%5B%7B"Rank_188x":%7B"$between":%5B3,%20500%5D%7D%7D,%7B"Rank_201x":%7B"$between":%5B10,%202000%5D%7D%7D%5D
     //%25u%25,%25e%25
     //MF
@@ -45,20 +48,22 @@ class App extends Component {
     let female = false;
     let lettersArr = [];
     let genderArr = [];
-    let letterClasses = [];
+    let letterInputClass = [];
+    let letterDropdownClass = [];
     let letterError = [];
     let letterRow = [];
     const { savedQuery } = this.props.match.params;
-    console.log(savedQuery);
+    let savedQueryEncode = encodeURI(savedQuery);
+    let savedQueryDecode = decodeURI(savedQueryEncode);
     if (savedQuery) {
-      let fields = savedQuery.split("&");
-      fields[0] = fields[0].replace("25", "");
+      let fields = savedQueryDecode.split("&");
       let letters = fields[0].split(",");
       for (let i = 0; i < letters.length; i++) {
         if (letters[i]) {
           letterRow[i] = i;
           lettersArr[i] = { $like: letters[i] };
-          letterClasses[i] = "no-border";
+          letterInputClass[i] = "no-border";
+          letterDropdownClass[i] = "no-border";
           letterError[i] = "";
         }
       }
@@ -68,7 +73,7 @@ class App extends Component {
       } else if (fields[1] === "F") {
         female = true;
         genderArr = ["F"];
-      } else if (fields[1] === "MF") {
+      } else if (fields[1] === "MF" || fields[1] === "FM") {
         male = true;
         female = true;
         genderArr = ["M", "F"];
@@ -76,7 +81,6 @@ class App extends Component {
       let numbers = [];
       if (fields[2]) {
         numbers = JSON.parse(fields[2]);
-        console.log(JSON.parse(fields[2]));
       }
       let numberRow = [];
       let numDD = [];
@@ -88,34 +92,33 @@ class App extends Component {
           numErr[i] = "";
         }
       }
-      //console.log(numbers);
       this.setState({
         male: male,
         female: female,
         letterrows: letterRow,
         letterInputs: lettersArr,
-        letterRowLength: lettersArr.length,
-        letterDropdownClasses: letterClasses,
-        letterInputClasses: letterClasses,
+        letterRowLength: lettersArr.length - 1,
+        letterDropdownClasses: letterDropdownClass,
+        letterInputClasses: letterInputClass,
         letterErrorMessage: letterError,
         numberInputs: numbers,
         numberRowLength: numbers.length,
         numberrows: numberRow,
         numberDropdownClassesA: numDD,
         numberDropdownClassesB: numDD,
-        numberErrorMessage: numErr
+        numberErrorMessage: numErr,
+        moreResults: parseInt(fields[3])
       });
       let query = {
         letters: lettersArr,
         gender: genderArr,
         numbers: numbers,
-        limit: 200,
-        sort: [["id", "ASC"]]
+        limit: parseInt(fields[3]),
+        sort: JSON.parse(fields[4])
       };
+      console.log(query);
       API.findNames(query)
         .then(res => {
-          console.log(res.data.count);
-          console.log(res.data);
           if (res.data.count >= 20) {
             this.setState({
               totalCount: res.data.count,
@@ -197,7 +200,7 @@ class App extends Component {
   checkErroroneousInputs = () => {
     let submit = true;
     let errorArray = [];
-    let letterInputClasses = this.state.letterInputClasses;
+    let letterInputClass = this.state.letterInputClasses;
     let letterDropdowns = this.state.letterDropdownClasses;
     let letterError = this.state.letterErrorMessage;
     let dropdownA = this.state.numberDropdownClassesA;
@@ -207,23 +210,25 @@ class App extends Component {
     for (let i = 0; i < this.state.letterInputs.length; i++) {
       if (this.state.letterInputs[i]) {
         if (
-          this.state.letterInputs[i].$like === "%%" ||
-          this.state.letterInputs[i].$like === "%" ||
-          this.state.letterInputs[i].$like.includes("Letter(s)")
+          this.state.letterInputs[i].$like &&
+          (this.state.letterInputs[i].$like === "%%" ||
+            this.state.letterInputs[i].$like === "%" ||
+            this.state.letterInputs[i].$like === "%Letter(s)%")
         ) {
           //change border of letter-input-#
           submit = false;
-          letterInputClasses[this.state.letterrows[i]] = "red-border";
-          letterDropdowns[this.state.letterrows[i]] = "no-border";
-          letterError[this.state.letterrows[i]] = "*Input a value.*";
+          let index = this.state.letterrows[i];
+          letterDropdowns[index] = "no-border";
+          letterInputClass[index] = "red-border";
+          letterError[index] = "*Input a value.*";
         } else if (this.state.letterInputs[i] === "string") {
           //change border of dropdown-toggle-#
           submit = false;
-          letterInputClasses[this.state.letterrows[i]] = "no-border";
+          letterInputClass[this.state.letterrows[i]] = "no-border";
           letterDropdowns[this.state.letterrows[i]] = "red-border";
           letterError[this.state.letterrows[i]] = "*Make a selection.*";
         } else {
-          letterInputClasses[this.state.letterrows[i]] = "no-border";
+          letterInputClass[this.state.letterrows[i]] = "no-border";
           letterDropdowns[this.state.letterrows[i]] = "no-border";
           letterError[this.state.letterrows[i]] = "";
         }
@@ -231,7 +236,14 @@ class App extends Component {
       //check for 2 of the same inputs, or 2 begins withs, or 2 ends with
       if (i + 1 < this.state.letterInputs.length) {
         for (let j = i + 1; j < this.state.letterInputs.length; j++) {
-          if (this.state.letterInputs[i] && this.state.letterInputs[j]) {
+          if (
+            this.state.letterInputs[i] &&
+            this.state.letterInputs[j] &&
+            this.state.letterInputs[j][
+              Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+            ][0] !== "%Letter(s)%" &&
+            this.state.letterInputs[j] !== "string"
+          ) {
             if (
               (Object.getOwnPropertyNames(this.state.letterInputs[i])[0] ===
                 Object.getOwnPropertyNames(this.state.letterInputs[j])[0] &&
@@ -261,12 +273,11 @@ class App extends Component {
           }
         }
       }
-      console.log(errorArray);
       if (errorArray) {
         for (let k = 0; k < errorArray.length; k++) {
-          letterInputClasses[errorArray[k]] = "red-border";
+          letterInputClass[errorArray[k]] = "red-border";
           letterDropdowns[errorArray[k]] = "red-border";
-          letterError[errorArray[k]] = "*Make a selection.*";
+          letterError[errorArray[k]] = "*Incorrect Input.*";
         }
       }
     }
@@ -275,7 +286,6 @@ class App extends Component {
     errorArray = [];
     for (let i = 0; i < this.state.numberInputs.length; i++) {
       if (this.state.numberInputs[i]) {
-        console.log(Object.getOwnPropertyNames(this.state.numberInputs[i])[0]);
         if (
           Object.getOwnPropertyNames(this.state.numberInputs[i]).length === 0
         ) {
@@ -315,7 +325,6 @@ class App extends Component {
           }
         }
       }
-      console.log(errorArray);
       if (errorArray) {
         for (let k = 0; k < errorArray.length; k++) {
           dropdownA[errorArray[k]] = "red-border";
@@ -331,7 +340,7 @@ class App extends Component {
       count = "";
     }
     this.setState({
-      letterInputClasses: letterInputClasses,
+      letterInputClasses: letterInputClass,
       letterDropdownClasses: letterDropdowns,
       letterErrorMessage: letterError,
       numberDropdownClassesA: dropdownA,
@@ -364,6 +373,7 @@ class App extends Component {
     } else if (this.state.sort === "Least - Most Popular") {
       sortQuery = [["id", "DESC"]];
     }
+    let queryGender = "MF";
     let lettersArr = this.state.letterInputs;
     let query = {
       letters: lettersArr,
@@ -380,6 +390,7 @@ class App extends Component {
         limit: moreResults,
         sort: sortQuery
       };
+      queryGender = "F";
     } else if (!this.state.female && this.state.male) {
       query = {
         letters: lettersArr,
@@ -388,12 +399,27 @@ class App extends Component {
         limit: moreResults,
         sort: sortQuery
       };
+      queryGender = "M";
     }
-    console.log("QUERY = " + query);
+    let queryLetter = "";
+    for (let i = 0; i < this.state.letterInputs.length; i++) {
+      queryLetter += this.state.letterInputs[i].$like;
+      queryLetter += ",";
+    }
+    let queryLink =
+      queryLetter +
+      "&" +
+      queryGender +
+      "&" +
+      JSON.stringify(this.state.numberInputs) +
+      "&" +
+      moreResults +
+      "&" +
+      JSON.stringify(sortQuery);
+    queryLink = encodeURI(queryLink);
+    this.props.history.push("/" + encodeURI(queryLink));
     API.findNames(query)
       .then(res => {
-        console.log(res.data.count);
-        console.log(res.data);
         if (res.data.count >= 20) {
           this.setState({
             totalCount: res.data.count,
@@ -556,16 +582,6 @@ class App extends Component {
         </div>
 
         <div className="row justify-content-center col-12 mx-auto">
-          {this.state.totalCount < 0 ? (
-            <h4> </h4>
-          ) : (
-            <CopyToClipboard
-              text={window.location.href + this.state.query}
-            >
-              <button type="button"
-            className="btn btn-secondary ml-0 px-1">Save Search</button>
-            </CopyToClipboard>
-          )}
           <button
             type="button"
             className="btn btn-secondary px-1"

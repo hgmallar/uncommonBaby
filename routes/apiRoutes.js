@@ -40,7 +40,6 @@ module.exports = function(app) {
         [or]: req.body.gender
       }
     };
-    let numbers = [];
     for (let i = 0; i < req.body.numbers.length; i++) {
       let key = Object.keys(req.body.numbers[i])[0];
       let value = Object.values(req.body.numbers[i])[0];

@@ -57,10 +57,13 @@ class NumberForm extends Component {
           }
           startMin = this.props.inputs[key].$between[0];
           startMax = this.props.inputs[key].$between[1];
+          console.log("startmin " + this.props.inputs[key].$between[0]);
+          console.log("startmax " + this.props.inputs[key].$between[1]);
           if (this.props.male && this.props.female) {
             API.getCount(key)
               .then(res => {
                 max = res.data;
+                console.log("max " + res.data)
                 this.checkSliderMinMax(
                   max,
                   options,
@@ -78,6 +81,7 @@ class NumberForm extends Component {
             API.getCountMF(key, gender)
               .then(res => {
                 max = res.data;
+                console.log("max " + res.data)
                 this.checkSliderMinMax(
                   max,
                   options,
