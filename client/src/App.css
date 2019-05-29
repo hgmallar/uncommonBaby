@@ -60,6 +60,10 @@ a:visited, a:hover{
   color: inherit;
 }
 
+.no-underline:hover {
+  text-decoration: none;
+}
+
 a:hover {
   font-weight: bold;
   cursor: pointer;
