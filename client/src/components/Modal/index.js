@@ -55,7 +55,7 @@ class Modal extends Component {
             </div>
           ) : this.state.status === "percentile" ? (
             <div className="modal-body">
-              <p> All Time Percentile = {this.props.percent}</p>
+              <p> All Time Percentile = {this.props.percent.toFixed(2)}%</p>
               <LineChart
                 data={{
                   "1880s": this.props.dataArr2[0],
