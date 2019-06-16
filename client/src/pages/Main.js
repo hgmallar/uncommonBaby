@@ -9,6 +9,7 @@ import API from "../utils/API";
 
 class App extends Component {
   state = {
+    show: false,
     male: false,
     female: false,
     isLoading: false,
@@ -32,7 +33,15 @@ class App extends Component {
     showModal: false,
     modalTitle: "",
     modalMessage: "",
-    query: ""
+    query: "",
+    name: "",
+    gender: "",
+    count: 0,
+    percent: 0,
+    rank: 0,
+    dataArr1: [],
+    dataArr2: [],
+    dataArr3: []
   };
 
   componentWillMount() {
@@ -499,6 +508,38 @@ class App extends Component {
     this.setState({ sort: input });
   };
 
+  nameClicked = (name, gender, evt) => {
+    evt.preventDefault();
+    this.setState({ show: true });
+    let query = {
+      name: name,
+      gender: gender
+    };
+    API.findName(query)
+      .then(res => {
+        console.log("found name");
+        console.log(res.data);
+        this.setState({
+          name: res.data[0].Name,
+          gender: res.data[0].Gender,
+          count: res.data[0].Count_AllTime,
+          percent: res.data[0].Percentile_AllTime,
+          rank: res.data[0].Rank_AllTime,
+          dataArr1: [res.data[0].Count_188x, res.data[0].Count_189x, res.data[0].Count_190x, res.data[0].Count_191x, res.data[0].Count_192x, res.data[0].Count_193x, res.data[0].Count_194x, res.data[0].Count_195x, res.data[0].Count_196x, res.data[0].Count_197x, res.data[0].Count_198x, res.data[0].Count_199x, res.data[0].Count_200x, res.data[0].Count_201x],
+          dataArr2: [res.data[0].Percentile_188x, res.data[0].Percentile_189x, res.data[0].Percentile_190x, res.data[0].Percentile_191x, res.data[0].Percentile_192x, res.data[0].Percentile_193x, res.data[0].Percentile_194x, res.data[0].Percentile_195x, res.data[0].Percentile_196x, res.data[0].Percentile_197x, res.data[0].Percentile_198x, res.data[0].Percentile_199x, res.data[0].Percentile_200x, res.data[0].Percentile_201x],
+          dataArr3: [res.data[0].Rank_188x, res.data[0].Rank_189x, res.data[0].Rank_190x, res.data[0].Rank_191x, res.data[0].Rank_192x, res.data[0].Rank_193x, res.data[0].Rank_194x, res.data[0].Rank_195x, res.data[0].Rank_196x, res.data[0].Rank_197x, res.data[0].Rank_198x, res.data[0].Rank_199x, res.data[0].Rank_200x, res.data[0].Rank_201x]
+        })
+      })
+      .catch(err => {
+        console.log("find name error: ");
+        console.log(err);
+      });
+  };
+
+  handleClose = () => {
+    this.setState({ show: false, dataArr1: [], dataArr2: [], dataArr3: [], name: "", gender: "", count: 0, percent: 0, rank: 0, });
+  };
+
   render() {
     return (
       <Wrapper>
@@ -506,7 +547,6 @@ class App extends Component {
         <h4 className="subhead text-center col-12">
           A tool to find names based on popularity
         </h4>
-
         <div className="form-check form-check-inline row justify-content-center col-12 mx-0 px-0 text-center">
           <label>
             Male
@@ -525,7 +565,6 @@ class App extends Component {
             />
           </label>
         </div>
-
         <div className="text-center row justify-content-center mx-auto">
           <div className="col-md-4 px-0">
             {this.state.letterrows.map(r => (
@@ -564,7 +603,6 @@ class App extends Component {
             ))}
           </div>
         </div>
-
         <div className="text-center white-text row justify-content-center mx-auto">
           <button
             className="link-button col-md-4"
@@ -579,7 +617,6 @@ class App extends Component {
             + More Number Search Terms
           </button>
         </div>
-
         <div className="row justify-content-center col-12 mx-auto">
           <button
             type="button"
@@ -650,7 +687,6 @@ class App extends Component {
             </div>
           )}
         </div>
-
         <div className="row justify-content-center col-12 mx-auto">
           <List
             results={this.state.results}
@@ -660,14 +696,23 @@ class App extends Component {
             increaseResults={this.increaseResults}
             updateLoad={this.updateLoad}
             loading={this.state.isLoading}
+            nameClicked={this.nameClicked}
           />
         </div>
         <Modal
-          show={this.state.showModal}
-          title={this.state.modalTitle}
-          message={this.state.modalMessage}
+          show={this.state.show}
           handleClose={this.handleClose}
+          name={this.state.name}
+          gender={this.state.gender}
+          count={this.state.count}
+          percent={this.state.percent}
+          rank={this.state.rank}
+          totalCount={this.state.totalCount}
+          dataArr1={this.state.dataArr1}
+          dataArr2={this.state.dataArr2}
+          dataArr3={this.state.dataArr3}
         />
+        ;
       </Wrapper>
     );
   }

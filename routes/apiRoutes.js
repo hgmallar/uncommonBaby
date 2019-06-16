@@ -26,7 +26,24 @@ module.exports = function(app) {
       .catch(err => res.status(422).json(err));
   });
 
-  // GET route for getting the names
+  // POST route for getting the name
+  app.post("/name", function(req, res) {
+    db.Name.findAll({
+      where: {
+        Name: req.body.name,
+        Gender: req.body.gender
+      },
+      attributes: {
+        include: ["Name", "Gender", "Count_AllTime", "Percentile_AllTime", "Rank_AllTime", "Count_188x", "Count_189x", "Count_190x", "Count_191x", "Count_192x", "Count_193x", "Count_194x", "Count_195x", "Count_196x", "Count_197x", "Count_198x", "Count_199x", "Count_200x", "Count_201x", "Percentile_188x", "Percentile_189x", "Percentile_190x", "Percentile_191x", "Percentile_192x", "Percentile_193x", "Percentile_194x", "Percentile_195x", "Percentile_196x", "Percentile_197x", "Percentile_198x", "Percentile_199x", "Percentile_200x", "Percentile_201x", "Rank_188x", "Rank_189x", "Rank_190x", "Rank_191x", "Rank_192x", "Rank_193x", "Rank_194x", "Rank_195x", "Rank_196x", "Rank_197x", "Rank_198x", "Rank_199x", "Rank_200x", "Rank_201x"]
+      }
+    })
+      .then(result => {
+        res.json(result);
+      })
+      .catch(err => res.status(422).json(err));
+  });
+
+  // POST route for getting the names
   app.post("/names", function(req, res) {
     let letters = [];
     for (let i = 0; i < req.body.letters.length; i++) {

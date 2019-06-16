@@ -127,6 +127,14 @@ a:hover {
   border: none;
 }
 
+.space-around {
+  justify-content: space-around;
+}
+
+.hover:hover {
+  font-weight: bold;
+}
+
 @media only screen and (min-width:0px) and (max-width:600px){
   .form-inline {
     flex-wrap: wrap;
