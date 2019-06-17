@@ -10,17 +10,15 @@ class Modal extends Component {
 
   render() {
     const showHideStyle = this.props.show ? "block" : "none";
+    const gender = this.props.gender === "M" ? " - Male" : " - Female";
+    const heading = this.props.title
+      ? this.props.title
+      : `${this.props.name}${gender}`;
     return (
       <div className="modal" role="dialog" style={{ display: showHideStyle }}>
         <div className="modal-content">
           <div className="modal-header">
-            {this.props.gender === "M" ? (
-              <h3 className="modal-title mx-auto">{this.props.name} - Male</h3>
-            ) : (
-              <h3 className="modal-title mx-auto">
-                {this.props.name} - Female
-              </h3>
-            )}
+            <h3 className="modal-title mx-auto">{heading}</h3>
             <button
               type="button"
               className="close white p-0 m-0"
@@ -31,7 +29,11 @@ class Modal extends Component {
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          {this.state.status === "count" ? (
+          {this.props.title ? (
+            <div className="modal-body">
+              <p>{this.props.message}</p>
+            </div>
+          ) : this.state.status === "count" ? (
             <div className="modal-body">
               <p> All Time Count = {this.props.count}</p>
               <LineChart
@@ -98,37 +100,50 @@ class Modal extends Component {
               />
             </div>
           )}
-          <div className="modal-footer space-around">
-            <h5
-              className="hover"
-              onClick={() => this.setState({ status: "count" })}
-            >
-              {" "}
-              Count{" "}
-            </h5>
-            <h5
-              className="hover"
-              onClick={() => this.setState({ status: "percentile" })}
-            >
-              {" "}
-              Percentile{" "}
-            </h5>
-            <h5
-              className="hover"
-              onClick={() => this.setState({ status: "rank" })}
-            >
-              {" "}
-              Rank{" "}
-            </h5>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={this.props.handleClose}
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
+          {this.props.title ? (
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={this.props.handleClose}
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          ) : (
+            <div className="modal-footer space-around">
+              <h5
+                className="hover"
+                onClick={() => this.setState({ status: "count" })}
+              >
+                {" "}
+                Count{" "}
+              </h5>
+              <h5
+                className="hover"
+                onClick={() => this.setState({ status: "percentile" })}
+              >
+                {" "}
+                Percentile{" "}
+              </h5>
+              <h5
+                className="hover"
+                onClick={() => this.setState({ status: "rank" })}
+              >
+                {" "}
+                Rank{" "}
+              </h5>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={this.props.handleClose}
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          )}
         </div>
       </div>
     );

@@ -9,7 +9,7 @@ import API from "../utils/API";
 
 class App extends Component {
   state = {
-    show: false,
+    showModal: false,
     male: false,
     female: false,
     isLoading: false,
@@ -30,7 +30,6 @@ class App extends Component {
     sort: "Most - Least Popular",
     letterErrorMessage: [],
     numberErrorMessage: [],
-    showModal: false,
     modalTitle: "",
     modalMessage: "",
     query: "",
@@ -161,10 +160,6 @@ class App extends Component {
       modalMessage: message,
       modalTitle: title
     });
-  };
-
-  handleClose = () => {
-    this.setState({ showModal: false });
   };
 
   handleClickLetter = () => {
@@ -510,7 +505,7 @@ class App extends Component {
 
   nameClicked = (name, gender, evt) => {
     evt.preventDefault();
-    this.setState({ show: true });
+    this.setState({ showModal: true });
     let query = {
       name: name,
       gender: gender
@@ -537,7 +532,7 @@ class App extends Component {
   };
 
   handleClose = () => {
-    this.setState({ show: false, dataArr1: [], dataArr2: [], dataArr3: [], name: "", gender: "", count: 0, percent: 0, rank: 0, });
+    this.setState({ showModal: false, dataArr1: [], dataArr2: [], dataArr3: [], modalTitle: "", modalMessage: "", name: "", gender: "", count: 0, percent: 0, rank: 0, });
   };
 
   render() {
@@ -700,8 +695,10 @@ class App extends Component {
           />
         </div>
         <Modal
-          show={this.state.show}
+          show={this.state.showModal}
           handleClose={this.handleClose}
+          title={this.state.modalTitle}
+          message={this.state.modalMessage}
           name={this.state.name}
           gender={this.state.gender}
           count={this.state.count}
