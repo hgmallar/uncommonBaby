@@ -37,6 +37,7 @@ class Modal extends Component {
             <div className="modal-body">
               <p> All Time Count = {this.props.count}</p>
               <LineChart
+                colors={["#547980", "#547980"]}
                 data={{
                   "1880s": this.props.dataArr1[0],
                   "1890s": this.props.dataArr1[1],
@@ -59,6 +60,7 @@ class Modal extends Component {
             <div className="modal-body">
               <p> All Time Percentile = {this.props.percent.toFixed(2)}%</p>
               <LineChart
+                colors={["#547980", "#547980"]}
                 data={{
                   "1880s": this.props.dataArr2[0],
                   "1890s": this.props.dataArr2[1],
@@ -81,6 +83,7 @@ class Modal extends Component {
             <div className="modal-body">
               <p> All Time Rank = {this.props.rank}</p>
               <LineChart
+                colors={["#547980", "#547980"]}
                 data={{
                   "1880s": this.props.dataArr3[0],
                   "1890s": this.props.dataArr3[1],

@@ -615,7 +615,7 @@ class App extends Component {
         <div className="row justify-content-center col-12 mx-auto">
           <button
             type="button"
-            className="btn btn-secondary px-1"
+            className="btn btn-secondary px-1 submit"
             onClick={e => this.checkErroroneousInputs()}
           >
             Submit

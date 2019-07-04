@@ -8,6 +8,7 @@
   font-size: 1.25rem;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  color: #45ADA8;
 }
 
 .modal-header {
@@ -41,17 +42,19 @@
   white-space: pre-wrap;
   display:flex;
   flex-wrap: wrap;
-  
+  color: #594F4F;
 }
 
 .modal-footer {
   display: flex;
   padding: 1rem;
   border-top: 1px solid #e9ecef;
+  color: #594F4F;
 }
 
 .close {
   margin: auto 0;
+  color: #594F4F;
 }
 
 .display-block {
