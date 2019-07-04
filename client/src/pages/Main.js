@@ -31,7 +31,7 @@ class App extends Component {
     letterErrorMessage: [],
     numberErrorMessage: [],
     modalTitle: "",
-    modalMessage: "",
+    modalMessages: [],
     query: "",
     name: "",
     gender: "",
@@ -149,15 +149,46 @@ class App extends Component {
 
   updateModal = type => {
     let title = "Number Options";
-    let message = `Rank: Returns only the names with the rank in the inputted range for that decade or all time.\nPercentile: Returns only the names with the popularity percentage in the inputted range for that decade or all time.\nCount: Returns only the names with the count in the inputted range for that decade or all time.`;
+    let messages = [
+      {
+        cat: "Rank: ",
+        message:
+          "Returns only the names with the rank in the inputted range for that decade or all time."
+      },
+      {
+        cat: "Percentile: ",
+        message:
+          "Returns only the names with the popularity percentage in the inputted range for that decade or all time."
+      },
+      {
+        cat: "Number Options",
+        message:
+          "Returns only the names with the count in the inputted range for that decade or all time."
+      }
+    ];
     if (type === "letter") {
       title = "Letter Options";
-      message =
-        "Contains: Returns only names that contain the letter or string inputted.\nStarts With: Returns only names that start with the letter or string inputted.\nEnds With: Returns only names that end with the letter or string inputted.";
+      messages = [
+        {
+          cat: "Contains: ",
+          message:
+            "Returns only names that contain the letter or string inputted."
+        },
+        {
+          cat: "Starts With: ",
+          message:
+            "Returns only names that start with the letter or string inputted."
+        },
+        {
+          cat: "Ends With: ",
+          message:
+            "Returns only names that end with the letter or string inputted."
+        }
+      ];
     }
     this.setState({
       showModal: true,
-      modalMessage: message,
+      modalMessages: messages,
       modalTitle: title
     });
   };
@@ -520,10 +551,55 @@ class App extends Component {
           count: res.data[0].Count_AllTime,
           percent: res.data[0].Percentile_AllTime,
           rank: res.data[0].Rank_AllTime,
-          dataArr1: [res.data[0].Count_188x, res.data[0].Count_189x, res.data[0].Count_190x, res.data[0].Count_191x, res.data[0].Count_192x, res.data[0].Count_193x, res.data[0].Count_194x, res.data[0].Count_195x, res.data[0].Count_196x, res.data[0].Count_197x, res.data[0].Count_198x, res.data[0].Count_199x, res.data[0].Count_200x, res.data[0].Count_201x],
-          dataArr2: [res.data[0].Percentile_188x, res.data[0].Percentile_189x, res.data[0].Percentile_190x, res.data[0].Percentile_191x, res.data[0].Percentile_192x, res.data[0].Percentile_193x, res.data[0].Percentile_194x, res.data[0].Percentile_195x, res.data[0].Percentile_196x, res.data[0].Percentile_197x, res.data[0].Percentile_198x, res.data[0].Percentile_199x, res.data[0].Percentile_200x, res.data[0].Percentile_201x],
-          dataArr3: [res.data[0].Rank_188x, res.data[0].Rank_189x, res.data[0].Rank_190x, res.data[0].Rank_191x, res.data[0].Rank_192x, res.data[0].Rank_193x, res.data[0].Rank_194x, res.data[0].Rank_195x, res.data[0].Rank_196x, res.data[0].Rank_197x, res.data[0].Rank_198x, res.data[0].Rank_199x, res.data[0].Rank_200x, res.data[0].Rank_201x]
-        })
+          dataArr1: [
+            res.data[0].Count_188x,
+            res.data[0].Count_189x,
+            res.data[0].Count_190x,
+            res.data[0].Count_191x,
+            res.data[0].Count_192x,
+            res.data[0].Count_193x,
+            res.data[0].Count_194x,
+            res.data[0].Count_195x,
+            res.data[0].Count_196x,
+            res.data[0].Count_197x,
+            res.data[0].Count_198x,
+            res.data[0].Count_199x,
+            res.data[0].Count_200x,
+            res.data[0].Count_201x
+          ],
+          dataArr2: [
+            res.data[0].Percentile_188x,
+            res.data[0].Percentile_189x,
+            res.data[0].Percentile_190x,
+            res.data[0].Percentile_191x,
+            res.data[0].Percentile_192x,
+            res.data[0].Percentile_193x,
+            res.data[0].Percentile_194x,
+            res.data[0].Percentile_195x,
+            res.data[0].Percentile_196x,
+            res.data[0].Percentile_197x,
+            res.data[0].Percentile_198x,
+            res.data[0].Percentile_199x,
+            res.data[0].Percentile_200x,
+            res.data[0].Percentile_201x
+          ],
+          dataArr3: [
+            res.data[0].Rank_188x,
+            res.data[0].Rank_189x,
+            res.data[0].Rank_190x,
+            res.data[0].Rank_191x,
+            res.data[0].Rank_192x,
+            res.data[0].Rank_193x,
+            res.data[0].Rank_194x,
+            res.data[0].Rank_195x,
+            res.data[0].Rank_196x,
+            res.data[0].Rank_197x,
+            res.data[0].Rank_198x,
+            res.data[0].Rank_199x,
+            res.data[0].Rank_200x,
+            res.data[0].Rank_201x
+          ]
+        });
       })
       .catch(err => {
         console.log("find name error: ");
@@ -532,7 +608,19 @@ class App extends Component {
   };
 
   handleClose = () => {
-    this.setState({ showModal: false, dataArr1: [], dataArr2: [], dataArr3: [], modalTitle: "", modalMessage: "", name: "", gender: "", count: 0, percent: 0, rank: 0, });
+    this.setState({
+      showModal: false,
+      dataArr1: [],
+      dataArr2: [],
+      dataArr3: [],
+      modalTitle: "",
+      modalMessages: [],
+      name: "",
+      gender: "",
+      count: 0,
+      percent: 0,
+      rank: 0
+    });
   };
 
   render() {
@@ -698,7 +786,7 @@ class App extends Component {
           show={this.state.showModal}
           handleClose={this.handleClose}
           title={this.state.modalTitle}
-          message={this.state.modalMessage}
+          messages={this.state.modalMessages}
           name={this.state.name}
           gender={this.state.gender}
           count={this.state.count}

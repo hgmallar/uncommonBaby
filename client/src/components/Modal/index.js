@@ -14,6 +14,12 @@ class Modal extends Component {
     const heading = this.props.title
       ? this.props.title
       : `${this.props.name}${gender}`;
+
+    const prettyMessage = this.props.messages.map((message, key) => (
+      <p key={message.cat}>
+        <span className="font-weight-bold">{message.cat}</span> {message.message}
+      </p>
+    ));
     return (
       <div className="modal" role="dialog" style={{ display: showHideStyle }}>
         <div className="modal-content">
@@ -31,7 +37,8 @@ class Modal extends Component {
           </div>
           {this.props.title ? (
             <div className="modal-body">
-              <p>{this.props.message}</p>
+              <div>{prettyMessage}</div>
+              {}
             </div>
           ) : this.state.status === "count" ? (
             <div className="modal-body">
