@@ -5,7 +5,8 @@ import "chart.js";
 
 class Modal extends Component {
   state = {
-    status: "count"
+    status: "count",
+    disclaimer: "*** higher count is more popular ***"
   };
 
   render() {
@@ -17,7 +18,8 @@ class Modal extends Component {
 
     const prettyMessage = this.props.messages.map((message, key) => (
       <p key={message.cat}>
-        <span className="font-weight-bold">{message.cat}</span> {message.message}
+        <span className="font-weight-bold">{message.cat}</span>{" "}
+        {message.message}
       </p>
     ));
     return (
@@ -38,6 +40,9 @@ class Modal extends Component {
           {this.props.title ? (
             <div className="modal-body">
               <div>{prettyMessage}</div>
+              <small className="font-weight-bold mx-auto">
+                *** A submission will satisfy all search terms. ***
+              </small>
               {}
             </div>
           ) : this.state.status === "count" ? (
@@ -62,10 +67,11 @@ class Modal extends Component {
                   "2010s": this.props.dataArr1[13]
                 }}
               />
+              <small className="font-weight-bold mx-auto">{this.state.disclaimer}</small>
             </div>
-          ) : this.state.status === "percentile" ? (
+          ) : (
             <div className="modal-body">
-              <p> All Time Percentile = {this.props.percent.toFixed(2)}%</p>
+              <p> All Time Rank = {this.props.rank}</p>
               <LineChart
                 colors={["#547980", "#547980"]}
                 data={{
@@ -85,29 +91,7 @@ class Modal extends Component {
                   "2010s": this.props.dataArr2[13]
                 }}
               />
-            </div>
-          ) : (
-            <div className="modal-body">
-              <p> All Time Rank = {this.props.rank}</p>
-              <LineChart
-                colors={["#547980", "#547980"]}
-                data={{
-                  "1880s": this.props.dataArr3[0],
-                  "1890s": this.props.dataArr3[1],
-                  "1900s": this.props.dataArr3[2],
-                  "1910s": this.props.dataArr3[3],
-                  "1920s": this.props.dataArr3[4],
-                  "1930s": this.props.dataArr3[5],
-                  "1940s": this.props.dataArr3[6],
-                  "1950s": this.props.dataArr3[7],
-                  "1960s": this.props.dataArr3[8],
-                  "1970s": this.props.dataArr3[9],
-                  "1980s": this.props.dataArr3[10],
-                  "1990s": this.props.dataArr3[11],
-                  "2000s": this.props.dataArr3[12],
-                  "2010s": this.props.dataArr3[13]
-                }}
-              />
+              <small className="font-weight-bold mx-auto">{this.state.disclaimer}</small>
             </div>
           )}
           {this.props.title ? (
@@ -125,21 +109,14 @@ class Modal extends Component {
             <div className="modal-footer space-around">
               <h5
                 className="hover"
-                onClick={() => this.setState({ status: "count" })}
+                onClick={() => this.setState({ status: "count", disclaimer: "*** higher count is more popular ***" })}
               >
                 {" "}
                 Count{" "}
               </h5>
               <h5
                 className="hover"
-                onClick={() => this.setState({ status: "percentile" })}
-              >
-                {" "}
-                Percentile{" "}
-              </h5>
-              <h5
-                className="hover"
-                onClick={() => this.setState({ status: "rank" })}
+                onClick={() => this.setState({ status: "rank", disclaimer: "*** lower rank is more popular ***"  })}
               >
                 {" "}
                 Rank{" "}

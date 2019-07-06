@@ -6,12 +6,12 @@ import "react-input-range/lib/css/index.css";
 
 class NumberForm extends Component {
   state = {
-    numericalOptions: "Numerical Options",
-    years: "Year(s)",
+    numericalOptions: "Count",
+    years: "All Time",
     yearCol: "Year(s)",
-    value: { min: 20, max: 80 },
+    value: { min: 1, max: 5150472 },
     minValue: 1,
-    maxValue: 100,
+    maxValue: 5150472,
     slider: "",
     output: {}
   };
@@ -63,7 +63,7 @@ class NumberForm extends Component {
             API.getCount(key)
               .then(res => {
                 max = res.data;
-                console.log("max " + res.data)
+                console.log("max " + res.data);
                 this.checkSliderMinMax(
                   max,
                   options,
@@ -71,6 +71,14 @@ class NumberForm extends Component {
                   startMax,
                   outputVal
                 );
+                this.setState({
+                  output: outputVal,
+                  numericalOptions: options,
+                  years: year,
+                  yearCol: yearCol,
+                  maxValue: max,
+                  value: { min: startMin, max: startMax }
+                });
               })
               .catch(err => {
                 console.log("count error: ");
@@ -81,7 +89,7 @@ class NumberForm extends Component {
             API.getCountMF(key, gender)
               .then(res => {
                 max = res.data;
-                console.log("max " + res.data)
+                console.log("max " + res.data);
                 this.checkSliderMinMax(
                   max,
                   options,
@@ -89,6 +97,14 @@ class NumberForm extends Component {
                   startMax,
                   outputVal
                 );
+                this.setState({
+                  output: outputVal,
+                  numericalOptions: options,
+                  years: year,
+                  yearCol: yearCol,
+                  maxValue: max,
+                  value: { min: startMin, max: startMax }
+                });
               })
               .catch(err => {
                 console.log("count error: ");
@@ -96,14 +112,6 @@ class NumberForm extends Component {
               });
           }
         }
-        this.setState({
-          output: outputVal,
-          numericalOptions: options,
-          years: year,
-          yearCol: yearCol,
-          maxValue: max,
-          value: { min: startMin, max: startMax }
-        });
       }
     }
   }
@@ -200,17 +208,6 @@ class NumberForm extends Component {
             console.log(err);
           });
       }
-    } else if (input === "Percentile" && input2 !== "Year(s)") {
-      this.checkSliderMinMax(max, input, startMin, startMax, outputVal);
-      outputVal = {
-        [query]: { $between: [this.state.value.min, this.state.value.max] }
-      };
-      this.setState({
-        numericalOptions: input,
-        maxValue: max,
-        output: outputVal
-      });
-      this.props.appendOutput(this.props.className, outputVal);
     } else {
       this.setState({ numericalOptions: input, output: outputVal });
       this.props.appendOutput(this.props.className, outputVal);
@@ -394,19 +391,6 @@ class NumberForm extends Component {
                   }
                 >
                   Rank
-                </button>
-                <button
-                  className="dropdown-item"
-                  href="#"
-                  onClick={e =>
-                    this.updateNumericalOptions(
-                      "Percentile",
-                      this.state.yearCol,
-                      e
-                    )
-                  }
-                >
-                  Percentile
                 </button>
                 <button
                   className="dropdown-item"

@@ -6,7 +6,7 @@ class List extends Component {
     renderList() {
         let newArray = this.props.results.slice(0, this.props.count);
         return (
-            <div>
+            <div className="col-12">
                 <ol>
                     {newArray.map(result => (
                         <li key={result.id}>

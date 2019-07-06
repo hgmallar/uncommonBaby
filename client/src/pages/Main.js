@@ -36,11 +36,9 @@ class App extends Component {
     name: "",
     gender: "",
     count: 0,
-    percent: 0,
     rank: 0,
     dataArr1: [],
-    dataArr2: [],
-    dataArr3: []
+    dataArr2: []
   };
 
   componentWillMount() {
@@ -151,19 +149,14 @@ class App extends Component {
     let title = "Number Options";
     let messages = [
       {
-        cat: "Rank: ",
+        cat: "Rank",
         message:
-          "Returns only the names with the rank in the inputted range for that decade or all time."
+          "orders names from most popular, 1, to least popular for a selected time period.  This search returns names whose position is in the inputted range for the selected time period.  (lower rank is more popular)"
       },
       {
-        cat: "Percentile: ",
+        cat: "Count",
         message:
-          "Returns only the names with the popularity percentage in the inputted range for that decade or all time."
-      },
-      {
-        cat: "Number Options",
-        message:
-          "Returns only the names with the count in the inputted range for that decade or all time."
+          "is the total number of babies given that name for a selected time period.  This search returns names whose count is in the inputted range for the selected time period.  (higher count is more popular)"
       }
     ];
     if (type === "letter") {
@@ -330,9 +323,7 @@ class App extends Component {
           Object.getOwnPropertyNames(this.state.numberInputs[i])[0] ===
             "Rank_Year(s)" ||
           Object.getOwnPropertyNames(this.state.numberInputs[i])[0] ===
-            "Count_Year(s)" ||
-          Object.getOwnPropertyNames(this.state.numberInputs[i])[0] ===
-            "Percentile_Year(s)"
+            "Count_Year(s)"
         ) {
           submit = false;
           dropdownA[this.state.numberrows[i]] = "red-border";
@@ -549,7 +540,6 @@ class App extends Component {
           name: res.data[0].Name,
           gender: res.data[0].Gender,
           count: res.data[0].Count_AllTime,
-          percent: res.data[0].Percentile_AllTime,
           rank: res.data[0].Rank_AllTime,
           dataArr1: [
             res.data[0].Count_188x,
@@ -568,22 +558,6 @@ class App extends Component {
             res.data[0].Count_201x
           ],
           dataArr2: [
-            res.data[0].Percentile_188x,
-            res.data[0].Percentile_189x,
-            res.data[0].Percentile_190x,
-            res.data[0].Percentile_191x,
-            res.data[0].Percentile_192x,
-            res.data[0].Percentile_193x,
-            res.data[0].Percentile_194x,
-            res.data[0].Percentile_195x,
-            res.data[0].Percentile_196x,
-            res.data[0].Percentile_197x,
-            res.data[0].Percentile_198x,
-            res.data[0].Percentile_199x,
-            res.data[0].Percentile_200x,
-            res.data[0].Percentile_201x
-          ],
-          dataArr3: [
             res.data[0].Rank_188x,
             res.data[0].Rank_189x,
             res.data[0].Rank_190x,
@@ -612,13 +586,11 @@ class App extends Component {
       showModal: false,
       dataArr1: [],
       dataArr2: [],
-      dataArr3: [],
       modalTitle: "",
       modalMessages: [],
       name: "",
       gender: "",
       count: 0,
-      percent: 0,
       rank: 0
     });
   };
@@ -790,12 +762,10 @@ class App extends Component {
           name={this.state.name}
           gender={this.state.gender}
           count={this.state.count}
-          percent={this.state.percent}
           rank={this.state.rank}
           totalCount={this.state.totalCount}
           dataArr1={this.state.dataArr1}
           dataArr2={this.state.dataArr2}
-          dataArr3={this.state.dataArr3}
         />
         ;
       </Wrapper>
