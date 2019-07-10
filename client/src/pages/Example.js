@@ -12,8 +12,9 @@ class Example extends Component {
             alt="example search"
           />
           <p className="yellow-text p-2 image-size mx-auto">
-            The above search searches for a male name that begins with a B,
-            contains a y, and was relatively unpopular in the 2000s and 2010s.
+            The above search searches for a male name with a length between 1
+            and 8 characters that begins with a B, contains a y, and was
+            relatively unpopular in the 2000s and 2010s.
           </p>
         </div>
       </Wrapper>

@@ -6,7 +6,7 @@ class About extends Component {
   render() {
     return (
       <Wrapper>
-        <p className="p-2 yellow-text">Unpopular Baby was originally started as a python script that parsed the Social Security Administration Database to come up with a list of possible names to name our son, Bryce.  It was morphed into a more user friendly web application based on friend requests.  Happy searching!</p>
+        <p className="mx-2 p-2 yellow-text">Unpopular Baby was originally started as a python script that parsed the Social Security Administration Database to come up with a list of possible names to name our son, Bryce.  It was morphed into a more user friendly web application based on friend requests.  Happy searching!</p>
       </Wrapper>
     );
   }
