@@ -8,7 +8,7 @@ class Example extends Component {
         <div className="mx-auto text-center">
           <img
             className="image-size"
-            src="/assets/images/example1.PNG"
+            src="/assets/images/unpopbaby.PNG"
             alt="example search"
           />
           <p className="yellow-text p-2 image-size mx-auto">
