@@ -75,7 +75,7 @@ class LetterForm extends Component {
       <div className="max-width">
         <div className="row justify-content-center mx-auto">
           <form className="form-inline letters mb-0">
-            <div className="dropdown ml-md-2 ml-xs-1">
+            <div className="dropdown ml-1">
               <button
                 className={`btn btn-secondary dropdown-toggle ml-0 px-1 ${
                   this.props.dropdownClass
@@ -116,7 +116,7 @@ class LetterForm extends Component {
               </div>
             </div>
 
-            <label>
+            <label className="ml-1">
               <input
                 type="text"
                 className={`form-control letter-input letter-input-${
@@ -128,15 +128,15 @@ class LetterForm extends Component {
             </label>
             <button
               type="button"
-              className="close text-white ml-2"
+              className="close text-white ml-1 small"
               onClick={this.hideForm}
             >
               {" "}
               &times;
             </button>
           </form>
-          <sup>
-            <button type="button" className="info text-white">
+          <sup className="mx-0">
+            <button type="button" className="info text-white mx-0">
               <i
                 className="fas fa-info-circle"
                 onClick={() => this.props.updateModal("letter")}

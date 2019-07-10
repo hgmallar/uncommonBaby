@@ -239,7 +239,7 @@ class NumberForm extends Component {
       <div className="max-width">
         <div className="row justify-content-center mx-auto">
           <form className="form-inline number-form mb-0">
-            <div className="dropdown">
+            <div className="dropdown ml-1">
               <button
                 className={`btn btn-secondary dropdown-toggle ml-0 px-1 ${
                   this.props.dropdownClassA
@@ -366,9 +366,9 @@ class NumberForm extends Component {
               </div>
             </div>
 
-            <div className="dropdown">
+            <div className="dropdown ml-1">
               <button
-                className={`btn btn-secondary dropdown-toggle px-1 ${
+                className={`btn btn-secondary dropdown-toggle ml-0 px-1 ${
                   this.props.dropdownClassB
                 }`}
                 type="button"

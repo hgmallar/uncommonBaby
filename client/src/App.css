@@ -7,12 +7,12 @@
 }
 
 .red-border {
-  border: 2px solid red !important;
+  border: 2px solid rgb(204, 15, 103) !important;
 }
 
 .red-text {
   font-weight: bold;
-  color: red;
+  color: rgb(204, 15, 103);
 }
 
 .no-border {
@@ -21,6 +21,7 @@
 
 .close {
   text-shadow: none;
+  font-size: 1.2rem;
   opacity: 1;
 }
 
@@ -71,8 +72,12 @@ a:hover {
   cursor: pointer;
 }
 
+a:active {
+  border-color: none;
+}
+
 .letter-input {
-  width: 100px !important;
+  width: 85px !important;
 }
 
 .input-range__track--active {
@@ -170,10 +175,86 @@ li {
   border-color: #E5FCC2 !important;
 }
 
+.number {
+  width: 80px !important;
+}
 
+.bm-menu-wrap{
+  width: 200px !important;
+}
+
+.bm-item {
+  text-decoration: none;
+  margin-bottom: 10px;
+  color: #547980;
+}
+
+.bm-item:active, .bm-item:visited, .bm-item:hover, .bm-item:link {
+  text-decoration: none;
+}
+
+/* Position and sizing of burger button */
+.bm-burger-button {
+  position: fixed;
+  width: 24px;
+  height: 20px;
+  left: 24px;
+  top: 24px;
+}
+
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+  background: #E5FCC2;
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+  color: #547980 !important;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: #547980 !important;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  background: #9DE0AD;
+  padding: 2.5em 1.5em 0;
+  font-size: 1.15em;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+  color: #547980;
+}
+
+/* Wrapper for item list */
+.bm-item:focus {
+  outline:none;
+}
+
+/* Wrapper for item list */
+.menu-item:focus {
+  outline:none;
+}
+
+.image-size {
+  width: 60%;
+  height:auto;
+}
+
+.yellow-text {
+  color: #E5FCC2;
+}
 
 @media only screen and (min-width:0px) and (max-width:600px){
   .form-inline {
     flex-wrap: wrap;
+  }
+  .image-size {
+    width: 100%;
   }
 }

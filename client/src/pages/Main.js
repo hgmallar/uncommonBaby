@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Wrapper from "../components/Wrapper";
 import List from "../components/List";
-import Header from "../components/Header";
 import LetterForm from "../components/LetterForm";
 import NumberForm from "../components/NumberForm";
 import Modal from "../components/Modal";
@@ -12,6 +11,8 @@ class App extends Component {
     showModal: false,
     male: false,
     female: false,
+    minLength: 1,
+    maxLength: 100,
     isLoading: false,
     letterrows: [0],
     numberrows: [0],
@@ -84,8 +85,8 @@ class App extends Component {
         genderArr = ["M", "F"];
       }
       let numbers = [];
-      if (fields[2]) {
-        numbers = JSON.parse(fields[2]);
+      if (fields[4]) {
+        numbers = JSON.parse(fields[4]);
       }
       let numberRow = [];
       let numDD = [];
@@ -100,6 +101,8 @@ class App extends Component {
       this.setState({
         male: male,
         female: female,
+        minLength: parseInt(fields[2]),
+        maxLength: parseInt(fields[3]),
         letterrows: letterRow,
         letterInputs: lettersArr,
         letterRowLength: lettersArr.length - 1,
@@ -112,14 +115,16 @@ class App extends Component {
         numberDropdownClassesA: numDD,
         numberDropdownClassesB: numDD,
         numberErrorMessage: numErr,
-        moreResults: parseInt(fields[3])
+        moreResults: parseInt(fields[5])
       });
       let query = {
         letters: lettersArr,
         gender: genderArr,
+        min: parseInt(fields[2]),
+        max: parseInt(fields[3]),
         numbers: numbers,
-        limit: parseInt(fields[3]),
-        sort: JSON.parse(fields[4])
+        limit: parseInt(fields[5]),
+        sort: JSON.parse(fields[6])
       };
       console.log(query);
       API.findNames(query)
@@ -403,6 +408,8 @@ class App extends Component {
     let query = {
       letters: lettersArr,
       gender: ["F", "M"],
+      min: this.state.minLength,
+      max: this.state.maxLength,
       numbers: this.state.numberInputs,
       limit: moreResults,
       sort: sortQuery
@@ -411,6 +418,8 @@ class App extends Component {
       query = {
         letters: lettersArr,
         gender: ["F"],
+        min: this.state.minLength,
+        max: this.state.maxLength,
         numbers: this.state.numberInputs,
         limit: moreResults,
         sort: sortQuery
@@ -420,6 +429,8 @@ class App extends Component {
       query = {
         letters: lettersArr,
         gender: ["M"],
+        min: this.state.minLength,
+        max: this.state.maxLength,
         numbers: this.state.numberInputs,
         limit: moreResults,
         sort: sortQuery
@@ -435,6 +446,10 @@ class App extends Component {
       queryLetter +
       "&" +
       queryGender +
+      "&" +
+      this.state.minLength +
+      "&" +
+      this.state.maxLength +
       "&" +
       JSON.stringify(this.state.numberInputs) +
       "&" +
@@ -598,28 +613,58 @@ class App extends Component {
   render() {
     return (
       <Wrapper>
-        <Header />
-        <h4 className="subhead text-center col-12">
-          A tool to find names based on popularity
-        </h4>
-        <div className="form-check form-check-inline row justify-content-center col-12 mx-0 px-0 text-center">
-          <label>
-            Male
-            <input
-              type="checkbox"
-              onChange={e => this.setState({ male: !this.state.male })}
-              checked={this.state.male}
-            />
-          </label>
-          <label>
-            Female
-            <input
-              type="checkbox"
-              onChange={e => this.setState({ female: !this.state.female })}
-              checked={this.state.female}
-            />
-          </label>
-        </div>
+        <form className="justify-content-center mx-0 px-0 text-center align-items-center">
+          <div className="row mr-0 justify-content-center mx-auto">
+            <div className="form-inline form-check form-check-inline mb-2 col-md-5">
+              <label className="my-0">
+                Male
+                <input
+                  className="my-0"
+                  type="checkbox"
+                  onChange={e => this.setState({ male: !this.state.male })}
+                  checked={this.state.male}
+                />
+              </label>
+              <label className="my-0">
+                Female
+                <input
+                  className="my-0"
+                  type="checkbox"
+                  onChange={e => this.setState({ female: !this.state.female })}
+                  checked={this.state.female}
+                />
+              </label>
+            </div>
+            <div className="form-inline col-md-5 mt-xs-2 mt-md-0">
+              <div className="form-group ml-1">
+                <label className="mb-0 mx-auto">Min Length</label>
+                <input
+                  className="form-control form-control-sm mx-auto my-0 number"
+                  type="number"
+                  min="1"
+                  max={this.state.maxLength}
+                  placeholder={this.state.minLength}
+                  onChange={e =>
+                    this.setState({ minLength: parseInt(e.target.value) })
+                  }
+                />
+              </div>
+              <div className="form-group ml-1">
+                <label className="mb-0 mx-auto">Max Length</label>
+                <input
+                  className="form-control form-control-sm mx-auto my-0 number"
+                  type="number"
+                  min={this.state.minLength}
+                  max="100"
+                  placeholder={this.state.maxLength}
+                  onChange={e =>
+                    this.setState({ maxLength: parseInt(e.target.value) })
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        </form>
         <div className="text-center row justify-content-center mx-auto">
           <div className="col-md-4 px-0">
             {this.state.letterrows.map(r => (
@@ -767,7 +812,6 @@ class App extends Component {
           dataArr1={this.state.dataArr1}
           dataArr2={this.state.dataArr2}
         />
-        ;
       </Wrapper>
     );
   }
