@@ -10,7 +10,7 @@ class List extends Component {
                 <ol>
                     {newArray.map(result => (
                         <li key={result.id}>
-                            <h4 onClick={e => this.props.nameClicked(result.Name, result.Gender, e)} className="text-center">{result.Name} {(result.Gender === "M") ? "- male" : "- female"}</h4>
+                            <h4 onClick={e => this.props.nameClicked(result.Name, result.Gender, e)} className="text-center">{result.Name} {(result.Gender === "M") ? "- male" : (result.Gender === "F") ? "- female" : "- both"}</h4>
                         </li>
                     ))}
                 </ol>

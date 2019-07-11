@@ -79,6 +79,9 @@ class App extends Component {
       } else if (fields[1] === "F") {
         female = true;
         genderArr = ["F"];
+      } else if (fields[1] === "B") {
+        female = true;
+        genderArr = ["B"];
       } else if (fields[1] === "MF" || fields[1] === "FM") {
         male = true;
         female = true;
@@ -403,11 +406,11 @@ class App extends Component {
     } else if (this.state.sort === "Least - Most Popular") {
       sortQuery = [["id", "DESC"]];
     }
-    let queryGender = "MF";
+    let queryGender = "B";
     let lettersArr = this.state.letterInputs;
     let query = {
       letters: lettersArr,
-      gender: ["F", "M"],
+      gender: ["B"],
       min: this.state.minLength,
       max: this.state.maxLength,
       numbers: this.state.numberInputs,
@@ -436,6 +439,17 @@ class App extends Component {
         sort: sortQuery
       };
       queryGender = "M";
+    } else if (this.state.female && this.state.male) {
+      query = {
+        letters: lettersArr,
+        gender: ["F", "M"],
+        min: this.state.minLength,
+        max: this.state.maxLength,
+        numbers: this.state.numberInputs,
+        limit: moreResults,
+        sort: sortQuery
+      };
+      queryGender = "MF";
     }
     let queryLetter = "";
     for (let i = 0; i < this.state.letterInputs.length; i++) {
