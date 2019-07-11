@@ -135,14 +135,21 @@ class LetterForm extends Component {
               &times;
             </button>
           </form>
-          <sup className="mx-0">
-            <button type="button" className="info text-white mx-0">
-              <i
-                className="fas fa-info-circle"
-                onClick={() => this.props.updateModal("letter")}
-              />
-            </button>
-          </sup>
+          {this.props.nth === 0 ? (
+            <sup className="mx-0">
+              <button
+                type="button"
+                className="info text-white mx-0"
+              >
+                <i
+                  className="fas fa-info-circle"
+                  onClick={() => this.props.updateModal("letter")}
+                />
+              </button>
+            </sup>
+          ) : (
+            <div />
+          )}
         </div>
         <div className="red-text">{this.props.errorMessage}</div>
       </div>

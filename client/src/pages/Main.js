@@ -12,7 +12,7 @@ class App extends Component {
     male: false,
     female: false,
     minLength: 1,
-    maxLength: 100,
+    maxLength: 10,
     isLoading: false,
     letterrows: [0],
     numberrows: [0],
@@ -159,12 +159,12 @@ class App extends Component {
       {
         cat: "Rank",
         message:
-          "orders names from most popular, 1, to least popular for a selected time period.  This search returns names whose position is in the inputted range for the selected time period.  (lower rank is more popular)"
+          "orders names from most popular, 1, to least popular for a selected time period.  This search returns names whose position is in the inputted range for the selected gender(s) and time period.  (lower rank is more popular)"
       },
       {
         cat: "Count",
         message:
-          "is the total number of babies given that name for a selected time period.  This search returns names whose count is in the inputted range for the selected time period.  (higher count is more popular)"
+          "is the total number of babies given that name for a selected time period.  This search returns names whose count is in the inputted range for the selected gender(s) and time period.  (higher count is more popular)"
       }
     ];
     if (type === "letter") {
@@ -184,6 +184,32 @@ class App extends Component {
           cat: "Ends With: ",
           message:
             "Returns only names that end with the letter or string inputted."
+        }
+      ];
+    } else if (type === "gender") {
+      title = "Gender Options";
+      messages = [
+        {
+          cat: "Selcting Both Genders: ",
+          message: "Returns the individual results for each gender."
+        },
+        {
+          cat: "Selecting Neither Gender: ",
+          message: "Ignores gender."
+        }
+      ];
+    } else if (type === "charCount") {
+      title = "Name Length Options";
+      messages = [
+        {
+          cat: "Min Length: ",
+          message:
+            "Returns the names with a length greater than or equal to this number."
+        },
+        {
+          cat: "Max Length: ",
+          message:
+            "Returns the names with a length less than or equal to this number."
         }
       ];
     }
@@ -648,6 +674,14 @@ class App extends Component {
                   checked={this.state.female}
                 />
               </label>
+              <sup className="mx-0">
+                <button type="button" className="info text-white mx-0">
+                  <i
+                    className="fas fa-info-circle"
+                    onClick={() => this.updateModal("gender")}
+                  />
+                </button>
+              </sup>
             </div>
             <div className="form-inline col-md-5 mt-xs-2 mt-md-0">
               <div className="form-group ml-1">
@@ -669,13 +703,21 @@ class App extends Component {
                   className="form-control form-control-sm mx-auto my-0 number"
                   type="number"
                   min={this.state.minLength}
-                  max="100"
+                  max="10"
                   placeholder={this.state.maxLength}
                   onChange={e =>
                     this.setState({ maxLength: parseInt(e.target.value) })
                   }
                 />
               </div>
+              <sup className="mx-0">
+                <button type="button" className="info text-white mx-0">
+                  <i
+                    className="fas fa-info-circle"
+                    onClick={() => this.updateModal("charCount")}
+                  />
+                </button>
+              </sup>
             </div>
           </div>
         </form>
@@ -696,6 +738,7 @@ class App extends Component {
                 appendOutput={this.grabLetterInput}
                 removeLetterRow={this.removeLetterRow}
                 updateModal={this.updateModal}
+                nth={r}
               />
             ))}
           </div>
@@ -713,6 +756,7 @@ class App extends Component {
                 female={this.state.female}
                 removeNumberRow={this.removeNumberRow}
                 updateModal={this.updateModal}
+                nth={r}
               />
             ))}
           </div>
