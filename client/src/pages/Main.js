@@ -12,7 +12,7 @@ class App extends Component {
     male: false,
     female: false,
     minLength: 1,
-    maxLength: 10,
+    maxLength: 15,
     isLoading: false,
     letterrows: [0],
     numberrows: [0],
@@ -190,7 +190,7 @@ class App extends Component {
       title = "Gender Options";
       messages = [
         {
-          cat: "Selcting Both Genders: ",
+          cat: "Selecting Both Genders: ",
           message: "Returns the individual results for each gender."
         },
         {
@@ -703,7 +703,7 @@ class App extends Component {
                   className="form-control form-control-sm mx-auto my-0 number"
                   type="number"
                   min={this.state.minLength}
-                  max="10"
+                  max="15"
                   placeholder={this.state.maxLength}
                   onChange={e =>
                     this.setState({ maxLength: parseInt(e.target.value) })
