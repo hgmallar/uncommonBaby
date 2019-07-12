@@ -82,7 +82,7 @@ class App extends Component {
       } else if (fields[1] === "B") {
         female = true;
         genderArr = ["B"];
-      } else if (fields[1] === "MF" || fields[1] === "FM") {
+      } else if (fields[1] === "MF") {
         male = true;
         female = true;
         genderArr = ["M", "F"];
@@ -274,7 +274,9 @@ class App extends Component {
           this.state.letterInputs[i].$like &&
           (this.state.letterInputs[i].$like === "%%" ||
             this.state.letterInputs[i].$like === "%" ||
-            this.state.letterInputs[i].$like === "%Letter(s)%")
+            this.state.letterInputs[i].$like === "%Letter(s)%" || 
+            this.state.letterInputs[i].$like === "Letter(s)%" ||
+            this.state.letterInputs[i].$like === "%Letter(s)")
         ) {
           //change border of letter-input-#
           submit = false;

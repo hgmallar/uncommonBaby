@@ -8,9 +8,9 @@ class NumberForm extends Component {
   state = {
     numericalOptions: "Count",
     years: "All Time",
-    yearCol: "Year(s)",
-    value: { min: 1, max: 5150472 },
-    minValue: 1,
+    yearCol: "AllTime",
+    value: { min: 0, max: 5150472 },
+    minValue: 0,
     maxValue: 5150472,
     slider: "",
     output: {}
@@ -65,6 +65,7 @@ class NumberForm extends Component {
                 max = res.data;
                 console.log("max " + res.data);
                 this.checkSliderMinMax(
+                  0,
                   max,
                   options,
                   startMin,
@@ -91,6 +92,7 @@ class NumberForm extends Component {
                 max = res.data;
                 console.log("max " + res.data);
                 this.checkSliderMinMax(
+                  0,
                   max,
                   options,
                   startMin,
@@ -121,10 +123,11 @@ class NumberForm extends Component {
     this.updateNumbers(input, input2, this.props.male, this.props.female);
   };
 
-  checkSliderMinMax = (max, input, startMin, startMax, outputVal) => {
+  checkSliderMinMax = (min, max, input, startMin, startMax, outputVal) => {
     //update both
     this.setState({
       numericalOptions: input,
+      minValue: min,
       maxValue: max,
       value: { min: startMin, max: startMax },
       output: outputVal
@@ -153,9 +156,19 @@ class NumberForm extends Component {
           .then(res => {
             max = res.data;
             startMin = Math.round(res.data * minPercentage);
+            if (startMin === 0) {
+              startMin = 1;
+            }
             startMax = Math.round(res.data * maxPercentage);
             outputVal = { [query]: { $between: [startMin, startMax] } };
-            this.checkSliderMinMax(max, input, startMin, startMax, outputVal);
+            this.checkSliderMinMax(
+              1,
+              max,
+              input,
+              startMin,
+              startMax,
+              outputVal
+            );
             this.props.appendOutput(this.props.className, outputVal);
           })
           .catch(err => {
@@ -167,9 +180,19 @@ class NumberForm extends Component {
           .then(res => {
             max = res.data;
             startMin = Math.round(res.data * minPercentage);
+            if (startMin === 0) {
+              startMin = 1;
+            }
             startMax = Math.round(res.data * maxPercentage);
             outputVal = { [query]: { $between: [startMin, startMax] } };
-            this.checkSliderMinMax(max, input, startMin, startMax, outputVal);
+            this.checkSliderMinMax(
+              1,
+              max,
+              input,
+              startMin,
+              startMax,
+              outputVal
+            );
             this.props.appendOutput(this.props.className, outputVal);
           })
           .catch(err => {
@@ -186,7 +209,14 @@ class NumberForm extends Component {
             startMin = Math.round(res.data * minPercentage);
             startMax = Math.round(res.data * maxPercentage);
             outputVal = { [query]: { $between: [startMin, startMax] } };
-            this.checkSliderMinMax(max, input, startMin, startMax, outputVal);
+            this.checkSliderMinMax(
+              0,
+              max,
+              input,
+              startMin,
+              startMax,
+              outputVal
+            );
             this.props.appendOutput(this.props.className, outputVal);
           })
           .catch(err => {
@@ -200,7 +230,14 @@ class NumberForm extends Component {
             startMin = Math.round(res.data * minPercentage);
             startMax = Math.round(res.data * maxPercentage);
             outputVal = { [query]: { $between: [startMin, startMax] } };
-            this.checkSliderMinMax(max, input, startMin, startMax, outputVal);
+            this.checkSliderMinMax(
+              0,
+              max,
+              input,
+              startMin,
+              startMax,
+              outputVal
+            );
             this.props.appendOutput(this.props.className, outputVal);
           })
           .catch(err => {
