@@ -12,20 +12,6 @@ const { and, or, like, between } = Sequelize.Op;
 
 // Routes =============================================================
 module.exports = function(app) {
-  // GET route for getting the endpoints of the slider
-  app.get("/count/:col", function(req, res) {
-    db.Name.max(req.params.col)
-      .then(max => res.json(max))
-      .catch(err => res.status(422).json(err));
-  });
-
-  // GET route for getting the endpoints of the slider
-  app.get("/count/:col/:gender", function(req, res) {
-    db.Name.max(req.params.col, { where: { Gender: req.params.gender } })
-      .then(max => res.json(max))
-      .catch(err => res.status(422).json(err));
-  });
-
   // POST route for getting the name
   app.post("/name", function(req, res) {
     db.Name.findAll({

@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import InputRange from "react-input-range";
-import API from "../../utils/API";
 import "./styles.css";
 import "react-input-range/lib/css/index.css";
+
+import myData from "./max_values_full.json";
 
 class NumberForm extends Component {
   state = {
@@ -59,62 +60,42 @@ class NumberForm extends Component {
           startMax = this.props.inputs[key].$between[1];
           console.log("startmin " + this.props.inputs[key].$between[0]);
           console.log("startmax " + this.props.inputs[key].$between[1]);
-          if (this.props.male && this.props.female) {
-            API.getCount(key)
-              .then(res => {
-                max = res.data;
-                console.log("max " + res.data);
-                this.checkSliderMinMax(
-                  0,
-                  max,
-                  options,
-                  startMin,
-                  startMax,
-                  outputVal
-                );
-                this.setState({
-                  output: outputVal,
-                  numericalOptions: options,
-                  years: year,
-                  yearCol: yearCol,
-                  maxValue: max,
-                  value: { min: startMin, max: startMax }
-                });
-              })
-              .catch(err => {
-                console.log("count error: ");
-                console.log(err);
-              });
-          } else {
-            let gender = this.props.male ? "M" : "F";
-            API.getCountMF(key, gender)
-              .then(res => {
-                max = res.data;
-                console.log("max " + res.data);
-                this.checkSliderMinMax(
-                  0,
-                  max,
-                  options,
-                  startMin,
-                  startMax,
-                  outputVal
-                );
-                this.setState({
-                  output: outputVal,
-                  numericalOptions: options,
-                  years: year,
-                  yearCol: yearCol,
-                  maxValue: max,
-                  value: { min: startMin, max: startMax }
-                });
-              })
-              .catch(err => {
-                console.log("count error: ");
-                console.log(err);
-              });
+          let gender = "B";
+          if (this.props.male && !this.props.female) {
+            gender = "M";
+          } else if (!this.props.male && this.props.female) {
+            gender = "F";
+          } else if (this.props.male && this.props.female) {
+            gender = "MF";
           }
+          console.log(myData);
+          console.log(myData.key);
+          max = this.getEndpoints(key, gender);
+          this.checkSliderMinMax(
+            0,
+            max,
+            options,
+            startMin,
+            startMax,
+            outputVal
+          );
+          this.setState({
+            output: outputVal,
+            numericalOptions: options,
+            years: year,
+            yearCol: yearCol,
+            maxValue: max,
+            value: { min: startMin, max: startMax }
+          });
         }
       }
+    } else {
+      this.updateNumbers(
+        this.state.numericalOptions,
+        this.state.yearCol,
+        this.props.male,
+        this.props.female
+      );
     }
   }
 
@@ -142,109 +123,38 @@ class NumberForm extends Component {
     let startMin = Math.round(minPercentage * 100);
     let startMax = Math.round(maxPercentage * 100);
     let query = input + "_" + input2;
-    let gender = "";
+    let gender = "B";
     if (male && !female) {
       gender = "M";
     } else if (!male && female) {
       gender = "F";
+    } else if (male && female) {
+      gender = "MF";
     }
     let outputVal = { [query]: { $between: [startMin, startMax] } };
     if (input === "Rank" && input2 !== "Year(s)") {
       //set max to the highest number in the column for that rank decade
-      if ((male && !female) || (!male && female)) {
-        API.getCountMF(query, gender)
-          .then(res => {
-            max = res.data;
-            startMin = Math.round(res.data * minPercentage);
-            if (startMin === 0) {
-              startMin = 1;
-            }
-            startMax = Math.round(res.data * maxPercentage);
-            outputVal = { [query]: { $between: [startMin, startMax] } };
-            this.checkSliderMinMax(
-              1,
-              max,
-              input,
-              startMin,
-              startMax,
-              outputVal
-            );
-            this.props.appendOutput(this.props.className, outputVal);
-          })
-          .catch(err => {
-            console.log("count error: ");
-            console.log(err);
-          });
-      } else {
-        API.getCount(query)
-          .then(res => {
-            max = res.data;
-            startMin = Math.round(res.data * minPercentage);
-            if (startMin === 0) {
-              startMin = 1;
-            }
-            startMax = Math.round(res.data * maxPercentage);
-            outputVal = { [query]: { $between: [startMin, startMax] } };
-            this.checkSliderMinMax(
-              1,
-              max,
-              input,
-              startMin,
-              startMax,
-              outputVal
-            );
-            this.props.appendOutput(this.props.className, outputVal);
-          })
-          .catch(err => {
-            console.log("count error: ");
-            console.log(err);
-          });
+      console.log(myData);
+      console.log(myData.key);
+      max = this.getEndpoints(query, gender);
+      startMin = Math.round(max * minPercentage);
+      if (startMin === 0) {
+        startMin = 1;
       }
+      startMax = Math.round(max * maxPercentage);
+      outputVal = { [query]: { $between: [startMin, startMax] } };
+      this.checkSliderMinMax(1, max, input, startMin, startMax, outputVal);
+      this.props.appendOutput(this.props.className, outputVal);
     } else if (input === "Count" && input2 !== "Year(s)") {
       //set max to the highest number in the column for that count decade
-      if ((male && !female) || (!male && female)) {
-        API.getCountMF(query, gender)
-          .then(res => {
-            max = res.data;
-            startMin = Math.round(res.data * minPercentage);
-            startMax = Math.round(res.data * maxPercentage);
-            outputVal = { [query]: { $between: [startMin, startMax] } };
-            this.checkSliderMinMax(
-              0,
-              max,
-              input,
-              startMin,
-              startMax,
-              outputVal
-            );
-            this.props.appendOutput(this.props.className, outputVal);
-          })
-          .catch(err => {
-            console.log("count error: ");
-            console.log(err);
-          });
-      } else {
-        API.getCount(query)
-          .then(res => {
-            max = res.data;
-            startMin = Math.round(res.data * minPercentage);
-            startMax = Math.round(res.data * maxPercentage);
-            outputVal = { [query]: { $between: [startMin, startMax] } };
-            this.checkSliderMinMax(
-              0,
-              max,
-              input,
-              startMin,
-              startMax,
-              outputVal
-            );
-            this.props.appendOutput(this.props.className, outputVal);
-          })
-          .catch(err => {
-            console.log("count error: ");
-            console.log(err);
-          });
-      }
+      console.log(myData);
+      console.log(myData.key);
+      max = this.getEndpoints(query, gender);
+      startMin = Math.round(max * minPercentage);
+      startMax = Math.round(max * maxPercentage);
+      outputVal = { [query]: { $between: [startMin, startMax] } };
+      this.checkSliderMinMax(0, max, input, startMin, startMax, outputVal);
+      this.props.appendOutput(this.props.className, outputVal);
     } else {
       this.setState({ numericalOptions: input, output: outputVal });
       this.props.appendOutput(this.props.className, outputVal);
@@ -269,6 +179,16 @@ class NumberForm extends Component {
 
   hideForm = () => {
     this.props.removeNumberRow(this.props.className);
+  };
+
+  getEndpoints = (key, gender) => {
+    const type = key.substring(0, key.indexOf("_"));
+    const year = key.substring(key.indexOf("_") + 1);
+    console.log(type);
+    console.log(year);
+    console.log(gender);
+    console.log(myData[type][year][gender]);
+    return myData[type][year][gender];
   };
 
   render() {
@@ -458,6 +378,17 @@ class NumberForm extends Component {
                 this.props.appendOutput(this.props.className, outputVal);
               }}
             />
+          </form>
+          {this.props.nth === 0 ? (
+            <sup>
+              <button type="button" className="info text-white pr-0 pl-1">
+                <i
+                  className="fas fa-info-circle"
+                  onClick={() => this.props.updateModal("number")}
+                />
+              </button>
+            </sup>
+          ) : (
             <button
               type="button"
               className="close text-white ml-2"
@@ -466,18 +397,6 @@ class NumberForm extends Component {
               {" "}
               &times;
             </button>
-          </form>
-          {this.props.nth === 0 ? (
-            <sup>
-              <button type="button" className="info text-white">
-                <i
-                  className="fas fa-info-circle"
-                  onClick={() => this.props.updateModal("number")}
-                />
-              </button>
-            </sup>
-          ) : (
-            <div />
           )}
         </div>
         <div className="red-text">{this.props.errorMessage}</div>

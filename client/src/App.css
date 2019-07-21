@@ -128,7 +128,6 @@ a:active {
   background-color: rgba(54, 79, 80, 0);
   border: none;
   cursor: pointer;
-  position: absolute;
 }
 
 .space-around {

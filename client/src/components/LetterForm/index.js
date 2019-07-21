@@ -126,6 +126,17 @@ class LetterForm extends Component {
                 placeholder={this.state.input}
               />
             </label>
+          </form>
+          {this.props.nth === 0 ? (
+            <sup className="mx-0">
+              <button type="button" className="info text-white mx-0 pr-0 pl-1">
+                <i
+                  className="fas fa-info-circle"
+                  onClick={() => this.props.updateModal("letter")}
+                />
+              </button>
+            </sup>
+          ) : (
             <button
               type="button"
               className="close text-white ml-1 small"
@@ -134,21 +145,6 @@ class LetterForm extends Component {
               {" "}
               &times;
             </button>
-          </form>
-          {this.props.nth === 0 ? (
-            <sup className="mx-0">
-              <button
-                type="button"
-                className="info text-white mx-0"
-              >
-                <i
-                  className="fas fa-info-circle"
-                  onClick={() => this.props.updateModal("letter")}
-                />
-              </button>
-            </sup>
-          ) : (
-            <div />
           )}
         </div>
         <div className="red-text">{this.props.errorMessage}</div>
