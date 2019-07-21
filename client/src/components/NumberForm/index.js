@@ -118,6 +118,7 @@ class NumberForm extends Component {
   updateNumbers = (input, input2, male, female) => {
     let max = 100;
     let prevMax = this.state.maxValue;
+    let prevMin = this.state.minValue;
     let minPercentage = this.state.value.min / prevMax;
     let maxPercentage = this.state.value.max / prevMax;
     let startMin = Math.round(minPercentage * 100);
@@ -151,6 +152,9 @@ class NumberForm extends Component {
       console.log(myData.key);
       max = this.getEndpoints(query, gender);
       startMin = Math.round(max * minPercentage);
+      if (prevMin === 1) {
+        startMin = 0;
+      }
       startMax = Math.round(max * maxPercentage);
       outputVal = { [query]: { $between: [startMin, startMax] } };
       this.checkSliderMinMax(0, max, input, startMin, startMax, outputVal);
