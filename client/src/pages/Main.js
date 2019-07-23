@@ -57,7 +57,7 @@ class App extends Component {
     let letterInputClass = [];
     let letterDropdownClass = [];
     let letterError = [];
-    let letterRow = [];
+    let letterRow = [0];
     const { savedQuery } = this.props.match.params;
     let savedQueryEncode = encodeURI(savedQuery);
     let savedQueryDecode = decodeURI(savedQueryEncode);
@@ -80,7 +80,6 @@ class App extends Component {
         female = true;
         genderArr = ["F"];
       } else if (fields[1] === "B") {
-        female = true;
         genderArr = ["B"];
       } else if (fields[1] === "MF") {
         male = true;
@@ -101,6 +100,10 @@ class App extends Component {
           numErr[i] = "";
         }
       }
+      let letterArrLen = lettersArr.length - 1;
+      if(!lettersArr) {
+        letterArrLen = 0;
+      }
       this.setState({
         male: male,
         female: female,
@@ -108,7 +111,7 @@ class App extends Component {
         maxLength: parseInt(fields[3]),
         letterrows: letterRow,
         letterInputs: lettersArr,
-        letterRowLength: lettersArr.length - 1,
+        letterRowLength: letterArrLen,
         letterDropdownClasses: letterDropdownClass,
         letterInputClasses: letterInputClass,
         letterErrorMessage: letterError,
@@ -652,6 +655,14 @@ class App extends Component {
     });
   };
 
+  clearLetterBorders = (r) => {
+    let letterDropdownClasses = [];
+    let letterInputClasses = [];
+    let letterErrorMessage = [];
+    let letterInputs = [];
+    this.setState({letterDropdownClasses: letterDropdownClasses, letterInputClasses: letterInputClasses, letterErrorMessage: letterErrorMessage, letterInputs: letterInputs})
+  }
+
   render() {
     return (
       <Wrapper>
@@ -728,6 +739,7 @@ class App extends Component {
             {this.state.letterrows.map(r => (
               <LetterForm
                 key={r}
+                nth={r}
                 className={r}
                 inputs={
                   this.state.letterInputs[r]
@@ -740,7 +752,9 @@ class App extends Component {
                 appendOutput={this.grabLetterInput}
                 removeLetterRow={this.removeLetterRow}
                 updateModal={this.updateModal}
-                nth={r}
+                first={this.state.letterrows[0]}
+                length={this.state.letterrows.length}
+                clearBorders={this.clearLetterBorders}
               />
             ))}
           </div>
@@ -748,6 +762,7 @@ class App extends Component {
             {this.state.numberrows.map(r => (
               <NumberForm
                 key={r}
+                nth={r}
                 className={r}
                 inputs={this.state.numberInputs[r]}
                 errorMessage={this.state.numberErrorMessage[r]}
@@ -758,7 +773,8 @@ class App extends Component {
                 female={this.state.female}
                 removeNumberRow={this.removeNumberRow}
                 updateModal={this.updateModal}
-                nth={r}
+                first={this.state.numberrows[0]}
+                length={this.state.numberrows.length}
               />
             ))}
           </div>

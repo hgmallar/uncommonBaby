@@ -30,6 +30,9 @@ class LetterForm extends Component {
 
   updateOutput = evt => {
     let input = evt.target.value;
+    if (input === "Letter(s)") {
+      input = "";
+    }
     let output = "string";
     if (this.state.dropdown === "Contains") {
       output = { $like: "%" + input + "%" };
@@ -42,8 +45,19 @@ class LetterForm extends Component {
     this.props.appendOutput(this.props.className, output);
   };
 
-  hideForm = () => {
-    this.props.removeLetterRow(this.props.className);
+  hideForm = (e, r) => {
+    if (this.props.length > 1) {
+      this.props.removeLetterRow(this.props.className);
+    } else {
+      this.setState({
+        letterOptions: "Letter Options",
+        dropdown: "Letter Options",
+        input: "Letter(s)",
+        output: ""
+      });
+      this.props.appendOutput(this.props.className, "");
+      this.props.clearBorders(r);
+    }
   };
 
   componentWillMount = () => {
@@ -123,11 +137,26 @@ class LetterForm extends Component {
                   this.props.className
                 } ${this.props.inputClass}`}
                 onChange={e => this.updateOutput(e)}
-                placeholder={this.state.input}
+                onClick={e => e.target.value = ""}
+                value={this.state.input}
               />
             </label>
           </form>
-          {this.props.nth === 0 ? (
+          {this.props.length > 1 ||
+          (this.state.dropdown !== "Letter Options" ||
+            this.state.input !== "Letter(s)") ? (
+            <button
+              type="button"
+              className="close text-white ml-1 small"
+              onClick={e => this.hideForm(e, this.props.nth)}
+            >
+              {" "}
+              &times;
+            </button>
+          ) : (
+            <div />
+          )}
+          {this.props.first === this.props.nth ? (
             <sup className="mx-0">
               <button type="button" className="info text-white mx-0 pr-0 pl-1">
                 <i
@@ -137,14 +166,7 @@ class LetterForm extends Component {
               </button>
             </sup>
           ) : (
-            <button
-              type="button"
-              className="close text-white ml-1 small"
-              onClick={this.hideForm}
-            >
-              {" "}
-              &times;
-            </button>
+            <div />
           )}
         </div>
         <div className="red-text">{this.props.errorMessage}</div>

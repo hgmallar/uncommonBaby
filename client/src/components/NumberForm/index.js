@@ -10,9 +10,9 @@ class NumberForm extends Component {
     numericalOptions: "Count",
     years: "All Time",
     yearCol: "AllTime",
-    value: { min: 0, max: 5150472 },
+    value: { min: 0, max: myData["Count"]["AllTime"]["B"] },
     minValue: 0,
-    maxValue: 5150472,
+    maxValue: myData["Count"]["AllTime"]["B"],
     slider: "",
     output: {}
   };
@@ -42,12 +42,10 @@ class NumberForm extends Component {
     let max = 100;
     let outputVal = this.state.output;
     if (this.props.inputs) {
-      console.log(this.props.inputs);
       outputVal = this.props.inputs;
       let key = Object.keys(this.props.inputs)[0];
       if (!key.includes("Year(s)")) {
         if (this.props.inputs.hasOwnProperty(key)) {
-          console.log(key);
           options = key.substr(0, key.indexOf("_"));
           year = key.substr(key.indexOf("_") + 1);
           yearCol = year;
@@ -58,8 +56,6 @@ class NumberForm extends Component {
           }
           startMin = this.props.inputs[key].$between[0];
           startMax = this.props.inputs[key].$between[1];
-          console.log("startmin " + this.props.inputs[key].$between[0]);
-          console.log("startmax " + this.props.inputs[key].$between[1]);
           let gender = "B";
           if (this.props.male && !this.props.female) {
             gender = "M";
@@ -68,8 +64,6 @@ class NumberForm extends Component {
           } else if (this.props.male && this.props.female) {
             gender = "MF";
           }
-          console.log(myData);
-          console.log(myData.key);
           max = this.getEndpoints(key, gender);
           this.checkSliderMinMax(
             0,
@@ -135,8 +129,6 @@ class NumberForm extends Component {
     let outputVal = { [query]: { $between: [startMin, startMax] } };
     if (input === "Rank" && input2 !== "Year(s)") {
       //set max to the highest number in the column for that rank decade
-      console.log(myData);
-      console.log(myData.key);
       max = this.getEndpoints(query, gender);
       startMin = Math.round(max * minPercentage);
       if (startMin === 0) {
@@ -148,8 +140,6 @@ class NumberForm extends Component {
       this.props.appendOutput(this.props.className, outputVal);
     } else if (input === "Count" && input2 !== "Year(s)") {
       //set max to the highest number in the column for that count decade
-      console.log(myData);
-      console.log(myData.key);
       max = this.getEndpoints(query, gender);
       startMin = Math.round(max * minPercentage);
       if (prevMin === 1) {
@@ -182,20 +172,48 @@ class NumberForm extends Component {
   };
 
   hideForm = () => {
-    this.props.removeNumberRow(this.props.className);
+    let gender = "B";
+    if (this.props.male && !this.props.female) {
+      gender = "M";
+    } else if (!this.props.male && this.props.female) {
+      gender = "F";
+    } else if (this.props.male && this.props.female) {
+      gender = "MF";
+    }
+    if (this.props.length > 1) {
+      this.props.removeNumberRow(this.props.className);
+    } else {
+      this.setState({
+        numericalOptions: "Count",
+        years: "All Time",
+        yearCol: "AllTime",
+        value: { min: 0, max: myData["Count"]["AllTime"][gender] },
+        minValue: 0,
+        maxValue: myData["Count"]["AllTime"][gender],
+        slider: "",
+        output: {}
+      });
+      this.props.appendOutput(this.props.className, {"Count_AllTime": {$between: [0, myData["Count"]["AllTime"][gender]]}});
+      //this.props.appendOutput(this.props.className, "");
+      //this.props.clearBorders(r);
+    }
   };
 
   getEndpoints = (key, gender) => {
     const type = key.substring(0, key.indexOf("_"));
     const year = key.substring(key.indexOf("_") + 1);
-    console.log(type);
-    console.log(year);
-    console.log(gender);
-    console.log(myData[type][year][gender]);
     return myData[type][year][gender];
   };
 
   render() {
+    let gender = "B";
+    if (this.props.male && !this.props.female) {
+      gender = "M";
+    } else if (!this.props.male && this.props.female) {
+      gender = "F";
+    } else if (this.props.male && this.props.female) {
+      gender = "MF";
+    }
     return (
       <div className="max-width">
         <div className="row justify-content-center mx-auto">
@@ -383,7 +401,29 @@ class NumberForm extends Component {
               }}
             />
           </form>
-          {this.props.nth === 0 ? (
+          {this.props.length > 1 ||
+          !(
+            (this.state.years === "All Time" &&
+              this.state.numericalOptions === "Count" &&
+              this.state.value.min === 0 &&
+              this.state.value.max === myData["Count"]["AllTime"][gender]) ||
+            (this.state.years === "All Time" &&
+              this.state.numericalOptions === "Rank" &&
+              this.state.value.min === 1 &&
+              this.state.value.max === myData["Rank"]["AllTime"][gender])
+          ) ? (
+            <button
+              type="button"
+              className="close text-white ml-2"
+              onClick={this.hideForm}
+            >
+              {" "}
+              &times;
+            </button>
+          ) : (
+            <div />
+          )}
+          {this.props.first === this.props.nth ? (
             <sup>
               <button type="button" className="info text-white pr-0 pl-1">
                 <i
@@ -393,14 +433,7 @@ class NumberForm extends Component {
               </button>
             </sup>
           ) : (
-            <button
-              type="button"
-              className="close text-white ml-2"
-              onClick={this.hideForm}
-            >
-              {" "}
-              &times;
-            </button>
+            <div />
           )}
         </div>
         <div className="red-text">{this.props.errorMessage}</div>
