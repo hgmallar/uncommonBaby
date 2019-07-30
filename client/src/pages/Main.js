@@ -29,6 +29,8 @@ class App extends Component {
     moreResults: 100,
     totalCount: -1,
     sort: "Most - Least Popular",
+    sortDisplay: "All Time",
+    sortExtra: "AllTime",
     letterErrorMessage: [],
     numberErrorMessage: [],
     modalTitle: "",
@@ -43,13 +45,6 @@ class App extends Component {
   };
 
   componentWillMount() {
-    //Encode %25u%25,%25e%25&MF&%5B%7B%22Rank_188x%22:%7B%22$between%22:%5B3,%20500%5D%7D%7D,%7B%22Rank_201x%22:%7B%22$between%22:%5B10,%202000%5D%7D%7D%5D&100&%5B%5B%22id%22,%22ASC%22%5D%5D
-    //Decode %u%,%e%&MF&[{"Rank_188x":{"$between":[3, 500]}},{"Rank_201x":{"$between":[10, 2000]}}]&100&[["id","ASC"]]
-    //%25u%25,%25e%25&MF&%5B%7B"Rank_188x":%7B"$between":%5B3,%20500%5D%7D%7D,%7B"Rank_201x":%7B"$between":%5B10,%202000%5D%7D%7D%5D&100&%5B%5B"id","ASC"%5D%5D
-    //%25u%25,%25e%25&MF&%5B%7B"Rank_188x":%7B"$between":%5B3,%20500%5D%7D%7D,%7B"Rank_201x":%7B"$between":%5B10,%202000%5D%7D%7D%5D
-    //%25u%25,%25e%25
-    //MF
-    //%5B%7B%22Rank_188x%22:%7B%22$between%22:%5B3,%20500%5D%7D%7D,%7B%22Rank_201x%22:%7B%22$between%22:%5B10,%202000%5D%7D%7D%5D
     let male = false;
     let female = false;
     let lettersArr = [];
@@ -101,8 +96,25 @@ class App extends Component {
         }
       }
       let letterArrLen = lettersArr.length - 1;
-      if(!lettersArr) {
+      if (!lettersArr) {
         letterArrLen = 0;
+      }
+      let sortDD = "Most - Least Popular";
+      if ((JSON.parse(fields[6])[0][0] === "Name") && (JSON.parse(fields[6])[0][1] === "ASC")) {
+        sortDD = "A - Z";
+      } else if ((JSON.parse(fields[6])[0][0] === "Name") && (JSON.parse(fields[6])[0][1] === "DESC")) {
+        sortDD = "Z - A";
+      }
+      else if (JSON.parse(fields[6])[0][0] === "RAND") {
+        sortDD = "Random";
+      }
+      else if (((JSON.parse(fields[6])[0][0].split("_")[0] === "Count") && (JSON.parse(fields[6])[0][1] === "ASC")) || ((JSON.parse(fields[6])[0][0].split("_")[0] === "Rank") && (JSON.parse(fields[6])[0][1] === "DESC"))) {
+        sortDD = "Least - Most Popular";
+      }
+      let sortDisp = Object.getOwnPropertyNames(numbers[0])[0].split("_")[1];
+      let display = "All Time";
+      if (sortDisp !== "AllTime") {
+        display = `${sortDisp.split("x")[0]}0s`;
       }
       this.setState({
         male: male,
@@ -121,7 +133,10 @@ class App extends Component {
         numberDropdownClassesA: numDD,
         numberDropdownClassesB: numDD,
         numberErrorMessage: numErr,
-        moreResults: parseInt(fields[5])
+        moreResults: parseInt(fields[5]),
+        sort: sortDD,
+        sortExtra: sortDisp,
+        sortDisplay: display
       });
       let query = {
         letters: lettersArr,
@@ -258,12 +273,26 @@ class App extends Component {
     }
     let newArray = this.state.numberInputs;
     newArray[realIndex] = output;
-    this.setState({ numberInputs: newArray });
+    let sortDisp = Object.getOwnPropertyNames(newArray[0])[0].split(
+      "_"
+    )[1];
+    let display = "All Time";
+    if (sortDisp !== "AllTime") {
+      display = `${sortDisp.split("x")[0]}0s`;
+    }
+    this.setState({
+      numberInputs: newArray,
+      sortExtra: sortDisp,
+      sortDisplay: display
+    });
   };
 
   checkErroroneousInputs = () => {
     let submit = true;
     let errorArray = [];
+    let letterInput = this.state.letterInputs;
+    let letterRow = this.state.letterrows;
+    let nullRows = [];
     let letterInputClass = this.state.letterInputClasses;
     let letterDropdowns = this.state.letterDropdownClasses;
     let letterError = this.state.letterErrorMessage;
@@ -277,7 +306,7 @@ class App extends Component {
           this.state.letterInputs[i].$like &&
           (this.state.letterInputs[i].$like === "%%" ||
             this.state.letterInputs[i].$like === "%" ||
-            this.state.letterInputs[i].$like === "%Letter(s)%" || 
+            this.state.letterInputs[i].$like === "%Letter(s)%" ||
             this.state.letterInputs[i].$like === "Letter(s)%" ||
             this.state.letterInputs[i].$like === "%Letter(s)")
         ) {
@@ -298,6 +327,8 @@ class App extends Component {
           letterDropdowns[this.state.letterrows[i]] = "no-border";
           letterError[this.state.letterrows[i]] = "";
         }
+      } else {
+        nullRows.push(i);
       }
       //check for 2 of the same inputs, or 2 begins withs, or 2 ends with
       if (i + 1 < this.state.letterInputs.length) {
@@ -346,6 +377,10 @@ class App extends Component {
           letterError[errorArray[k]] = "*Incorrect Input.*";
         }
       }
+    }
+    for (let i = nullRows.length - 1; i >= 0; i--) {
+      letterInput.splice(nullRows[i], 1);
+      letterRow.splice(nullRows[i], 1);
     }
 
     //loop through numberInputs
@@ -407,6 +442,8 @@ class App extends Component {
       letterInputClasses: letterInputClass,
       letterDropdownClasses: letterDropdowns,
       letterErrorMessage: letterError,
+      letterInputs: letterInput,
+      letterrows: letterRow,
       numberDropdownClassesA: dropdownA,
       numberDropdownClassesB: dropdownB,
       numberErrorMessage: numberError,
@@ -427,15 +464,45 @@ class App extends Component {
 
   handleSubmit = (results, moreResults) => {
     this.setState({ showResults: results });
-    let sortQuery = [["id", "ASC"]];
+    let sortOn = "id";
+    if (this.state.numberInputs[0]) {
+      sortOn = Object.getOwnPropertyNames(this.state.numberInputs[0])[0];
+    }
+    let sortQuery = [[sortOn, "ASC"]];
     if (this.state.sort === "A - Z") {
       sortQuery = [["Name", "ASC"]];
     } else if (this.state.sort === "Z - A") {
       sortQuery = [["Name", "DESC"]];
     } else if (this.state.sort === "Most - Least Popular") {
-      sortQuery = [["id", "ASC"]];
+      if (sortOn.split("_")[0] === "Count") {
+        sortQuery = [[sortOn, "DESC"]];
+        if (sortOn.split("_")[1] !== this.state.sortExtra) {
+          sortQuery = [[`Count_${this.state.sortExtra}`, "DESC"]];
+        }
+      } else if (sortOn.split("_")[0] === "Rank") {
+        sortQuery = [[sortOn, "ASC"]];
+        if (sortOn.split("_")[1] !== this.state.sortExtra) {
+          sortQuery = [[`Rank_${this.state.sortExtra}`, "ASC"]];
+        }
+      } else {
+        sortQuery = [["id", "ASC"]];
+      }
     } else if (this.state.sort === "Least - Most Popular") {
-      sortQuery = [["id", "DESC"]];
+      if (sortOn.split("_")[0] === "Count") {
+        sortQuery = [[sortOn, "ASC"]];
+        if (sortOn.split("_")[1] !== this.state.sortExtra) {
+          sortQuery = [[`Count_${this.state.sortExtra}`, "ASC"]];
+        }
+      } else if (sortOn.split("_")[0] === "Rank") {
+        sortQuery = [[sortOn, "DESC"]];
+        if (sortOn.split("_")[1] !== this.state.sortExtra) {
+          sortQuery = [[`Rank_${this.state.sortExtra}`, "DESC"]];
+        }
+      } else {
+        sortQuery = [["id", "DESC"]];
+      }
+    } else if (this.state.sort === "Random") {
+      sortQuery = [["RAND", Math.floor(Math.random() * 1000)]];
     }
     let queryGender = "B";
     let lettersArr = this.state.letterInputs;
@@ -509,13 +576,15 @@ class App extends Component {
           this.setState({
             totalCount: res.data.count,
             results: res.data.rows,
-            isLoading: true
+            isLoading: true,
+            seed: query.seed
           });
         } else {
           this.setState({
             totalCount: res.data.count,
             results: res.data.rows,
-            isLoading: false
+            isLoading: false,
+            seed: query.seed
           });
         }
       })
@@ -573,9 +642,18 @@ class App extends Component {
     newArray.splice(realIndex, 1);
     let newRows = this.state.numberrows;
     newRows.splice(realIndex, 1);
+    let sortDisp = Object.getOwnPropertyNames(newArray[0])[0].split(
+      "_"
+    )[1];
+    let display = "All Time";
+    if (sortDisp !== "AllTime") {
+      display = `${sortDisp.split("x")[0]}0s`;
+    }
     this.setState({
       numberInputs: newArray,
-      numberrows: newRows
+      numberrows: newRows,
+      sortExtra: sortDisp,
+      sortDisplay: display
     });
     //this.handleSubmit(20, this.state.moreResults);
   };
@@ -583,6 +661,15 @@ class App extends Component {
   updateDropdownOptions = (input, evt) => {
     evt.preventDefault();
     this.setState({ sort: input });
+  };
+
+  updateDropdownOptionsTwo = (input, evt) => {
+    evt.preventDefault();
+    let display = "All Time";
+    if (input !== "AllTime") {
+      display = `${input.split("x")[0]}0s`;
+    }
+    this.setState({ sortDisplay: display, sortExtra: input });
   };
 
   nameClicked = (name, gender, evt) => {
@@ -594,8 +681,6 @@ class App extends Component {
     };
     API.findName(query)
       .then(res => {
-        console.log("found name");
-        console.log(res.data);
         this.setState({
           name: res.data[0].Name,
           gender: res.data[0].Gender,
@@ -655,13 +740,18 @@ class App extends Component {
     });
   };
 
-  clearLetterBorders = (r) => {
+  clearLetterBorders = r => {
     let letterDropdownClasses = [];
     let letterInputClasses = [];
     let letterErrorMessage = [];
     let letterInputs = [];
-    this.setState({letterDropdownClasses: letterDropdownClasses, letterInputClasses: letterInputClasses, letterErrorMessage: letterErrorMessage, letterInputs: letterInputs})
-  }
+    this.setState({
+      letterDropdownClasses: letterDropdownClasses,
+      letterInputClasses: letterInputClasses,
+      letterErrorMessage: letterErrorMessage,
+      letterInputs: letterInputs
+    });
+  };
 
   render() {
     return (
@@ -812,55 +902,191 @@ class App extends Component {
           {this.state.totalCount <= 1 ? (
             <h4> </h4>
           ) : (
-            <div>
-              <button
-                className={`btn btn-secondary dropdown-toggle px-1`}
-                type="button"
-                id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                {this.state.sort}
-              </button>
-              <div
-                className="dropdown-menu"
-                aria-labelledby="dropdownMenuButton"
-              >
+            <form className="form-inline">
+              <div>
                 <button
-                  className="dropdown-item"
-                  href="#"
-                  onClick={e => this.updateDropdownOptions("A - Z", e)}
+                  className={`btn btn-secondary dropdown-toggle px-1`}
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
                 >
-                  A - Z
+                  {this.state.sort}
                 </button>
-                <button
-                  className="dropdown-item"
-                  href="#"
-                  onClick={e => this.updateDropdownOptions("Z - A", e)}
+                <div
+                  className="dropdown-menu"
+                  aria-labelledby="dropdownMenuButton"
                 >
-                  Z - A
-                </button>
-                <button
-                  className="dropdown-item"
-                  href="#"
-                  onClick={e =>
-                    this.updateDropdownOptions("Most - Least Popular", e)
-                  }
-                >
-                  Most - Least Popular
-                </button>
-                <button
-                  className="dropdown-item"
-                  href="#"
-                  onClick={e =>
-                    this.updateDropdownOptions("Least - Most Popular", e)
-                  }
-                >
-                  Least - Most Popular
-                </button>
+                  <button
+                    className="dropdown-item"
+                    href="#"
+                    onClick={e => this.updateDropdownOptions("A - Z", e)}
+                  >
+                    A - Z
+                  </button>
+                  <button
+                    className="dropdown-item"
+                    href="#"
+                    onClick={e => this.updateDropdownOptions("Z - A", e)}
+                  >
+                    Z - A
+                  </button>
+                  <button
+                    className="dropdown-item"
+                    href="#"
+                    onClick={e =>
+                      this.updateDropdownOptions("Most - Least Popular", e)
+                    }
+                  >
+                    Most - Least Popular
+                  </button>
+                  <button
+                    className="dropdown-item"
+                    href="#"
+                    onClick={e =>
+                      this.updateDropdownOptions("Least - Most Popular", e)
+                    }
+                  >
+                    Least - Most Popular
+                  </button>
+                  <button
+                    className="dropdown-item"
+                    href="#"
+                    onClick={e => this.updateDropdownOptions("Random", e)}
+                  >
+                    Random
+                  </button>
+                </div>
               </div>
-            </div>
+              {this.state.sort === "Most - Least Popular" ||
+              this.state.sort === "Least - Most Popular" ? (
+                <div>
+                  <button
+                    className={`btn btn-secondary dropdown-toggle px-1`}
+                    type="button"
+                    id="dropdownMenuButton"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    {this.state.sortDisplay}
+                  </button>
+                  <div
+                    className="dropdown-menu"
+                    aria-labelledby="dropdownMenuButton"
+                  >
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("AllTime", e)}
+                    >
+                      All Time
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("188x", e)}
+                    >
+                      1880s
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("189x", e)}
+                    >
+                      1890s
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("190x", e)}
+                    >
+                      1900s
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("191x", e)}
+                    >
+                      1910s
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("192x", e)}
+                    >
+                      1920s
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("193x", e)}
+                    >
+                      1930s
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("194x", e)}
+                    >
+                      1940s
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("195x", e)}
+                    >
+                      1950s
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("196x", e)}
+                    >
+                      1960s
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("197x", e)}
+                    >
+                      1970s
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("198x", e)}
+                    >
+                      1980s
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("199x", e)}
+                    >
+                      1990s
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("200x", e)}
+                    >
+                      2000s
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      href="#"
+                      onClick={e => this.updateDropdownOptionsTwo("201x", e)}
+                    >
+                      2010s
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div />
+              )}
+            </form>
           )}
         </div>
         <div className="row justify-content-center col-12 mx-auto">

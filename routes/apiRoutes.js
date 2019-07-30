@@ -20,7 +20,40 @@ module.exports = function(app) {
         Gender: req.body.gender
       },
       attributes: {
-        include: ["Name", "Gender", "Count_AllTime", "Rank_AllTime", "Count_188x", "Count_189x", "Count_190x", "Count_191x", "Count_192x", "Count_193x", "Count_194x", "Count_195x", "Count_196x", "Count_197x", "Count_198x", "Count_199x", "Count_200x", "Count_201x", "Rank_188x", "Rank_189x", "Rank_190x", "Rank_191x", "Rank_192x", "Rank_193x", "Rank_194x", "Rank_195x", "Rank_196x", "Rank_197x", "Rank_198x", "Rank_199x", "Rank_200x", "Rank_201x"]
+        include: [
+          "Name",
+          "Gender",
+          "Count_AllTime",
+          "Rank_AllTime",
+          "Count_188x",
+          "Count_189x",
+          "Count_190x",
+          "Count_191x",
+          "Count_192x",
+          "Count_193x",
+          "Count_194x",
+          "Count_195x",
+          "Count_196x",
+          "Count_197x",
+          "Count_198x",
+          "Count_199x",
+          "Count_200x",
+          "Count_201x",
+          "Rank_188x",
+          "Rank_189x",
+          "Rank_190x",
+          "Rank_191x",
+          "Rank_192x",
+          "Rank_193x",
+          "Rank_194x",
+          "Rank_195x",
+          "Rank_196x",
+          "Rank_197x",
+          "Rank_198x",
+          "Rank_199x",
+          "Rank_200x",
+          "Rank_201x"
+        ]
       }
     })
       .then(result => {
@@ -42,7 +75,20 @@ module.exports = function(app) {
       Gender: {
         [or]: req.body.gender
       },
-      where: {[and]: [Sequelize.where(Sequelize.fn('char_length', Sequelize.col('Name')), '>=', req.body.min), Sequelize.where(Sequelize.fn('char_length', Sequelize.col('Name')), '<=', req.body.max)]}
+      where: {
+        [and]: [
+          Sequelize.where(
+            Sequelize.fn("char_length", Sequelize.col("Name")),
+            ">=",
+            req.body.min
+          ),
+          Sequelize.where(
+            Sequelize.fn("char_length", Sequelize.col("Name")),
+            "<=",
+            req.body.max
+          )
+        ]
+      }
     };
     for (let i = 0; i < req.body.numbers.length; i++) {
       let key = Object.keys(req.body.numbers[i])[0];
@@ -50,10 +96,14 @@ module.exports = function(app) {
       let secondval = Object.values(value)[0];
       whereObj[key] = { [between]: secondval };
     }
+    let sort = req.body.sort;
+    if (req.body.sort[0][0] === "RAND") {
+      sort = Sequelize.fn("RAND", req.body.sort[0][1]);
+    }
     db.Name.findAndCountAll({
       where: whereObj,
       limit: req.body.limit,
-      order: req.body.sort
+      order: sort
       //}).sort(sortQuery)
     })
       .then(result => {

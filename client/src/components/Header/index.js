@@ -21,6 +21,10 @@ class Header extends Component {
             Example
           </a>
 
+          <a className="menu-item" href="/contact">
+            Contact
+          </a>
+
         </Menu>
         <header className="navbar text-center col-12 justify-content-center pb-0">
           <a href="/" className="no-underline">

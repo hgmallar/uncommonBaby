@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Main from "./pages/Main";
 import About from "./pages/About";
 import Example from "./pages/Example";
+import Contact from "./pages/Contact";
 import ErrorPage from "./pages/ErrorPage";
 
 import "./App.css";
@@ -20,6 +21,7 @@ class App extends Component {
             <Route exact path="/" component={Main} />
             <Route exact path="/about" component={About} />
             <Route exact path="/example" component={Example} />
+            <Route exact path="/contact" component={Contact} />
             <Route path="/:savedQuery" component={Main} />
             <Route component={ErrorPage} />
           </Switch>
