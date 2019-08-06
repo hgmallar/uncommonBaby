@@ -15,6 +15,8 @@ class LetterForm extends Component {
     let output = "";
     if (letterInput === "Contains") {
       output = { $like: "%" + this.state.input + "%" };
+    } else if (letterInput === "Does Not Contain") {
+      output = { $notlike: "!%" + this.state.input + "%" };
     } else if (letterInput === "Starts With") {
       output = { $like: this.state.input + "%" };
     } else if (letterInput === "Ends With") {
@@ -36,6 +38,8 @@ class LetterForm extends Component {
     let output = "string";
     if (this.state.dropdown === "Contains") {
       output = { $like: "%" + input + "%" };
+    } else if (this.state.dropdown === "Does Not Contain") {
+      output = { $notlike: "!%" + input + "%" };
     } else if (this.state.dropdown === "Starts With") {
       output = { $like: input + "%" };
     } else if (this.state.dropdown === "Ends With") {
@@ -67,12 +71,15 @@ class LetterForm extends Component {
       this.props.inputs !== "string"
     ) {
       let inputs = this.props.inputs.replace(/%/g, "");
+      inputs = inputs.replace("!", "");
       let dropdowns = "Letter Options";
       if (
         this.props.inputs.charAt(0) === "%" &&
         this.props.inputs.charAt(this.props.inputs.length - 1) === "%"
       ) {
         dropdowns = "Contains";
+      } else if (this.props.inputs.charAt(0) === "!") {
+        dropdowns = "Does Not Contain";
       } else if (this.props.inputs.charAt(0) === "%") {
         dropdowns = "Ends With";
       } else if (

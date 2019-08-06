@@ -62,7 +62,11 @@ class App extends Component {
       for (let i = 0; i < letters.length; i++) {
         if (letters[i]) {
           letterRow[i] = i;
-          lettersArr[i] = { $like: letters[i] };
+          if (letters[i][0] !== "!") {
+            lettersArr[i] = { $like: letters[i] };
+          } else {
+            lettersArr[i] = { $notlike: letters[i] };
+          }
           letterInputClass[i] = "no-border";
           letterDropdownClass[i] = "no-border";
           letterError[i] = "";
@@ -100,15 +104,24 @@ class App extends Component {
         letterArrLen = 0;
       }
       let sortDD = "Most - Least Popular";
-      if ((JSON.parse(fields[6])[0][0] === "Name") && (JSON.parse(fields[6])[0][1] === "ASC")) {
+      if (
+        JSON.parse(fields[6])[0][0] === "Name" &&
+        JSON.parse(fields[6])[0][1] === "ASC"
+      ) {
         sortDD = "A - Z";
-      } else if ((JSON.parse(fields[6])[0][0] === "Name") && (JSON.parse(fields[6])[0][1] === "DESC")) {
+      } else if (
+        JSON.parse(fields[6])[0][0] === "Name" &&
+        JSON.parse(fields[6])[0][1] === "DESC"
+      ) {
         sortDD = "Z - A";
-      }
-      else if (JSON.parse(fields[6])[0][0] === "RAND") {
+      } else if (JSON.parse(fields[6])[0][0] === "RAND") {
         sortDD = "Random";
-      }
-      else if (((JSON.parse(fields[6])[0][0].split("_")[0] === "Count") && (JSON.parse(fields[6])[0][1] === "ASC")) || ((JSON.parse(fields[6])[0][0].split("_")[0] === "Rank") && (JSON.parse(fields[6])[0][1] === "DESC"))) {
+      } else if (
+        (JSON.parse(fields[6])[0][0].split("_")[0] === "Count" &&
+          JSON.parse(fields[6])[0][1] === "ASC") ||
+        (JSON.parse(fields[6])[0][0].split("_")[0] === "Rank" &&
+          JSON.parse(fields[6])[0][1] === "DESC")
+      ) {
         sortDD = "Least - Most Popular";
       }
       let sortDisp = Object.getOwnPropertyNames(numbers[0])[0].split("_")[1];
@@ -273,9 +286,7 @@ class App extends Component {
     }
     let newArray = this.state.numberInputs;
     newArray[realIndex] = output;
-    let sortDisp = Object.getOwnPropertyNames(newArray[0])[0].split(
-      "_"
-    )[1];
+    let sortDisp = Object.getOwnPropertyNames(newArray[0])[0].split("_")[1];
     let display = "All Time";
     if (sortDisp !== "AllTime") {
       display = `${sortDisp.split("x")[0]}0s`;
@@ -551,7 +562,11 @@ class App extends Component {
     }
     let queryLetter = "";
     for (let i = 0; i < this.state.letterInputs.length; i++) {
-      queryLetter += this.state.letterInputs[i].$like;
+      if (this.state.letterInputs[i].$like) {
+        queryLetter += this.state.letterInputs[i].$like;
+      } else {
+        queryLetter += this.state.letterInputs[i].$notlike;
+      }
       queryLetter += ",";
     }
     let queryLink =
@@ -613,8 +628,6 @@ class App extends Component {
     this.setState({ isLoading: false });
   };
 
-
-
   removeLetterRow = index => {
     let realIndex = index;
     for (let j = 0; j < this.state.letterrows.length; j++) {
@@ -653,9 +666,7 @@ class App extends Component {
     newArray.splice(realIndex, 1);
     let newRows = this.state.numberrows;
     newRows.splice(realIndex, 1);
-    let sortDisp = Object.getOwnPropertyNames(newArray[0])[0].split(
-      "_"
-    )[1];
+    let sortDisp = Object.getOwnPropertyNames(newArray[0])[0].split("_")[1];
     let display = "All Time";
     if (sortDisp !== "AllTime") {
       display = `${sortDisp.split("x")[0]}0s`;
@@ -843,8 +854,11 @@ class App extends Component {
                 nth={r}
                 className={r}
                 inputs={
-                  this.state.letterInputs[r]
+                  this.state.letterInputs[r] && this.state.letterInputs[r].$like
                     ? this.state.letterInputs[r].$like
+                    : this.state.letterInputs[r] &&
+                      this.state.letterInputs[r].$notlike
+                    ? this.state.letterInputs[r].$notlike
                     : "Letter(s)"
                 }
                 errorMessage={this.state.letterErrorMessage[r]}
