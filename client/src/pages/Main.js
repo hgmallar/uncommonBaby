@@ -613,6 +613,8 @@ class App extends Component {
     this.setState({ isLoading: false });
   };
 
+
+
   removeLetterRow = index => {
     let realIndex = index;
     for (let j = 0; j < this.state.letterrows.length; j++) {
@@ -620,11 +622,20 @@ class App extends Component {
         realIndex = j;
       }
     }
+    // let newInputClasses = this.state.letterInputClasses;
+    // newInputClasses.splice(realIndex, 1);
+    // let newErrorMessage = this.state.letterErrorMessage;
+    // newErrorMessage.splice(realIndex, 1);
+    // let newDropdownClasses = this.state.letterDropdownClasses;
+    // newDropdownClasses.splice(realIndex, 1);
     let newArray = this.state.letterInputs;
     newArray.splice(realIndex, 1);
     let newRows = this.state.letterrows;
     newRows.splice(realIndex, 1);
     this.setState({
+      //letterDropdownClasses: newDropdownClasses,
+      //letterErrorMessage: newErrorMessage,
+      //letterInputClasses: newInputClasses,
       letterInputs: newArray,
       letterrows: newRows
     });

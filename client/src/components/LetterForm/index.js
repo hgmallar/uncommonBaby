@@ -90,18 +90,31 @@ class LetterForm extends Component {
         <div className="row justify-content-center mx-auto">
           <form className="form-inline letters mb-0">
             <div className="dropdown ml-1">
-              <button
-                className={`btn btn-secondary dropdown-toggle ml-0 px-1 ${
-                  this.props.dropdownClass
-                }`}
-                type="button"
-                id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                {this.state.dropdown}
-              </button>
+              {this.state.dropdown !== "Letter Options" ? (
+                <button
+                  className={`btn btn-secondary dropdown-toggle ml-0 px-1 ${
+                    this.props.dropdownClass
+                  }`}
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  {this.state.dropdown}
+                </button>
+              ) : (
+                <button
+                  className={`btn btn-secondary dropdown-toggle ml-0 px-1 grey`}
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  {this.state.dropdown}
+                </button>
+              )}
               <div
                 className="dropdown-menu"
                 aria-labelledby="dropdownMenuButton"
@@ -112,6 +125,13 @@ class LetterForm extends Component {
                   onClick={e => this.updateLetterOptions("Contains", e)}
                 >
                   Contains
+                </button>
+                <button
+                  className="dropdown-item"
+                  href="#"
+                  onClick={e => this.updateLetterOptions("Does Not Contain", e)}
+                >
+                  Does Not Contain
                 </button>
                 <button
                   className="dropdown-item"
@@ -131,15 +151,26 @@ class LetterForm extends Component {
             </div>
 
             <label className="ml-1">
+            {(this.state.input !== "Letter(s)") ? (
               <input
                 type="text"
                 className={`form-control letter-input letter-input-${
                   this.props.className
                 } ${this.props.inputClass}`}
                 onChange={e => this.updateOutput(e)}
-                onClick={e => e.target.value = ""}
+                onClick={e => (e.target.value = "")}
                 value={this.state.input}
               />
+            ) : 
+            (<input
+              type="text"
+              className={`form-control letter-input grey letter-input-${
+                this.props.className
+              } ${this.props.inputClass}`}
+              onChange={e => this.updateOutput(e)}
+              onClick={e => (e.target.value = "")}
+              value={this.state.input}
+            />)}
             </label>
           </form>
           {this.props.length > 1 ||

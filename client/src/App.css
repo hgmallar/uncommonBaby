@@ -19,6 +19,15 @@
   border:none;
 }
 
+.grey {
+  background-color: #CED4DA !important;
+  border-color: #CED4DA !important;
+}
+
+.white {
+  background-color: white;
+}
+
 .close {
   text-shadow: none;
   font-size: 1.2rem;
