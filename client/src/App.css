@@ -264,6 +264,10 @@ li {
   width: calc(100% - 20px);
 }
 
+.displayErrors input:invalid {
+  border: 2px solid rgb(204, 15, 103);
+}
+
 @media only screen and (min-width:0px) and (max-width:600px){
   .form-inline {
     flex-wrap: wrap;

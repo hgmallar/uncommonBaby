@@ -8,5 +8,9 @@ export default {
   findName: function(query) {
     console.log(query);
     return axios.post("/name", query);
+  },
+  send: function(query) {
+    console.log("Sending" + query);
+    return axios.post("/api/send", query);
   }
 };

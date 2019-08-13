@@ -64,7 +64,7 @@ class LetterForm extends Component {
     }
   };
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     if (
       this.props.inputs &&
       !this.props.inputs.includes("Letter(s)") &&

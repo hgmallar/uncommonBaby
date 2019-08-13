@@ -40,10 +40,11 @@ class Modal extends Component {
           {this.props.title ? (
             <div className="modal-body">
               <div>{prettyMessage}</div>
+              {(this.props.title !== "Contact Form") ? (
               <small className="font-weight-bold mx-auto">
                 *** A submission will satisfy all search terms. ***
               </small>
-              {}
+              ) : (<div />) }
             </div>
           ) : this.state.status === "count" ? (
             <div className="modal-body">

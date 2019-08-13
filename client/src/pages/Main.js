@@ -44,7 +44,7 @@ class App extends Component {
     dataArr2: []
   };
 
-  componentWillMount() {
+  componentDidMount() {
     let male = false;
     let female = false;
     let lettersArr = [];

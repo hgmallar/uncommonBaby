@@ -17,23 +17,23 @@ class NumberForm extends Component {
     output: {}
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (
-      this.props.male !== nextProps.male ||
-      this.props.female !== nextProps.female
-    ) {
-      if (this.state.numericalOptions !== "Numerical Options") {
-        this.updateNumbers(
-          this.state.numericalOptions,
-          this.state.yearCol,
-          nextProps.male,
-          nextProps.female
-        );
-      }
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (
+  //     this.props.male !== nextProps.male ||
+  //     this.props.female !== nextProps.female
+  //   ) {
+  //     if (this.state.numericalOptions !== "Numerical Options") {
+  //       this.updateNumbers(
+  //         this.state.numericalOptions,
+  //         this.state.yearCol,
+  //         nextProps.male,
+  //         nextProps.female
+  //       );
+  //     }
+  //   }
+  // }
 
-  componentWillMount() {
+  componentDidMount() {
     let startMin = 20;
     let startMax = 80;
     let options = "Numerical Options";

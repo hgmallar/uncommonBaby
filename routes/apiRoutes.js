@@ -10,6 +10,26 @@ var db = require("../models");
 var Sequelize = require("sequelize");
 const { and, or, like, notLike, between } = Sequelize.Op;
 
+var nodemailer = require("nodemailer");
+
+var transport = {
+  host: "smtp.gmail.com",
+  auth: {
+    user: process.env.REACT_APP_USER,
+    pass: process.env.REACT_APP_PASS
+  }
+};
+
+var transporter = nodemailer.createTransport(transport);
+
+transporter.verify((error, success) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log("Server is ready to take messages");
+  }
+});
+
 // Routes =============================================================
 module.exports = function(app) {
   // POST route for getting the name
@@ -68,9 +88,10 @@ module.exports = function(app) {
     for (let i = 0; i < req.body.letters.length; i++) {
       if (req.body.letters[i].$like) {
         letters.push({ [like]: req.body.letters[i].$like });
-      }
-      else {
-        letters.push({ [notLike]: req.body.letters[i].$notlike.replace("!", "") });
+      } else {
+        letters.push({
+          [notLike]: req.body.letters[i].$notlike.replace("!", "")
+        });
       }
     }
     let whereObj = {
@@ -115,5 +136,32 @@ module.exports = function(app) {
         res.json({ count: result.count, rows: result.rows });
       })
       .catch(err => res.status(422).json(err));
+  });
+
+  // POST route for contacting
+  app.post("/api/send", function(req, res) {
+    var name = req.body.name;
+    var email = req.body.email;
+    var message = req.body.comments;
+    var content = `name: ${name} \n email: ${email} \n message: ${message} `;
+
+    var mail = {
+      from: name,
+      to: process.env.REACT_APP_USER, //Change to email address that you want to receive messages on
+      subject: "New Message from Contact Form",
+      text: content
+    };
+
+    transporter.sendMail(mail, (err, data) => {
+      if (err) {
+        res.json({
+          msg: "fail"
+        });
+      } else {
+        res.json({
+          msg: "success"
+        });
+      }
+    });
   });
 };
