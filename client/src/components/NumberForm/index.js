@@ -17,21 +17,21 @@ class NumberForm extends Component {
     output: {}
   };
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (
-  //     this.props.male !== nextProps.male ||
-  //     this.props.female !== nextProps.female
-  //   ) {
-  //     if (this.state.numericalOptions !== "Numerical Options") {
-  //       this.updateNumbers(
-  //         this.state.numericalOptions,
-  //         this.state.yearCol,
-  //         nextProps.male,
-  //         nextProps.female
-  //       );
-  //     }
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.male !== prevProps.male ||
+      this.props.female !== prevProps.female
+    ) {
+      if (this.state.numericalOptions !== "Numerical Options") {
+        this.updateNumbers(
+          this.state.numericalOptions,
+          this.state.yearCol,
+          this.props.male,
+          this.props.female
+        );
+      }
+    }
+  }
 
   componentDidMount() {
     let startMin = 20;
