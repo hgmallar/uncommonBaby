@@ -13,7 +13,12 @@ const { and, or, like, notLike, between } = Sequelize.Op;
 var nodemailer = require("nodemailer");
 
 var transport = {
-  host: "smtp.gmail.com",
+  host: "smtp-mail.outlook.com", // hostname
+  secureConnection: false, // TLS requires secureConnection to be false
+  port: 587, // port for secure SMTP
+  tls: {
+    ciphers: "SSLv3"
+  },
   auth: {
     user: process.env.REACT_APP_USER,
     pass: process.env.REACT_APP_PASS
