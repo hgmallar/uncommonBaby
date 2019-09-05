@@ -19,8 +19,12 @@ class LetterForm extends Component {
       output = { $notlike: "!%" + this.state.input + "%" };
     } else if (letterInput === "Starts With") {
       output = { $like: this.state.input + "%" };
+    } else if (letterInput === "Does Not Start With") {
+      output = { $notlike: "!" + this.state.input + "%" };
     } else if (letterInput === "Ends With") {
       output = { $like: "%" + this.state.input };
+    } else if (letterInput === "Does Not End With") {
+      output = { $notlike: "!%" + this.state.input };
     }
     this.setState({
       letterOptions: letterInput,
@@ -42,8 +46,12 @@ class LetterForm extends Component {
       output = { $notlike: "!%" + input + "%" };
     } else if (this.state.dropdown === "Starts With") {
       output = { $like: input + "%" };
+    } else if (this.state.dropdown === "Does Not Start With") {
+      output = { $notlike: "!" + input + "%" };
     } else if (this.state.dropdown === "Ends With") {
       output = { $like: "%" + input };
+    } else if (this.state.dropdown === "Does Not End With") {
+      output = { $notlike: "!%" + input };
     }
     this.setState({ input: input, output: output });
     this.props.appendOutput(this.props.className, output);
@@ -64,30 +72,41 @@ class LetterForm extends Component {
     }
   };
 
-  componentDidMount = () => {
-    if (
-      this.props.inputs &&
-      !this.props.inputs.includes("Letter(s)") &&
-      this.props.inputs !== "string"
-    ) {
-      let inputs = this.props.inputs.replace(/%/g, "");
-      inputs = inputs.replace("!", "");
-      let dropdowns = "Letter Options";
+  componentDidUpdate = prevProps => {
+    if (prevProps.inputs !== this.props.inputs) {
       if (
-        this.props.inputs.charAt(0) === "%" &&
-        this.props.inputs.charAt(this.props.inputs.length - 1) === "%"
+        this.props.inputs &&
+        !this.props.inputs.includes("Letter(s)") &&
+        this.props.inputs !== "string"
       ) {
-        dropdowns = "Contains";
-      } else if (this.props.inputs.charAt(0) === "!") {
-        dropdowns = "Does Not Contain";
-      } else if (this.props.inputs.charAt(0) === "%") {
-        dropdowns = "Ends With";
-      } else if (
-        this.props.inputs.charAt(this.props.inputs.length - 1) === "%"
-      ) {
-        dropdowns = "Starts With";
+        let inputs = this.props.inputs.replace(/%/g, "");
+        inputs = inputs.replace("!", "");
+
+        let dropdowns = "Letter Options";
+        if (
+          this.props.inputs.charAt(0) === "%" &&
+          this.props.inputs.charAt(this.props.inputs.length - 1) === "%"
+        ) {
+          dropdowns = "Contains";
+        } else if (this.props.inputs.charAt(0) === "!") {
+          if (this.props.inputs.substr(-1) === "%") {
+            if (this.props.inputs.charAt(1) === "%") {
+              dropdowns = "Does Not Contain";
+            } else {
+              dropdowns = "Does Not Start With";
+            }
+          } else {
+            dropdowns = "Does Not End With";
+          }
+        } else if (this.props.inputs.charAt(0) === "%") {
+          dropdowns = "Ends With";
+        } else if (
+          this.props.inputs.charAt(this.props.inputs.length - 1) === "%"
+        ) {
+          dropdowns = "Starts With";
+        }
+        this.setState({ input: inputs, dropdown: dropdowns });
       }
-      this.setState({ input: inputs, dropdown: dropdowns });
     }
   };
 
@@ -150,34 +169,53 @@ class LetterForm extends Component {
                 <button
                   className="dropdown-item"
                   href="#"
+                  onClick={e =>
+                    this.updateLetterOptions("Does Not Start With", e)
+                  }
+                >
+                  Does Not Start With
+                </button>
+                <button
+                  className="dropdown-item"
+                  href="#"
                   onClick={e => this.updateLetterOptions("Ends With", e)}
                 >
                   Ends With
+                </button>
+                <button
+                  className="dropdown-item"
+                  href="#"
+                  onClick={e =>
+                    this.updateLetterOptions("Does Not End With", e)
+                  }
+                >
+                  Does Not End With
                 </button>
               </div>
             </div>
 
             <label className="ml-1">
-            {(this.state.input !== "Letter(s)") ? (
-              <input
-                type="text"
-                className={`form-control letter-input letter-input-${
-                  this.props.className
-                } ${this.props.inputClass}`}
-                onChange={e => this.updateOutput(e)}
-                onClick={e => (e.target.value = "")}
-                value={this.state.input}
-              />
-            ) : 
-            (<input
-              type="text"
-              className={`form-control letter-input grey letter-input-${
-                this.props.className
-              } ${this.props.inputClass}`}
-              onChange={e => this.updateOutput(e)}
-              onClick={e => (e.target.value = "")}
-              value={this.state.input}
-            />)}
+              {this.state.input !== "Letter(s)" ? (
+                <input
+                  type="text"
+                  className={`form-control letter-input letter-input-${
+                    this.props.className
+                  } ${this.props.inputClass}`}
+                  onChange={e => this.updateOutput(e)}
+                  onClick={e => (e.target.value = "")}
+                  value={this.state.input}
+                />
+              ) : (
+                <input
+                  type="text"
+                  className={`form-control letter-input grey letter-input-${
+                    this.props.className
+                  } ${this.props.inputClass}`}
+                  onChange={e => this.updateOutput(e)}
+                  onClick={e => (e.target.value = "")}
+                  value={this.state.input}
+                />
+              )}
             </label>
           </form>
           {this.props.length > 1 ||
