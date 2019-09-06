@@ -256,7 +256,8 @@ class App extends Component {
 
   handleClickLetter = () => {
     let rows = this.state.letterrows;
-    let index = this.state.letterRowLength + 1;
+    //let index = this.state.letterRowLength + 1;
+    let index = this.state.letterrows.length;
     rows.push(index);
     this.setState({ letterrows: rows, letterRowLength: index });
   };
@@ -275,7 +276,8 @@ class App extends Component {
 
   handleClickNumber = () => {
     let rows = this.state.numberrows;
-    let index = this.state.numberRowLength + 1;
+    //let index = this.state.numberRowLength + 1;
+    let index = this.state.numberrows.length;
     rows.push(index);
     this.setState({ numberrows: rows, numberRowLength: index });
   };
@@ -305,7 +307,7 @@ class App extends Component {
     let submit = true;
     let errorArray = [];
     let letterInput = this.state.letterInputs;
-    let letterRow = this.state.letterrows;
+    //let letterRow = this.state.letterrows;
     let nullRows = [];
     let letterInputClass = this.state.letterInputClasses;
     let letterDropdowns = this.state.letterDropdownClasses;
@@ -344,8 +346,16 @@ class App extends Component {
       } else {
         nullRows.push(i);
       }
-      //check for 2 of the same inputs, or 2 begins withs, or 2 ends with
+      //check for 2 of the same inputs, or 2 begins withs, or 2 ends with, or starts with/ends with/contains string and does not start with/end with/contain string
       if (i + 1 < this.state.letterInputs.length) {
+        let iString = this.state.letterInputs[i][Object.getOwnPropertyNames(this.state.letterInputs[i])[0]];
+        let antiString = "";
+        if (iString.includes("!")) {
+          antiString = iString.replace("!", "");
+        }
+        else {
+          antiString = "!"+iString;
+        }
         for (let j = i + 1; j < this.state.letterInputs.length; j++) {
           if (
             this.state.letterInputs[i] &&
@@ -358,24 +368,15 @@ class App extends Component {
             if (
               (Object.getOwnPropertyNames(this.state.letterInputs[i])[0] ===
                 Object.getOwnPropertyNames(this.state.letterInputs[j])[0] &&
-                this.state.letterInputs[i][
-                  Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
-                ] ===
-                  this.state.letterInputs[j][
-                    Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
-                  ]) ||
-              (this.state.letterInputs[i][
-                Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
-              ][0] !== "%" &&
-                this.state.letterInputs[j][
-                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
-                ][0] !== "%") ||
-              (this.state.letterInputs[i][
-                Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
-              ].substr(-1) !== "%" &&
-                this.state.letterInputs[j][
-                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
-                ].substr(-1) !== "%")
+                this.state.letterInputs[i][Object.getOwnPropertyNames(this.state.letterInputs[i])[0]] ===
+                  this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]]) ||
+              (this.state.letterInputs[i][Object.getOwnPropertyNames(this.state.letterInputs[i])[0]][0] !== "%" &&
+                this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]][0] !== "%" && 
+                this.state.letterInputs[i][Object.getOwnPropertyNames(this.state.letterInputs[i])[0]][0] !== "!" &&
+                this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]][0] !== "!") ||
+              (this.state.letterInputs[i][Object.getOwnPropertyNames(this.state.letterInputs[i])[0]].substr(-1) !== "%" &&
+                this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]].substr(-1) !== "%") ||
+                antiString ===  this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]]
             ) {
               errorArray.push(this.state.letterrows[i]);
               errorArray.push(this.state.letterrows[j]);
@@ -394,7 +395,7 @@ class App extends Component {
     }
     for (let i = nullRows.length - 1; i >= 0; i--) {
       letterInput.splice(nullRows[i], 1);
-      letterRow.splice(nullRows[i], 1);
+      //letterRow.splice(nullRows[i], 1);
     }
 
     //loop through numberInputs
@@ -457,7 +458,7 @@ class App extends Component {
       letterDropdownClasses: letterDropdowns,
       letterErrorMessage: letterError,
       letterInputs: letterInput,
-      letterrows: letterRow,
+      //letterrows: letterRow,
       numberDropdownClassesA: dropdownA,
       numberDropdownClassesB: dropdownB,
       numberErrorMessage: numberError,
@@ -647,7 +648,11 @@ class App extends Component {
     let newArray = this.state.letterInputs;
     newArray.splice(realIndex, 1);
     let newRows = this.state.letterrows;
-    newRows.splice(realIndex, 1);
+    //newRows.splice(realIndex, 1);
+    newRows.pop();
+    for (let i=0; i < newRows.length; i++) {
+      newRows[i] = i;
+    }
     this.setState({
       //letterDropdownClasses: newDropdownClasses,
       //letterErrorMessage: newErrorMessage,
@@ -668,7 +673,11 @@ class App extends Component {
     let newArray = this.state.numberInputs;
     newArray.splice(realIndex, 1);
     let newRows = this.state.numberrows;
-    newRows.splice(realIndex, 1);
+    //newRows.splice(realIndex, 1);
+    newRows.pop();
+    for (let i=0; i < newRows.length; i++) {
+      newRows[i] = i;
+    }
     let sortDisp = Object.getOwnPropertyNames(newArray[0])[0].split("_")[1];
     let display = "All Time";
     if (sortDisp !== "AllTime") {
