@@ -22,7 +22,7 @@ class App extends Component {
     letterInputs: [],
     letterInputClasses: [],
     letterDropdownClasses: [],
-    numberInputs: [],
+    numberInputs: [{Count_AllTime: { $between: [0, 5173828] }}],
     numberDropdownClassesA: [],
     numberDropdownClassesB: [],
     showResults: 20,
@@ -86,8 +86,11 @@ class App extends Component {
         genderArr = ["M", "F"];
       }
       let numbers = [];
+      console.log(fields[4]);
       if (fields[4]) {
-        numbers = JSON.parse(fields[4]);
+        numbers = fields[4].split(",");
+        numbers = JSON.parse(numbers);
+        console.log(numbers);      
       }
       let numberRow = [];
       let numDD = [];

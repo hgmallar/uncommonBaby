@@ -17,7 +17,7 @@ class NumberForm extends Component {
     output: {}
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate = prevProps => {
     if (
       this.props.male !== prevProps.male ||
       this.props.female !== prevProps.female
@@ -31,67 +31,72 @@ class NumberForm extends Component {
         );
       }
     }
-  }
-
-  componentDidUpdate = prevProps => {
     if (prevProps.inputs !== this.props.inputs) {
-      let startMin = 20;
-      let startMax = 80;
-      let options = "Numerical Options";
-      let yearCol = "Year(s)";
-      let year = "Year(s)";
-      let max = 100;
-      let outputVal = this.state.output;
-      if (this.props.inputs) {
-        outputVal = this.props.inputs;
-        let key = Object.keys(this.props.inputs)[0];
-        if (!key.includes("Year(s)")) {
-          if (this.props.inputs.hasOwnProperty(key)) {
-            options = key.substr(0, key.indexOf("_"));
-            year = key.substr(key.indexOf("_") + 1);
-            yearCol = year;
-            if (year.includes("x")) {
-              year = year.replace(/x/, "0s");
-            } else {
-              year = "All Time";
-            }
-            startMin = this.props.inputs[key].$between[0];
-            startMax = this.props.inputs[key].$between[1];
-            let gender = "B";
-            if (this.props.male && !this.props.female) {
-              gender = "M";
-            } else if (!this.props.male && this.props.female) {
-              gender = "F";
-            } else if (this.props.male && this.props.female) {
-              gender = "MF";
-            }
-            max = this.getEndpoints(key, gender);
-            this.checkSliderMinMax(
-              0,
-              max,
-              options,
-              startMin,
-              startMax,
-              outputVal
-            );
-            this.setState({
-              output: outputVal,
-              numericalOptions: options,
-              years: year,
-              yearCol: yearCol,
-              maxValue: max,
-              value: { min: startMin, max: startMax }
-            });
+      this.componentMount();
+    }
+  };
+
+  componentDidMount = () => {
+    this.componentMount();
+  };
+
+  componentMount = () => {
+    let startMin = 20;
+    let startMax = 80;
+    let options = "Numerical Options";
+    let yearCol = "Year(s)";
+    let year = "Year(s)";
+    let max = 100;
+    let outputVal = this.state.output;
+    if (this.props.inputs) {
+      outputVal = this.props.inputs;
+      let key = Object.keys(this.props.inputs)[0];
+      if (!key.includes("Year(s)")) {
+        if (this.props.inputs.hasOwnProperty(key)) {
+          options = key.substr(0, key.indexOf("_"));
+          year = key.substr(key.indexOf("_") + 1);
+          yearCol = year;
+          if (year.includes("x")) {
+            year = year.replace(/x/, "0s");
+          } else {
+            year = "All Time";
           }
+          startMin = this.props.inputs[key].$between[0];
+          startMax = this.props.inputs[key].$between[1];
+          let gender = "B";
+          if (this.props.male && !this.props.female) {
+            gender = "M";
+          } else if (!this.props.male && this.props.female) {
+            gender = "F";
+          } else if (this.props.male && this.props.female) {
+            gender = "MF";
+          }
+          max = this.getEndpoints(key, gender);
+          this.checkSliderMinMax(
+            0,
+            max,
+            options,
+            startMin,
+            startMax,
+            outputVal
+          );
+          this.setState({
+            output: outputVal,
+            numericalOptions: options,
+            years: year,
+            yearCol: yearCol,
+            maxValue: max,
+            value: { min: startMin, max: startMax }
+          });
         }
-      } else {
-        this.updateNumbers(
-          this.state.numericalOptions,
-          this.state.yearCol,
-          this.props.male,
-          this.props.female
-        );
       }
+    } else {
+      this.updateNumbers(
+        this.state.numericalOptions,
+        this.state.yearCol,
+        this.props.male,
+        this.props.female
+      );
     }
   };
 

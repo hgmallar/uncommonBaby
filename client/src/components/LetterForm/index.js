@@ -74,39 +74,47 @@ class LetterForm extends Component {
 
   componentDidUpdate = prevProps => {
     if (prevProps.inputs !== this.props.inputs) {
-      if (
-        this.props.inputs &&
-        !this.props.inputs.includes("Letter(s)") &&
-        this.props.inputs !== "string"
-      ) {
-        let inputs = this.props.inputs.replace(/%/g, "");
-        inputs = inputs.replace("!", "");
+      this.componentMount();
+    }
+  };
 
-        let dropdowns = "Letter Options";
-        if (
-          this.props.inputs.charAt(0) === "%" &&
-          this.props.inputs.charAt(this.props.inputs.length - 1) === "%"
-        ) {
-          dropdowns = "Contains";
-        } else if (this.props.inputs.charAt(0) === "!") {
-          if (this.props.inputs.substr(-1) === "%") {
-            if (this.props.inputs.charAt(1) === "%") {
-              dropdowns = "Does Not Contain";
-            } else {
-              dropdowns = "Does Not Start With";
-            }
+  componentDidMount = () => {
+    this.componentMount();
+  };
+
+  componentMount = () => {
+    if (
+      this.props.inputs &&
+      !this.props.inputs.includes("Letter(s)") &&
+      this.props.inputs !== "string"
+    ) {
+      let inputs = this.props.inputs.replace(/%/g, "");
+      inputs = inputs.replace("!", "");
+
+      let dropdowns = "Letter Options";
+      if (
+        this.props.inputs.charAt(0) === "%" &&
+        this.props.inputs.charAt(this.props.inputs.length - 1) === "%"
+      ) {
+        dropdowns = "Contains";
+      } else if (this.props.inputs.charAt(0) === "!") {
+        if (this.props.inputs.substr(-1) === "%") {
+          if (this.props.inputs.charAt(1) === "%") {
+            dropdowns = "Does Not Contain";
           } else {
-            dropdowns = "Does Not End With";
+            dropdowns = "Does Not Start With";
           }
-        } else if (this.props.inputs.charAt(0) === "%") {
-          dropdowns = "Ends With";
-        } else if (
-          this.props.inputs.charAt(this.props.inputs.length - 1) === "%"
-        ) {
-          dropdowns = "Starts With";
+        } else {
+          dropdowns = "Does Not End With";
         }
-        this.setState({ input: inputs, dropdown: dropdowns });
+      } else if (this.props.inputs.charAt(0) === "%") {
+        dropdowns = "Ends With";
+      } else if (
+        this.props.inputs.charAt(this.props.inputs.length - 1) === "%"
+      ) {
+        dropdowns = "Starts With";
       }
+      this.setState({ input: inputs, dropdown: dropdowns });
     }
   };
 
