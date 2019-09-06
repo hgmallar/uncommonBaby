@@ -22,7 +22,7 @@ class App extends Component {
     letterInputs: [],
     letterInputClasses: [],
     letterDropdownClasses: [],
-    numberInputs: [{Count_AllTime: { $between: [0, 5173828] }}],
+    numberInputs: [{ Count_AllTime: { $between: [0, 5173828] } }],
     numberDropdownClassesA: [],
     numberDropdownClassesB: [],
     showResults: 20,
@@ -90,7 +90,7 @@ class App extends Component {
       if (fields[4]) {
         numbers = fields[4].split(",");
         numbers = JSON.parse(numbers);
-        console.log(numbers);      
+        console.log(numbers);
       }
       let numberRow = [];
       let numDD = [];
@@ -348,13 +348,22 @@ class App extends Component {
       }
       //check for 2 of the same inputs, or 2 begins withs, or 2 ends with, or starts with/ends with/contains string and does not start with/end with/contain string
       if (i + 1 < this.state.letterInputs.length) {
-        let iString = this.state.letterInputs[i][Object.getOwnPropertyNames(this.state.letterInputs[i])[0]];
+        let iString = this.state.letterInputs[i][
+          Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
+        ];
         let antiString = "";
+        let startString = "";
+        let endString = "";
+        let dncString = "";
         if (iString.includes("!")) {
-          antiString = iString.replace("!", "");
-        }
-        else {
-          antiString = "!"+iString;
+          antiString = iString.replace(/!/g, "");
+          if (iString[1] === "%" && iString.substr(-1) === "%") {
+            startString = antiString.replace(/%/g, "") + "%";
+            endString = "%" + antiString.replace(/%/g, "");
+          }
+        } else {
+          antiString = "!" + iString;
+          dncString = "!%" + iString.replace(/%/g, "") + "%";
         }
         for (let j = i + 1; j < this.state.letterInputs.length; j++) {
           if (
@@ -368,15 +377,37 @@ class App extends Component {
             if (
               (Object.getOwnPropertyNames(this.state.letterInputs[i])[0] ===
                 Object.getOwnPropertyNames(this.state.letterInputs[j])[0] &&
-                this.state.letterInputs[i][Object.getOwnPropertyNames(this.state.letterInputs[i])[0]] ===
-                  this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]]) ||
-              (this.state.letterInputs[i][Object.getOwnPropertyNames(this.state.letterInputs[i])[0]][0] !== "%" &&
-                this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]][0] !== "%" && 
-                this.state.letterInputs[i][Object.getOwnPropertyNames(this.state.letterInputs[i])[0]][0] !== "!" &&
-                this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]][0] !== "!") ||
-              (this.state.letterInputs[i][Object.getOwnPropertyNames(this.state.letterInputs[i])[0]].substr(-1) !== "%" &&
-                this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]].substr(-1) !== "%") ||
-                antiString ===  this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]]
+                this.state.letterInputs[i][
+                  Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
+                ] ===
+                  this.state.letterInputs[j][
+                    Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                  ]) ||
+              (this.state.letterInputs[i][
+                Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
+              ][0] !== "%" &&
+                this.state.letterInputs[j][
+                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                ][0] !== "%" &&
+                this.state.letterInputs[i][
+                  Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
+                ][0] !== "!" &&
+                this.state.letterInputs[j][
+                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                ][0] !== "!") ||
+              (this.state.letterInputs[i][
+                Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
+              ].substr(-1) !== "%" &&
+                this.state.letterInputs[j][
+                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                ].substr(-1) !== "%") ||
+              (antiString ===
+                this.state.letterInputs[j][
+                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                ]) ||
+                (startString && this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]] === startString) ||
+                (endString && this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]] === endString) ||
+                (dncString && this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]] === dncString) 
             ) {
               errorArray.push(this.state.letterrows[i]);
               errorArray.push(this.state.letterrows[j]);
@@ -650,7 +681,7 @@ class App extends Component {
     let newRows = this.state.letterrows;
     //newRows.splice(realIndex, 1);
     newRows.pop();
-    for (let i=0; i < newRows.length; i++) {
+    for (let i = 0; i < newRows.length; i++) {
       newRows[i] = i;
     }
     this.setState({
@@ -675,7 +706,7 @@ class App extends Component {
     let newRows = this.state.numberrows;
     //newRows.splice(realIndex, 1);
     newRows.pop();
-    for (let i=0; i < newRows.length; i++) {
+    for (let i = 0; i < newRows.length; i++) {
       newRows[i] = i;
     }
     let sortDisp = Object.getOwnPropertyNames(newArray[0])[0].split("_")[1];
