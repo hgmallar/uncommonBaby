@@ -2471,7 +2471,7 @@ react-copy-to-clipboard@^5.0.1:
     copy-to-clipboard "^3"
     prop-types "^15.5.8"
 
-react-infinite-loader@^1.0.3:
+react-infinite-loader@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/react-infinite-loader/-/react-infinite-loader-1.0.4.tgz#968bfda89fd0ec0573e1fe035e7998bfb1af3df2"
   integrity sha512-fUIswwMb8NIohiY0npKE/Lix6gwx/FW3K9UmIx5NtWg45kDBuHngaw1scQ6Y1tAQsAyONGskNltSpi0QGDRzsg==

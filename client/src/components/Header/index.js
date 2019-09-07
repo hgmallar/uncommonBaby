@@ -30,7 +30,7 @@ class Header extends Component {
           <a href="/" className="no-underline">
             <h1>
               <i className="fas fa-baby-carriage" />
-              <span className="text1"> Unpopular Baby Name </span>
+              <span className="text1"> Unpopular Baby Names </span>
               <i className="fas fa-baby" />
             </h1>
           </a>
