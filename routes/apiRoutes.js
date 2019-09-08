@@ -133,6 +133,7 @@ module.exports = function(app) {
     }
     db.Name.findAndCountAll({
       where: whereObj,
+      attributes: ["id", "Name", "Gender"],
       limit: req.body.limit,
       order: sort
       //}).sort(sortQuery)

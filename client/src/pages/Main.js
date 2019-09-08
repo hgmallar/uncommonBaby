@@ -88,9 +88,13 @@ class App extends Component {
       let numbers = [];
       console.log(fields[4]);
       if (fields[4]) {
-        numbers = fields[4].split(",");
-        numbers = JSON.parse(numbers);
+        let numbersArr = fields[4].split(",");
+        console.log(numbersArr);
         console.log(numbers);
+        numbers = JSON.parse(numbersArr);
+        console.log(numbers);
+        //numbers = JSON.parse(fields[4]);
+        //console.log(numbers);
       }
       let numberRow = [];
       let numDD = [];
