@@ -22,7 +22,22 @@ class NumberForm extends Component {
       this.props.male !== prevProps.male ||
       this.props.female !== prevProps.female
     ) {
-      if (this.state.numericalOptions !== "Numerical Options") {
+      if (this.props.inputs) {
+        let key = Object.keys(this.props.inputs)[0];
+        if (!key.includes("Year(s)")) {
+          if (this.props.inputs.hasOwnProperty(key)) {
+            let options = key.substr(0, key.indexOf("_"));
+            let yearCl = key.substr(key.indexOf("_") + 1);
+            this.updateNumbers(
+              options,
+              yearCl,
+              this.props.male,
+              this.props.female
+            );
+          }
+        }
+      }
+      else if (this.state.numericalOptions !== "Numerical Options") {
         this.updateNumbers(
           this.state.numericalOptions,
           this.state.yearCol,

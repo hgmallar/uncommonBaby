@@ -86,15 +86,9 @@ class App extends Component {
         genderArr = ["M", "F"];
       }
       let numbers = [];
-      console.log(fields[4]);
       if (fields[4]) {
-        let numbersArr = fields[4].split(",");
-        console.log(numbersArr);
-        console.log(numbers);
+        let numbersArr = fields[4];
         numbers = JSON.parse(numbersArr);
-        console.log(numbers);
-        //numbers = JSON.parse(fields[4]);
-        //console.log(numbers);
       }
       let numberRow = [];
       let numDD = [];
@@ -405,13 +399,22 @@ class App extends Component {
                 this.state.letterInputs[j][
                   Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
                 ].substr(-1) !== "%") ||
-              (antiString ===
+              antiString ===
                 this.state.letterInputs[j][
                   Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
-                ]) ||
-                (startString && this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]] === startString) ||
-                (endString && this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]] === endString) ||
-                (dncString && this.state.letterInputs[j][Object.getOwnPropertyNames(this.state.letterInputs[j])[0]] === dncString) 
+                ] ||
+              (startString &&
+                this.state.letterInputs[j][
+                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                ] === startString) ||
+              (endString &&
+                this.state.letterInputs[j][
+                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                ] === endString) ||
+              (dncString &&
+                this.state.letterInputs[j][
+                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                ] === dncString)
             ) {
               errorArray.push(this.state.letterrows[i]);
               errorArray.push(this.state.letterrows[j]);
