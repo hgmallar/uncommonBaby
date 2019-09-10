@@ -1,3 +1,7 @@
 ol {
     list-style-type: decimal;
 }
+
+.infinite-scroll-component {
+  overflow: inherit !important;
+}

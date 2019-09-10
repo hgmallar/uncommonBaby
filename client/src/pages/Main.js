@@ -500,6 +500,7 @@ class App extends Component {
       numberDropdownClassesA: dropdownA,
       numberDropdownClassesB: dropdownB,
       numberErrorMessage: numberError,
+      moreResults: 100,
       results: newResults,
       totalCount: count,
       isLoading: submit
@@ -510,7 +511,7 @@ class App extends Component {
         dropdownB[l] = "no-border";
         numberError[l] = "";
       }
-      this.handleSubmit(20, this.state.moreResults);
+      this.handleSubmit(20, 100);
     }
     errorArray = [];
   };
@@ -657,13 +658,16 @@ class App extends Component {
     if (newCount >= this.state.totalCount) {
       load = false;
     }
+    if (newCount >= this.state.moreResults) {
+      this.increaseResults();
+    }
     this.setState({ showResults: newCount, isLoading: load });
   };
 
   increaseResults = () => {
     let newCount = this.state.moreResults + 100;
-    this.setState({ moreResults: newCount });
     this.handleSubmit(newCount - 80, newCount);
+    this.setState({ moreResults: newCount });
   };
 
   updateLoad = () => {
