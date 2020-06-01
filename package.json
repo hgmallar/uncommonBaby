@@ -27,14 +27,8 @@
     "mysql2": "^1.6.5",
     "nodemailer": "^6.3.0",
     "path": "^0.12.7",
-    "react-bootstrap": "^1.0.0-beta.5",
-    "react-copy-to-clipboard": "^5.0.1",
-    "react-infinite-loader": "^1.0.4",
-    "react-infinite-scroller": "^1.2.4",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-select": "^2.3.0",
-    "react-slider": "^0.11.2",
     "sequelize": "^5.8.2"
   }
 }
