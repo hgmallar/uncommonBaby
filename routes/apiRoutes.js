@@ -137,7 +137,7 @@ module.exports = function (app) {
   });
 
   // GET route for getting the names
-  app.get("/api/names/:min/:max/:gender/:sort/:letters", function (req, res) {
+  app.get("/api/names/:min/:max/:gender/:sort/:lettersArr", function (req, res) {
     let genderArr = [];
     if (req.params.gender === "MF") {
       genderArr = ["M", "F"];
@@ -149,7 +149,7 @@ module.exports = function (app) {
       sort = Sequelize.fn("RAND", sort[0][1]);
     }
     let letters = [];
-    let lettersArr = req.params.letters.split(",");
+    let lettersArr = req.params.lettersArr.split(",");
     for (let i = 0; i < lettersArr.length; i++) {
       if (lettersArr[i].contains("!")) {
         letters.push({
