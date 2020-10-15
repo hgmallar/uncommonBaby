@@ -628,7 +628,7 @@ class App extends Component {
       JSON.stringify(sortQuery);
     queryLink = encodeURI(queryLink);
     this.props.history.push("/" + encodeURI(queryLink));
-    console.log(`query: ${query}`);
+    console.log(`query: ${query.letters}`);
     API.findNames(query)
       .then((res) => {
         if (res.data.count >= 20) {
