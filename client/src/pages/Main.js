@@ -161,7 +161,7 @@ class App extends Component {
         limit: parseInt(fields[5]),
         sort: JSON.parse(fields[6]),
       };
-      console.log(`query: ${query}`);
+      console.log(query);
       API.findNames(query)
         .then((res) => {
           if (res.data.count >= 20) {
@@ -628,7 +628,6 @@ class App extends Component {
       JSON.stringify(sortQuery);
     queryLink = encodeURI(queryLink);
     this.props.history.push("/" + encodeURI(queryLink));
-    console.log(`query: ${query.letters}`);
     API.findNames(query)
       .then((res) => {
         if (res.data.count >= 20) {
