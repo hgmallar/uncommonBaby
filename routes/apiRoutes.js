@@ -17,12 +17,12 @@ var transport = {
   secureConnection: false, // TLS requires secureConnection to be false
   port: 587, // port for secure SMTP
   tls: {
-    ciphers: "SSLv3"
+    ciphers: "SSLv3",
   },
   auth: {
     user: process.env.REACT_APP_USER,
-    pass: process.env.REACT_APP_PASS
-  }
+    pass: process.env.REACT_APP_PASS,
+  },
 };
 
 var transporter = nodemailer.createTransport(transport);
@@ -36,13 +36,13 @@ transporter.verify((error, success) => {
 });
 
 // Routes =============================================================
-module.exports = function(app) {
+module.exports = function (app) {
   // POST route for getting the name
-  app.post("/name", function(req, res) {
+  app.post("/name", function (req, res) {
     db.Name.findAll({
       where: {
         Name: req.body.name,
-        Gender: req.body.gender
+        Gender: req.body.gender,
       },
       attributes: {
         include: [
@@ -77,34 +77,91 @@ module.exports = function(app) {
           "Rank_198x",
           "Rank_199x",
           "Rank_200x",
-          "Rank_201x"
-        ]
-      }
+          "Rank_201x",
+        ],
+      },
     })
-      .then(result => {
+      .then((result) => {
         res.json(result);
       })
-      .catch(err => res.status(422).json(err));
+      .catch((err) => res.status(422).json(err));
+  });
+
+  app.get("/api/name", function (req, res) {
+    db.Name.findAll({
+      where: {
+        Name: "Hilary",
+        Gender: "F"
+      },
+      attributes: {
+        include: [
+          "Name",
+          "Gender",
+          "Count_AllTime",
+          "Rank_AllTime",
+          "Count_188x",
+          "Count_189x",
+          "Count_190x",
+          "Count_191x",
+          "Count_192x",
+          "Count_193x",
+          "Count_194x",
+          "Count_195x",
+          "Count_196x",
+          "Count_197x",
+          "Count_198x",
+          "Count_199x",
+          "Count_200x",
+          "Count_201x",
+          "Rank_188x",
+          "Rank_189x",
+          "Rank_190x",
+          "Rank_191x",
+          "Rank_192x",
+          "Rank_193x",
+          "Rank_194x",
+          "Rank_195x",
+          "Rank_196x",
+          "Rank_197x",
+          "Rank_198x",
+          "Rank_199x",
+          "Rank_200x",
+          "Rank_201x",
+        ],
+      },
+    })
+      .then((result) => {
+        return res.json(result);
+      })
+      .catch((err) => res.status(422).json(err));
+  });
+
+  // GET route for getting the names
+  app.get("/api/names/", function (req, res) {
+    console.log("HEREEEE")
+    db.Name.findAll({ attributes: ["id", "Name", "Gender"] })
+      .then((dbModel) => res.json(dbModel))
+      .catch((err) => res.status(422).json(err));
   });
 
   // POST route for getting the names
-  app.post("/names", function(req, res) {
+  app.post("/names", function (req, res) {
     let letters = [];
     for (let i = 0; i < req.body.letters.length; i++) {
       if (req.body.letters[i].$like) {
         letters.push({ [like]: req.body.letters[i].$like });
       } else {
         letters.push({
-          [notLike]: req.body.letters[i].$notlike.replace("!", "")
+          [notLike]: req.body.letters[i].$notlike.replace("!", ""),
         });
       }
     }
     let whereObj = {
       Name: {
-        [and]: letters
+        [and]: letters,
       },
       Gender: {
-        [or]: req.body.gender
+        [or]: req.body.gender,
       },
       where: {
         [and]: [
@@ -117,9 +174,9 @@ module.exports = function(app) {
             Sequelize.fn("char_length", Sequelize.col("Name")),
             "<=",
             req.body.max
-          )
-        ]
-      }
+          ),
+        ],
+      },
     };
     for (let i = 0; i < req.body.numbers.length; i++) {
       let key = Object.keys(req.body.numbers[i])[0];
@@ -135,17 +192,17 @@ module.exports = function(app) {
       where: whereObj,
       attributes: ["id", "Name", "Gender"],
       limit: req.body.limit,
-      order: sort
+      order: sort,
       //}).sort(sortQuery)
     })
-      .then(result => {
+      .then((result) => {
         res.json({ count: result.count, rows: result.rows });
       })
-      .catch(err => res.status(422).json(err));
+      .catch((err) => res.status(422).json(err));
   });
 
   // POST route for contacting
-  app.post("/api/send", function(req, res) {
+  app.post("/api/send", function (req, res) {
     var name = req.body.name;
     var email = req.body.email;
     var message = req.body.comments;
@@ -155,17 +212,17 @@ module.exports = function(app) {
       from: name,
       to: process.env.REACT_APP_USER, //Change to email address that you want to receive messages on
       subject: "New Message from Contact Form",
-      text: content
+      text: content,
     };
 
     transporter.sendMail(mail, (err, data) => {
       if (err) {
         res.json({
-          msg: "fail"
+          msg: "fail",
         });
       } else {
         res.json({
-          msg: "success"
+          msg: "success",
         });
       }
     });
