@@ -184,6 +184,12 @@ module.exports = function (app) {
         ],
       },
     };
+    let numberArr = req.params.numbersArr.split(",");
+    for (let i = 0; i < numberArr.length; i+2) {
+      let key = numberArr[i];
+      let value = numberArr[i+1].split("_");
+      whereObj[key] = { [between]: value };
+    }
     db.Name.findAll({
       where: whereObj,
       attributes: ["id", "Name", "Gender"],
