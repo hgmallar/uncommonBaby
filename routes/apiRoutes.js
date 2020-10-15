@@ -91,7 +91,7 @@ module.exports = function (app) {
     db.Name.findAll({
       where: {
         Name: "Hilary",
-        Gender: "F"
+        Gender: "F",
       },
       attributes: {
         include: [
@@ -137,10 +137,28 @@ module.exports = function (app) {
   });
 
   // GET route for getting the names
-  app.get("/api/names/", function (req, res) {
-    console.log("HEREEEE")
-    db.Name.findAll({ attributes: ["id", "Name", "Gender"] })
-      .then((dbModel) => res.json(dbModel))
+  app.get("/api/names/:min/:max", function (req, res) {
+    console.log("HEREEEE");
+    db.Name.findAll({
+      where: {
+        [and]: [
+          Sequelize.where(
+            Sequelize.fn("char_length", Sequelize.col("Name")),
+            ">=",
+            req.params.min
+          ),
+          Sequelize.where(
+            Sequelize.fn("char_length", Sequelize.col("Name")),
+            "<=",
+            req.params.max
+          ),
+        ],
+      },
+      attributes: ["id", "Name", "Gender"],
+    })
+      .then((result) => {
+        return res.json(result);
+      })
       .catch((err) => res.status(422).json(err));
   });
 
