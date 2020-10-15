@@ -137,7 +137,10 @@ module.exports = function (app) {
   });
 
   // GET route for getting the names
-  app.get("/api/names/:min/:max/:gender/:sort/:lettersArr", function (req, res) {
+  app.get("/api/names/:min/:max/:gender/:sort/:lettersArr/:numbersArr", function (
+    req,
+    res
+  ) {
     let genderArr = [];
     if (req.params.gender === "MF") {
       genderArr = ["M", "F"];
@@ -148,21 +151,21 @@ module.exports = function (app) {
     if (sort[0][0] === "RAND") {
       sort = Sequelize.fn("RAND", sort[0][1]);
     }
-    let letters = [];
-    let lettersArr = req.params.lettersArr.split(",");
-    for (let i = 0; i < lettersArr.length; i++) {
-      if (lettersArr[i].contains("!")) {
-        letters.push({
-          [notLike]: lettersArr[i].replace("!", ""),
-        });
-      } else {
-        letters.push({ [like]: lettersArr[i] });
-      }
-    }
+    // let letters = [];
+    // let lettersArr = req.params.lettersArr.split(",");
+    // for (let i = 0; i < lettersArr.length; i++) {
+    //   if (lettersArr[i].contains("!")) {
+    //     letters.push({
+    //       [notLike]: lettersArr[i].replace("!", ""),
+    //     });
+    //   } else {
+    //     letters.push({ [like]: lettersArr[i] });
+    //   }
+    // }
     let whereObj = {
-      Name: {
-        [and]: letters,
-      },
+      // Name: {
+      //   [and]: letters,
+      // },
       Gender: {
         [or]: genderArr,
       },
