@@ -137,13 +137,14 @@ module.exports = function (app) {
   });
 
   // GET route for getting the names
-  app.get("/api/names/:min/:max/:gender", function (req, res) {
+  app.get("/api/names/:min/:max/:gender/:sort", function (req, res) {
     let genderArr = [];
     if (req.params.gender === "MF") {
       genderArr = ["M", "F"];
     } else {
       genderArr = [req.params.gender];
     }
+    sortArr = [req.params.sort.split(",")]
     let whereObj = {
       Gender: {
         [or]: genderArr,
@@ -166,6 +167,7 @@ module.exports = function (app) {
     db.Name.findAll({
       where: whereObj,
       attributes: ["id", "Name", "Gender"],
+      order: [req.params.sort.split(",")],
     })
       .then((result) => {
         return res.json(result);
