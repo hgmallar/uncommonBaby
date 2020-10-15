@@ -144,7 +144,7 @@ module.exports = function (app) {
     } else {
       genderArr = [req.params.gender];
     }
-    db.Name.findAll({
+    let whereObj = {
       Gender: {
         [or]: genderArr,
       },
@@ -162,6 +162,9 @@ module.exports = function (app) {
           ),
         ],
       },
+    };
+    db.Name.findAll({
+      where: whereObj,
       attributes: ["id", "Name", "Gender"],
     })
       .then((result) => {
