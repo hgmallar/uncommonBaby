@@ -144,7 +144,10 @@ module.exports = function (app) {
     } else {
       genderArr = [req.params.gender];
     }
-    sortArr = [req.params.sort.split(",")]
+    sort = [req.params.sort.split(",")];
+    if (sort[0][0] === "RAND") {
+      sort = Sequelize.fn("RAND", sort[0][1]);
+    }
     let whereObj = {
       Gender: {
         [or]: genderArr,
@@ -167,7 +170,7 @@ module.exports = function (app) {
     db.Name.findAll({
       where: whereObj,
       attributes: ["id", "Name", "Gender"],
-      order: [req.params.sort.split(",")],
+      order: sort,
     })
       .then((result) => {
         return res.json(result);
