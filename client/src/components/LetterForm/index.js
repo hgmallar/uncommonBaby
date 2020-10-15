@@ -232,6 +232,7 @@ class LetterForm extends Component {
             <button
               type="button"
               className="close text-white ml-1 small"
+              style={{ paddingRight: this.props.marg }}
               onClick={e => this.hideForm(e, this.props.nth)}
             >
               {" "}

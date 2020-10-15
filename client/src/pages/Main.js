@@ -41,7 +41,7 @@ class App extends Component {
     count: 0,
     rank: 0,
     dataArr1: [],
-    dataArr2: []
+    dataArr2: [],
   };
 
   componentDidMount() {
@@ -150,7 +150,7 @@ class App extends Component {
         moreResults: parseInt(fields[5]),
         sort: sortDD,
         sortExtra: sortDisp,
-        sortDisplay: display
+        sortDisplay: display,
       });
       let query = {
         letters: lettersArr,
@@ -159,45 +159,45 @@ class App extends Component {
         max: parseInt(fields[3]),
         numbers: numbers,
         limit: parseInt(fields[5]),
-        sort: JSON.parse(fields[6])
+        sort: JSON.parse(fields[6]),
       };
       console.log(query);
       API.findNames(query)
-        .then(res => {
+        .then((res) => {
           if (res.data.count >= 20) {
             this.setState({
               totalCount: res.data.count,
               results: res.data.rows,
-              isLoading: true
+              isLoading: true,
             });
           } else {
             this.setState({
               totalCount: res.data.count,
               results: res.data.rows,
-              isLoading: false
+              isLoading: false,
             });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log("find names error: ");
           console.log(err);
         });
     }
   }
 
-  updateModal = type => {
+  updateModal = (type) => {
     let title = "Number Options";
     let messages = [
       {
         cat: "Rank",
         message:
-          "orders names from most popular, 1, to least popular for a selected time period.  This search returns names whose position is in the inputted range for the selected gender(s) and time period.  (lower rank is more popular)"
+          "orders names from most popular, 1, to least popular for a selected time period.  This search returns names whose position is in the inputted range for the selected gender(s) and time period.  (lower rank is more popular)",
       },
       {
         cat: "Count",
         message:
-          "is the total number of babies given that name for a selected time period.  This search returns names whose count is in the inputted range for the selected gender(s) and time period.  (higher count is more popular)"
-      }
+          "is the total number of babies given that name for a selected time period.  This search returns names whose count is in the inputted range for the selected gender(s) and time period.  (higher count is more popular)",
+      },
     ];
     if (type === "letter") {
       title = "Letter Options";
@@ -205,30 +205,30 @@ class App extends Component {
         {
           cat: "Contains: ",
           message:
-            "Returns only names that contain the letter or string inputted."
+            "Returns only names that contain the letter or string inputted.",
         },
         {
           cat: "Starts With: ",
           message:
-            "Returns only names that start with the letter or string inputted."
+            "Returns only names that start with the letter or string inputted.",
         },
         {
           cat: "Ends With: ",
           message:
-            "Returns only names that end with the letter or string inputted."
-        }
+            "Returns only names that end with the letter or string inputted.",
+        },
       ];
     } else if (type === "gender") {
       title = "Gender Options";
       messages = [
         {
           cat: "Selecting Both Genders: ",
-          message: "Returns the individual results for each gender."
+          message: "Returns the individual results for each gender.",
         },
         {
           cat: "Selecting Neither Gender: ",
-          message: "Ignores gender."
-        }
+          message: "Ignores gender.",
+        },
       ];
     } else if (type === "charCount") {
       title = "Name Length Options";
@@ -236,19 +236,19 @@ class App extends Component {
         {
           cat: "Min Length: ",
           message:
-            "Returns the names with a length greater than or equal to this number."
+            "Returns the names with a length greater than or equal to this number.",
         },
         {
           cat: "Max Length: ",
           message:
-            "Returns the names with a length less than or equal to this number."
-        }
+            "Returns the names with a length less than or equal to this number.",
+        },
       ];
     }
     this.setState({
       showModal: true,
       modalMessages: messages,
-      modalTitle: title
+      modalTitle: title,
     });
   };
 
@@ -297,7 +297,7 @@ class App extends Component {
     this.setState({
       numberInputs: newArray,
       sortExtra: sortDisp,
-      sortDisplay: display
+      sortDisplay: display,
     });
   };
 
@@ -503,7 +503,7 @@ class App extends Component {
       moreResults: 100,
       results: newResults,
       totalCount: count,
-      isLoading: submit
+      isLoading: submit,
     });
     if (submit) {
       for (let l = 0; l < this.state.numberInputs.length; l++) {
@@ -567,7 +567,7 @@ class App extends Component {
       max: this.state.maxLength,
       numbers: this.state.numberInputs,
       limit: moreResults,
-      sort: sortQuery
+      sort: sortQuery,
     };
     if (this.state.female && !this.state.male) {
       query = {
@@ -577,7 +577,7 @@ class App extends Component {
         max: this.state.maxLength,
         numbers: this.state.numberInputs,
         limit: moreResults,
-        sort: sortQuery
+        sort: sortQuery,
       };
       queryGender = "F";
     } else if (!this.state.female && this.state.male) {
@@ -588,7 +588,7 @@ class App extends Component {
         max: this.state.maxLength,
         numbers: this.state.numberInputs,
         limit: moreResults,
-        sort: sortQuery
+        sort: sortQuery,
       };
       queryGender = "M";
     } else if (this.state.female && this.state.male) {
@@ -599,7 +599,7 @@ class App extends Component {
         max: this.state.maxLength,
         numbers: this.state.numberInputs,
         limit: moreResults,
-        sort: sortQuery
+        sort: sortQuery,
       };
       queryGender = "MF";
     }
@@ -629,24 +629,24 @@ class App extends Component {
     queryLink = encodeURI(queryLink);
     this.props.history.push("/" + encodeURI(queryLink));
     API.findNames(query)
-      .then(res => {
+      .then((res) => {
         if (res.data.count >= 20) {
           this.setState({
             totalCount: res.data.count,
             results: res.data.rows,
             isLoading: true,
-            seed: query.seed
+            seed: query.seed,
           });
         } else {
           this.setState({
             totalCount: res.data.count,
             results: res.data.rows,
             isLoading: false,
-            seed: query.seed
+            seed: query.seed,
           });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("find names error: ");
         console.log(err);
       });
@@ -674,7 +674,7 @@ class App extends Component {
     this.setState({ isLoading: false });
   };
 
-  removeLetterRow = index => {
+  removeLetterRow = (index) => {
     let realIndex = index;
     for (let j = 0; j < this.state.letterrows.length; j++) {
       if (this.state.letterrows[j] === index) {
@@ -700,12 +700,12 @@ class App extends Component {
       //letterErrorMessage: newErrorMessage,
       //letterInputClasses: newInputClasses,
       letterInputs: newArray,
-      letterrows: newRows
+      letterrows: newRows,
     });
     //this.handleSubmit(20, this.state.moreResults);
   };
 
-  removeNumberRow = index => {
+  removeNumberRow = (index) => {
     let realIndex = index;
     for (let i = 0; i < this.state.numberrows.length; i++) {
       if (this.state.numberrows[i] === index) {
@@ -729,7 +729,7 @@ class App extends Component {
       numberInputs: newArray,
       numberrows: newRows,
       sortExtra: sortDisp,
-      sortDisplay: display
+      sortDisplay: display,
     });
     //this.handleSubmit(20, this.state.moreResults);
   };
@@ -753,10 +753,10 @@ class App extends Component {
     this.setState({ showModal: true });
     let query = {
       name: name,
-      gender: gender
+      gender: gender,
     };
     API.findName(query)
-      .then(res => {
+      .then((res) => {
         this.setState({
           name: res.data[0].Name,
           gender: res.data[0].Gender,
@@ -776,7 +776,7 @@ class App extends Component {
             res.data[0].Count_198x,
             res.data[0].Count_199x,
             res.data[0].Count_200x,
-            res.data[0].Count_201x
+            res.data[0].Count_201x,
           ],
           dataArr2: [
             res.data[0].Rank_188x,
@@ -792,11 +792,11 @@ class App extends Component {
             res.data[0].Rank_198x,
             res.data[0].Rank_199x,
             res.data[0].Rank_200x,
-            res.data[0].Rank_201x
-          ]
+            res.data[0].Rank_201x,
+          ],
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("find name error: ");
         console.log(err);
       });
@@ -812,11 +812,11 @@ class App extends Component {
       name: "",
       gender: "",
       count: 0,
-      rank: 0
+      rank: 0,
     });
   };
 
-  clearLetterBorders = r => {
+  clearLetterBorders = (r) => {
     let letterDropdownClasses = [];
     let letterInputClasses = [];
     let letterErrorMessage = [];
@@ -825,7 +825,7 @@ class App extends Component {
       letterDropdownClasses: letterDropdownClasses,
       letterInputClasses: letterInputClasses,
       letterErrorMessage: letterErrorMessage,
-      letterInputs: letterInputs
+      letterInputs: letterInputs,
     });
   };
 
@@ -840,7 +840,7 @@ class App extends Component {
                 <input
                   className="my-0"
                   type="checkbox"
-                  onChange={e => this.setState({ male: !this.state.male })}
+                  onChange={(e) => this.setState({ male: !this.state.male })}
                   checked={this.state.male}
                 />
               </label>
@@ -849,7 +849,9 @@ class App extends Component {
                 <input
                   className="my-0"
                   type="checkbox"
-                  onChange={e => this.setState({ female: !this.state.female })}
+                  onChange={(e) =>
+                    this.setState({ female: !this.state.female })
+                  }
                   checked={this.state.female}
                 />
               </label>
@@ -871,7 +873,7 @@ class App extends Component {
                   min="1"
                   max={this.state.maxLength}
                   placeholder={this.state.minLength}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState({ minLength: parseInt(e.target.value) })
                   }
                 />
@@ -884,7 +886,7 @@ class App extends Component {
                   min={this.state.minLength}
                   max="15"
                   placeholder={this.state.maxLength}
-                  onChange={e =>
+                  onChange={(e) =>
                     this.setState({ maxLength: parseInt(e.target.value) })
                   }
                 />
@@ -902,7 +904,7 @@ class App extends Component {
         </form>
         <div className="text-center row justify-content-center mx-auto">
           <div className="col-md-4 px-0">
-            {this.state.letterrows.map(r => (
+            {this.state.letterrows.map((r) => (
               <LetterForm
                 key={r}
                 nth={r}
@@ -924,11 +926,18 @@ class App extends Component {
                 first={this.state.letterrows[0]}
                 length={this.state.letterrows.length}
                 clearBorders={this.clearLetterBorders}
+                marg={(r) ? 15 : 0}
               />
             ))}
+            <button
+              className="link-button"
+              onClick={this.handleClickLetter}
+            >
+              + More Letter Search Terms
+            </button>
           </div>
           <div className="col-md-8 px-0">
-            {this.state.numberrows.map(r => (
+            {this.state.numberrows.map((r) => (
               <NumberForm
                 key={r}
                 nth={r}
@@ -944,29 +953,22 @@ class App extends Component {
                 updateModal={this.updateModal}
                 first={this.state.numberrows[0]}
                 length={this.state.numberrows.length}
+                marg={(r) ? 15 : 0}
               />
             ))}
+            <button
+              className="link-button"
+              onClick={this.handleClickNumber}
+            >
+              + More Number Search Terms
+            </button>
           </div>
-        </div>
-        <div className="text-center white-text row justify-content-center mx-auto">
-          <button
-            className="link-button col-md-4"
-            onClick={this.handleClickLetter}
-          >
-            + More Letter Search Terms
-          </button>
-          <button
-            className="link-button col-md-8"
-            onClick={this.handleClickNumber}
-          >
-            + More Number Search Terms
-          </button>
         </div>
         <div className="row justify-content-center col-12 mx-auto">
           <button
             type="button"
             className="btn btn-secondary px-1 submit"
-            onClick={e => this.checkErroroneousInputs()}
+            onClick={(e) => this.checkErroroneousInputs()}
           >
             Submit
           </button>
@@ -1000,21 +1002,21 @@ class App extends Component {
                   <button
                     className="dropdown-item"
                     href="#"
-                    onClick={e => this.updateDropdownOptions("A - Z", e)}
+                    onClick={(e) => this.updateDropdownOptions("A - Z", e)}
                   >
                     A - Z
                   </button>
                   <button
                     className="dropdown-item"
                     href="#"
-                    onClick={e => this.updateDropdownOptions("Z - A", e)}
+                    onClick={(e) => this.updateDropdownOptions("Z - A", e)}
                   >
                     Z - A
                   </button>
                   <button
                     className="dropdown-item"
                     href="#"
-                    onClick={e =>
+                    onClick={(e) =>
                       this.updateDropdownOptions("Most - Least Popular", e)
                     }
                   >
@@ -1023,7 +1025,7 @@ class App extends Component {
                   <button
                     className="dropdown-item"
                     href="#"
-                    onClick={e =>
+                    onClick={(e) =>
                       this.updateDropdownOptions("Least - Most Popular", e)
                     }
                   >
@@ -1032,7 +1034,7 @@ class App extends Component {
                   <button
                     className="dropdown-item"
                     href="#"
-                    onClick={e => this.updateDropdownOptions("Random", e)}
+                    onClick={(e) => this.updateDropdownOptions("Random", e)}
                   >
                     Random
                   </button>
@@ -1058,105 +1060,107 @@ class App extends Component {
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("AllTime", e)}
+                      onClick={(e) =>
+                        this.updateDropdownOptionsTwo("AllTime", e)
+                      }
                     >
                       All Time
                     </button>
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("188x", e)}
+                      onClick={(e) => this.updateDropdownOptionsTwo("188x", e)}
                     >
                       1880s
                     </button>
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("189x", e)}
+                      onClick={(e) => this.updateDropdownOptionsTwo("189x", e)}
                     >
                       1890s
                     </button>
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("190x", e)}
+                      onClick={(e) => this.updateDropdownOptionsTwo("190x", e)}
                     >
                       1900s
                     </button>
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("191x", e)}
+                      onClick={(e) => this.updateDropdownOptionsTwo("191x", e)}
                     >
                       1910s
                     </button>
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("192x", e)}
+                      onClick={(e) => this.updateDropdownOptionsTwo("192x", e)}
                     >
                       1920s
                     </button>
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("193x", e)}
+                      onClick={(e) => this.updateDropdownOptionsTwo("193x", e)}
                     >
                       1930s
                     </button>
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("194x", e)}
+                      onClick={(e) => this.updateDropdownOptionsTwo("194x", e)}
                     >
                       1940s
                     </button>
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("195x", e)}
+                      onClick={(e) => this.updateDropdownOptionsTwo("195x", e)}
                     >
                       1950s
                     </button>
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("196x", e)}
+                      onClick={(e) => this.updateDropdownOptionsTwo("196x", e)}
                     >
                       1960s
                     </button>
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("197x", e)}
+                      onClick={(e) => this.updateDropdownOptionsTwo("197x", e)}
                     >
                       1970s
                     </button>
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("198x", e)}
+                      onClick={(e) => this.updateDropdownOptionsTwo("198x", e)}
                     >
                       1980s
                     </button>
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("199x", e)}
+                      onClick={(e) => this.updateDropdownOptionsTwo("199x", e)}
                     >
                       1990s
                     </button>
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("200x", e)}
+                      onClick={(e) => this.updateDropdownOptionsTwo("200x", e)}
                     >
                       2000s
                     </button>
                     <button
                       className="dropdown-item"
                       href="#"
-                      onClick={e => this.updateDropdownOptionsTwo("201x", e)}
+                      onClick={(e) => this.updateDropdownOptionsTwo("201x", e)}
                     >
                       2010s
                     </button>

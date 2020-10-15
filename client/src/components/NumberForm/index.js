@@ -14,10 +14,10 @@ class NumberForm extends Component {
     minValue: 0,
     maxValue: myData["Count"]["AllTime"]["B"],
     slider: "",
-    output: {}
+    output: {},
   };
 
-  componentDidUpdate = prevProps => {
+  componentDidUpdate = (prevProps) => {
     if (
       this.props.male !== prevProps.male ||
       this.props.female !== prevProps.female
@@ -36,8 +36,7 @@ class NumberForm extends Component {
             );
           }
         }
-      }
-      else if (this.state.numericalOptions !== "Numerical Options") {
+      } else if (this.state.numericalOptions !== "Numerical Options") {
         this.updateNumbers(
           this.state.numericalOptions,
           this.state.yearCol,
@@ -101,7 +100,7 @@ class NumberForm extends Component {
             years: year,
             yearCol: yearCol,
             maxValue: max,
-            value: { min: startMin, max: startMax }
+            value: { min: startMin, max: startMax },
           });
         }
       }
@@ -127,7 +126,7 @@ class NumberForm extends Component {
       minValue: min,
       maxValue: max,
       value: { min: startMin, max: startMax },
-      output: outputVal
+      output: outputVal,
     });
   };
 
@@ -183,7 +182,7 @@ class NumberForm extends Component {
     if (this.state.numericalOptions !== "Numerical Options") {
       let query = this.state.numericalOptions + "_" + input2;
       outputVal = {
-        [query]: { $between: [this.state.value.min, this.state.value.max] }
+        [query]: { $between: [this.state.value.min, this.state.value.max] },
       };
     }
     this.setState({ years: input1, yearCol: input2, output: outputVal });
@@ -213,10 +212,10 @@ class NumberForm extends Component {
         minValue: 0,
         maxValue: myData["Count"]["AllTime"][gender],
         slider: "",
-        output: {}
+        output: {},
       });
       this.props.appendOutput(this.props.className, {
-        Count_AllTime: { $between: [0, myData["Count"]["AllTime"][gender]] }
+        Count_AllTime: { $between: [0, myData["Count"]["AllTime"][gender]] },
       });
       //this.props.appendOutput(this.props.className, "");
       //this.props.clearBorders(r);
@@ -240,13 +239,13 @@ class NumberForm extends Component {
     }
     return (
       <div className="max-width">
-        <div className="row justify-content-center mx-auto">
+        <div
+          className="row justify-content-center mx-auto"
+        >
           <form className="form-inline number-form mb-0">
             <div className="dropdown ml-1">
               <button
-                className={`btn btn-secondary dropdown-toggle ml-0 px-1 ${
-                  this.props.dropdownClassA
-                }`}
+                className={`btn btn-secondary dropdown-toggle ml-0 px-1 ${this.props.dropdownClassA}`}
                 type="button"
                 id="dropdownMenuButton"
                 data-toggle="dropdown"
@@ -262,105 +261,105 @@ class NumberForm extends Component {
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e => this.updateYearOptions("1880", "188x", e)}
+                  onClick={(e) => this.updateYearOptions("1880", "188x", e)}
                 >
                   1880s
                 </button>
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e => this.updateYearOptions("1890", "189x", e)}
+                  onClick={(e) => this.updateYearOptions("1890", "189x", e)}
                 >
                   1890s
                 </button>
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e => this.updateYearOptions("1900", "190x", e)}
+                  onClick={(e) => this.updateYearOptions("1900", "190x", e)}
                 >
                   1900s
                 </button>
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e => this.updateYearOptions("1910", "191x", e)}
+                  onClick={(e) => this.updateYearOptions("1910", "191x", e)}
                 >
                   1910s
                 </button>
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e => this.updateYearOptions("1920", "192x", e)}
+                  onClick={(e) => this.updateYearOptions("1920", "192x", e)}
                 >
                   1920s
                 </button>
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e => this.updateYearOptions("1930", "193x", e)}
+                  onClick={(e) => this.updateYearOptions("1930", "193x", e)}
                 >
                   1930s
                 </button>
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e => this.updateYearOptions("1940", "194x", e)}
+                  onClick={(e) => this.updateYearOptions("1940", "194x", e)}
                 >
                   1940s
                 </button>
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e => this.updateYearOptions("1950", "195x", e)}
+                  onClick={(e) => this.updateYearOptions("1950", "195x", e)}
                 >
                   1950s
                 </button>
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e => this.updateYearOptions("1960", "196x", e)}
+                  onClick={(e) => this.updateYearOptions("1960", "196x", e)}
                 >
                   1960s
                 </button>
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e => this.updateYearOptions("1970", "197x", e)}
+                  onClick={(e) => this.updateYearOptions("1970", "197x", e)}
                 >
                   1970s
                 </button>
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e => this.updateYearOptions("1980", "198x", e)}
+                  onClick={(e) => this.updateYearOptions("1980", "198x", e)}
                 >
                   1980s
                 </button>
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e => this.updateYearOptions("1990", "199x", e)}
+                  onClick={(e) => this.updateYearOptions("1990", "199x", e)}
                 >
                   1990s
                 </button>
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e => this.updateYearOptions("2000", "200x", e)}
+                  onClick={(e) => this.updateYearOptions("2000", "200x", e)}
                 >
                   2000s
                 </button>
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e => this.updateYearOptions("2010", "201x", e)}
+                  onClick={(e) => this.updateYearOptions("2010", "201x", e)}
                 >
                   2010s
                 </button>
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e =>
+                  onClick={(e) =>
                     this.updateYearOptions("All Time", "AllTime", e)
                   }
                 >
@@ -371,9 +370,7 @@ class NumberForm extends Component {
 
             <div className="dropdown ml-1">
               <button
-                className={`btn btn-secondary dropdown-toggle ml-0 px-1 ${
-                  this.props.dropdownClassB
-                }`}
+                className={`btn btn-secondary dropdown-toggle ml-0 px-1 ${this.props.dropdownClassB}`}
                 type="button"
                 id="dropdownMenuButton"
                 data-toggle="dropdown"
@@ -389,7 +386,7 @@ class NumberForm extends Component {
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e =>
+                  onClick={(e) =>
                     this.updateNumericalOptions("Rank", this.state.yearCol, e)
                   }
                 >
@@ -398,7 +395,7 @@ class NumberForm extends Component {
                 <button
                   className="dropdown-item"
                   href="#"
-                  onClick={e =>
+                  onClick={(e) =>
                     this.updateNumericalOptions("Count", this.state.yearCol, e)
                   }
                 >
@@ -411,13 +408,13 @@ class NumberForm extends Component {
               maxValue={this.state.maxValue}
               minValue={this.state.minValue}
               value={this.state.value}
-              onChange={value => {
+              onChange={(value) => {
                 let outputVal = {};
                 if (this.state.numericalOptions !== "Numerical Options") {
                   let query =
                     this.state.numericalOptions + "_" + this.state.yearCol;
                   outputVal = {
-                    [query]: { $between: [value.min, value.max] }
+                    [query]: { $between: [value.min, value.max] },
                   };
                 }
                 this.setState({ value: value, output: outputVal });
@@ -439,6 +436,7 @@ class NumberForm extends Component {
             <button
               type="button"
               className="close text-white ml-2"
+              style={{ paddingRight: this.props.marg }}
               onClick={this.hideForm}
             >
               {" "}
