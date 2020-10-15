@@ -137,9 +137,17 @@ module.exports = function (app) {
   });
 
   // GET route for getting the names
-  app.get("/api/names/:min/:max", function (req, res) {
-    console.log("HEREEEE");
+  app.get("/api/names/:min/:max/:gender", function (req, res) {
+    let genderArr = [];
+    if (req.params.gender === "MF") {
+      genderArr = ["M", "F"];
+    } else {
+      genderArr = [req.params.gender];
+    }
     db.Name.findAll({
+      Gender: {
+        [or]: genderArr,
+      },
       where: {
         [and]: [
           Sequelize.where(
