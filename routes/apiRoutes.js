@@ -191,7 +191,7 @@ module.exports = function (app) {
       for (let j = 0; j < value.length, j++) {
         value[j] = parseInt(value[j]);
       }
-      whereObj[key] = { [between]: value };
+      //whereObj[key] = { [between]: value };
     }
     db.Name.findAll({
       where: whereObj,
