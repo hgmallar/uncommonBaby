@@ -188,6 +188,9 @@ module.exports = function (app) {
     for (let i = 0; i < numberArr.length; i+2) {
       let key = numberArr[i];
       let value = numberArr[i+1].split("_");
+      for (let j = 0; j < value.length, j++) {
+        value[j] = parseInt(value[j]);
+      }
       whereObj[key] = { [between]: value };
     }
     db.Name.findAll({
