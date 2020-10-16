@@ -151,9 +151,11 @@ module.exports = function (app) {
         sort = Sequelize.fn("RAND", sort[0][1]);
       }
       let letters = [];
+
       let letterArr = req.params.lettersArr.split(",");
+      console.log(letterArr[0], letterArr[1])
       for (let i = 0; i < letterArr.length; i++) {
-        if (letterArr[i].contains("!")) {
+        if (letterArr[i].includes("!")) {
           let newString = letterArr[i].replace("!", "");
           letters.push({
             [notLike]: newString,
