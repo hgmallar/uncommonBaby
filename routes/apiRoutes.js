@@ -152,19 +152,19 @@ module.exports = function (app) {
       }
       let letters = [];
       let letterArr = req.params.lettersArr.split(",");
-      // for (let i = 0; i < letterArr.length; i++) {
-      //   if (letterArr[i].contains("!")) {
-      //     letters.push({
-      //       [notLike]: letterArr[i].replace("!", ""),
-      //     });
-      //   } else {
-      //     letters.push({ [like]: letterArr[i] });
-      //   }
-      // }
+      for (let i = 0; i < letterArr.length; i++) {
+        if (letterArr[i].contains("!")) {
+          letters.push({
+            [notLike]: letterArr[i].replace("!", ""),
+          });
+        } else {
+          letters.push({ [like]: letterArr[i] });
+        }
+      }
       let whereObj = {
-        // Name: {
-        //   [and]: letters,
-        // },
+        Name: {
+          [and]: letters,
+        },
         Gender: {
           [or]: genderArr,
         },
@@ -184,14 +184,14 @@ module.exports = function (app) {
         },
       };
       let numberArr = req.params.numbersArr.split(",");
-      for (let i = 0; i < numberArr.length; i+=2) {
-        let key = numberArr[i];
-        let value = numberArr[i+1].split("_");
-        for (let j = 0; j < value.length, j++) {
-          value[j] = parseInt(value[j]);
-        }
-        whereObj[key] = { [between]: value };
-      }
+      // for (let i = 0; i < numberArr.length; i+=2) {
+      //   let key = numberArr[i];
+      //   let value = numberArr[i+1].split("_");
+      //   for (let j = 0; j < value.length, j++) {
+      //     value[j] = parseInt(value[j]);
+      //   }
+      //   whereObj[key] = { [between]: value };
+      // }
       db.Name.findAll({
         where: whereObj,
         attributes: ["id", "Name", "Gender"],
