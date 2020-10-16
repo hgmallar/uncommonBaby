@@ -138,7 +138,7 @@ module.exports = function (app) {
 
   // GET route for getting the names
   app.get(
-    "/api/names/:min/:max/:gender/:sort/:lettersArr/:numbersArr/:limit",
+    "/api/names/:min/:max/:gender/:sort/:lettersArr/:numbersArr/:offset/:limit",
     function (req, res) {
       let genderArr = [];
       if (req.params.gender === "MF") {
@@ -196,6 +196,7 @@ module.exports = function (app) {
       db.Name.findAndCountAll({
         where: whereObj,
         attributes: ["id", "Name", "Gender"],
+        offset: parseInt(req.params.offset),
         limit: parseInt(req.params.limit),
         order: sort,
       })
