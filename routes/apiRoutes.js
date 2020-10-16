@@ -150,15 +150,15 @@ module.exports = function (app) {
       if (sort[0][0] === "RAND") {
         sort = Sequelize.fn("RAND", sort[0][1]);
       }
-      // let letters = [];
-      // let lettersArr = req.params.lettersArr.split(",");
-      // for (let i = 0; i < lettersArr.length; i++) {
-      //   if (lettersArr[i].contains("!")) {
+      let letters = [];
+      let letterArr = req.params.lettersArr.split(",");
+      // for (let i = 0; i < letterArr.length; i++) {
+      //   if (letterArr[i].contains("!")) {
       //     letters.push({
-      //       [notLike]: lettersArr[i].replace("!", ""),
+      //       [notLike]: letterArr[i].replace("!", ""),
       //     });
       //   } else {
-      //     letters.push({ [like]: lettersArr[i] });
+      //     letters.push({ [like]: letterArr[i] });
       //   }
       // }
       let whereObj = {
@@ -184,14 +184,14 @@ module.exports = function (app) {
         },
       };
       let numberArr = req.params.numbersArr.split(",");
-      // for (let i = 0; i < numberArr.length; i+2) {
-      //   let key = numberArr[i];
-      //   let value = numberArr[i+1].split("_");
-      //   for (let j = 0; j < value.length, j++) {
-      //     value[j] = parseInt(value[j]);
-      //   }
-      //   whereObj[key] = { [between]: value };
-      // }
+      for (let i = 0; i < numberArr.length; i+=2) {
+        let key = numberArr[i];
+        let value = numberArr[i+1].split("_");
+        for (let j = 0; j < value.length, j++) {
+          value[j] = parseInt(value[j]);
+        }
+        whereObj[key] = { [between]: value };
+      }
       db.Name.findAll({
         where: whereObj,
         attributes: ["id", "Name", "Gender"],
