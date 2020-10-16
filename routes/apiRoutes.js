@@ -193,7 +193,7 @@ module.exports = function (app) {
         }
         whereObj[key] = { [between]: value };
       }
-      db.Name.findAllAndCount({
+      db.Name.findAndCountAll({
         where: whereObj,
         attributes: ["id", "Name", "Gender"],
         limit: parseInt(req.params.limit),
