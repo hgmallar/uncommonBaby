@@ -152,15 +152,15 @@ module.exports = function (app) {
       }
       let letters = [{ [notLike]: req.params.lettersArr }];
       let letterArr = req.params.lettersArr.split(",");
-      // for (let i = 0; i < letterArr.length; i++) {
-      //   if (letterArr[i].contains("!")) {
-      //     letters.push({
-      //       [notLike]: letterArr[i].replace("!", ""),
-      //     });
-      //   } else {
-      //     letters.push({ [like]: letterArr[i] });
-      //   }
-      // }
+      for (let i = 0; i < letterArr.length; i++) {
+        // if (letterArr[i].contains("!")) {
+        //   letters.push({
+        //     [notLike]: letterArr[i].replace("!", ""),
+        //   });
+        // } else {
+          letters.push({ [notLike]: letterArr[i] });
+        //}
+      }
       let whereObj = {
         Name: {
           [and]: letters,
