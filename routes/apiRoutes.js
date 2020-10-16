@@ -196,7 +196,7 @@ module.exports = function (app) {
       db.Name.findAll({
         where: whereObj,
         attributes: ["id", "Name", "Gender"],
-        limit: req.params.limit,
+        limit: parseInt(req.params.limit),
         order: sort,
       })
         .then((result) => {
