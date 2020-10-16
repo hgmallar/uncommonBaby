@@ -150,17 +150,17 @@ module.exports = function (app) {
       if (sort[0][0] === "RAND") {
         sort = Sequelize.fn("RAND", sort[0][1]);
       }
-      let letters = [];
+      let letters = [{[notLike]: "%a%"}];
       let letterArr = req.params.lettersArr.split(",");
-      for (let i = 0; i < letterArr.length; i++) {
-        if (letterArr[i].contains("!")) {
-          letters.push({
-            [notLike]: letterArr[i].replace("!", ""),
-          });
-        } else {
-          letters.push({ [like]: letterArr[i] });
-        }
-      }
+      // for (let i = 0; i < letterArr.length; i++) {
+      //   if (letterArr[i].contains("!")) {
+      //     letters.push({
+      //       [notLike]: letterArr[i].replace("!", ""),
+      //     });
+      //   } else {
+      //     letters.push({ [like]: letterArr[i] });
+      //   }
+      // }
       let whereObj = {
         Name: {
           [and]: letters,
