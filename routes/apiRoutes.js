@@ -151,9 +151,7 @@ module.exports = function (app) {
         sort = Sequelize.fn("RAND", sort[0][1]);
       }
       let letters = [];
-
       let letterArr = req.params.lettersArr.split(",");
-      console.log(letterArr[0], letterArr[1])
       for (let i = 0; i < letterArr.length; i++) {
         if (letterArr[i].includes("!")) {
           let newString = letterArr[i].replace("!", "");
@@ -187,14 +185,14 @@ module.exports = function (app) {
         },
       };
       let numberArr = req.params.numbersArr.split(",");
-      // for (let i = 0; i < numberArr.length; i+=2) {
-      //   let key = numberArr[i];
-      //   let value = numberArr[i+1].split("_");
-      //   for (let j = 0; j < value.length, j++) {
-      //     value[j] = parseInt(value[j]);
-      //   }
-      //   whereObj[key] = { [between]: value };
-      // }
+      for (let i = 0; i < numberArr.length; i+=2) {
+        let key = numberArr[i];
+        let value = numberArr[i+1].split("_");
+        for (let j = 0; j < value.length, j++) {
+          value[j] = parseInt(value[j]);
+        }
+        whereObj[key] = { [between]: value };
+      }
       db.Name.findAll({
         where: whereObj,
         attributes: ["id", "Name", "Gender"],
