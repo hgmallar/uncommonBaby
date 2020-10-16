@@ -150,7 +150,7 @@ module.exports = function (app) {
       if (sort[0][0] === "RAND") {
         sort = Sequelize.fn("RAND", sort[0][1]);
       }
-      let letters = [{[notLike]: req.params.lettersArr}];
+      let letters = [{ [notLike]: `%${req.params.lettersArr}%` }];
       let letterArr = req.params.lettersArr.split(",");
       // for (let i = 0; i < letterArr.length; i++) {
       //   if (letterArr[i].contains("!")) {
