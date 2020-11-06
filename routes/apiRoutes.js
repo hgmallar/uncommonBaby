@@ -158,36 +158,58 @@ module.exports = function (app) {
           letters.push({
             [notLike]: newString,
           });
-        } else {
+        } else if (letterArr[i]) {
           letters.push({ [like]: letterArr[i] });
         }
       }
-      let whereObj = {
-        Name: {
-          [and]: letters,
-        },
-        Gender: {
-          [or]: genderArr,
-        },
-        where: {
-          [and]: [
-            Sequelize.where(
-              Sequelize.fn("char_length", Sequelize.col("Name")),
-              ">=",
-              req.params.min
-            ),
-            Sequelize.where(
-              Sequelize.fn("char_length", Sequelize.col("Name")),
-              "<=",
-              req.params.max
-            ),
-          ],
-        },
-      };
+      if (letters) {
+        let whereObj = {
+          Name: {
+            [and]: letters,
+          },
+          Gender: {
+            [or]: genderArr,
+          },
+          where: {
+            [and]: [
+              Sequelize.where(
+                Sequelize.fn("char_length", Sequelize.col("Name")),
+                ">=",
+                req.params.min
+              ),
+              Sequelize.where(
+                Sequelize.fn("char_length", Sequelize.col("Name")),
+                "<=",
+                req.params.max
+              ),
+            ],
+          },
+        };
+      } else {
+        let whereObj = {
+          Gender: {
+            [or]: genderArr,
+          },
+          where: {
+            [and]: [
+              Sequelize.where(
+                Sequelize.fn("char_length", Sequelize.col("Name")),
+                ">=",
+                req.params.min
+              ),
+              Sequelize.where(
+                Sequelize.fn("char_length", Sequelize.col("Name")),
+                "<=",
+                req.params.max
+              ),
+            ],
+          },
+        };
+      }
       let numberArr = req.params.numbersArr.split(",");
-      for (let i = 0; i < numberArr.length; i+=2) {
+      for (let i = 0; i < numberArr.length; i += 2) {
         let key = numberArr[i];
-        let value = numberArr[i+1].split("_");
+        let value = numberArr[i + 1].split("_");
         for (let j = 0; j < value.length; j++) {
           value[j] = parseInt(value[j]);
         }
