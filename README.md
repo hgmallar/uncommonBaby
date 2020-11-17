@@ -7,10 +7,12 @@
 ## Uses: 
 
  * React.js
+ * Chart.js
  * SQL
  * Sequelize
  * Node
  * Express
+ * Axios
  * Javascript
  * HTML
  * CSS
