@@ -136,6 +136,56 @@ module.exports = function (app) {
       .catch((err) => res.status(422).json(err));
   });
 
+  // GET route for getting a name
+  app.get("/api/name/:name/:gender", function (req, res) {
+    db.Name.findAll({
+      where: {
+        Name: req.params.name,
+        Gender: req.params.gender,
+      },
+      attributes: {
+        include: [
+          "Name",
+          "Gender",
+          "Count_AllTime",
+          "Rank_AllTime",
+          "Count_188x",
+          "Count_189x",
+          "Count_190x",
+          "Count_191x",
+          "Count_192x",
+          "Count_193x",
+          "Count_194x",
+          "Count_195x",
+          "Count_196x",
+          "Count_197x",
+          "Count_198x",
+          "Count_199x",
+          "Count_200x",
+          "Count_201x",
+          "Rank_188x",
+          "Rank_189x",
+          "Rank_190x",
+          "Rank_191x",
+          "Rank_192x",
+          "Rank_193x",
+          "Rank_194x",
+          "Rank_195x",
+          "Rank_196x",
+          "Rank_197x",
+          "Rank_198x",
+          "Rank_199x",
+          "Rank_200x",
+          "Rank_201x",
+        ],
+      },
+    })
+      .then((result) => {
+        return res.json(result);
+      })
+      .catch((err) => res.status(422).json(err));
+  });
+
   // GET route for getting the names
   app.get(
     "/api/names/:min/:max/:gender/:sort/:lettersArr/:numbersArr/:offset/:limit",
@@ -185,9 +235,9 @@ module.exports = function (app) {
         },
       };
       let numberArr = req.params.numbersArr.split(",");
-      for (let i = 0; i < numberArr.length; i+=2) {
+      for (let i = 0; i < numberArr.length; i += 2) {
         let key = numberArr[i];
-        let value = numberArr[i+1].split("_");
+        let value = numberArr[i + 1].split("_");
         for (let j = 0; j < value.length; j++) {
           value[j] = parseInt(value[j]);
         }
