@@ -13,15 +13,12 @@ const { and, or, like, notLike, between } = Sequelize.Op;
 var nodemailer = require("nodemailer");
 
 var transport = {
-  host: "smtp-mail.outlook.com", // hostname
-  secureConnection: false, // TLS requires secureConnection to be false
+  host: "smtp.gmail.com", // hostname
   port: 587, // port for secure SMTP
-  tls: {
-    ciphers: "SSLv3",
-  },
+  secure: false,
   auth: {
-    user: process.env.REACT_APP_USER,
-    pass: process.env.REACT_APP_PASS,
+    user: process.env.REACT_APP_THE_EMAIL,
+    pass: process.env.REACT_APP_THE_PASSWORD,
   },
 };
 
@@ -318,12 +315,13 @@ module.exports = function (app) {
   app.post("/api/send", function (req, res) {
     var name = req.body.name;
     var email = req.body.email;
+    var reason = req.body.reason;
     var message = req.body.comments;
-    var content = `name: ${name} \n email: ${email} \n message: ${message} `;
+    var content = `name: ${name} \nemail: ${email} \nreason: ${reason} \nmessage: ${message} `;
 
     var mail = {
-      from: name,
-      to: process.env.REACT_APP_USER, //Change to email address that you want to receive messages on
+      from: email,
+      to: process.env.REACT_APP_THE_EMAIL, //Change to email address that you want to receive messages on
       subject: "New Message from Contact Form",
       text: content,
     };

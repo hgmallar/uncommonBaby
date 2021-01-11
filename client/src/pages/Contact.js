@@ -47,6 +47,7 @@ class Contact extends Component {
       let query = {
         name: data.get("name"),
         email: data.get("email"),
+        reason: "Contact from Unpopular Baby Website",
         comments: data.get("comments")
       };
 
