@@ -120,13 +120,13 @@ class LetterForm extends Component {
 
   render() {
     return (
-      <div className="max-width">
+      <div className="max-width my-2">
         <div className="row justify-content-center mx-auto">
           <form className="form-inline letters mb-0">
-            <div className="dropdown ml-1">
+            <div className="ml-1">
               {this.state.dropdown !== "Letter Options" ? (
                 <button
-                  className={`btn btn-secondary dropdown-toggle ml-0 px-1 ${
+                  className={`btn btn-secondary dropdown dropdown-toggle ml-0 px-1 pb-2 my-0 ${
                     this.props.dropdownClass
                   }`}
                   type="button"
@@ -139,7 +139,7 @@ class LetterForm extends Component {
                 </button>
               ) : (
                 <button
-                  className={`btn btn-secondary dropdown-toggle ml-0 px-1 grey`}
+                  className={`btn btn-secondary dropdown dropdown-toggle ml-0 px-1 pb-2 grey my-0`}
                   type="button"
                   id="dropdownMenuButton"
                   data-toggle="dropdown"
@@ -202,7 +202,7 @@ class LetterForm extends Component {
               </div>
             </div>
 
-            <label className="ml-1">
+            <label className="ml-1 my-auto">
               {this.state.input !== "Letter(s)" ? (
                 <input
                   type="text"
@@ -242,14 +242,14 @@ class LetterForm extends Component {
             <div />
           )}
           {this.props.first === this.props.nth ? (
-            <sup className="mx-0">
+            <div className="mx-0 small align-self-center">
               <button type="button" className="info text-white mx-0 pr-0 pl-1">
                 <i
                   className="fas fa-info-circle"
                   onClick={() => this.props.updateModal("letter")}
                 />
               </button>
-            </sup>
+            </div>
           ) : (
             <div />
           )}

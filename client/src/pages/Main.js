@@ -833,141 +833,150 @@ class App extends Component {
     return (
       <Wrapper>
         <form className="justify-content-center mx-0 px-0 text-center align-items-center">
-          <div className="row mr-0 justify-content-center mx-auto">
-            <div className="form-inline form-check form-check-inline mb-2 col-md-5">
-              <label className="my-0">
-                Male
-                <input
-                  className="my-0"
-                  type="checkbox"
-                  onChange={(e) => this.setState({ male: !this.state.male })}
-                  checked={this.state.male}
-                />
-              </label>
-              <label className="my-0">
-                Female
-                <input
-                  className="my-0"
-                  type="checkbox"
-                  onChange={(e) =>
-                    this.setState({ female: !this.state.female })
-                  }
-                  checked={this.state.female}
-                />
-              </label>
-              <sup className="mx-0">
-                <button type="button" className="info text-white mx-0">
-                  <i
-                    className="fas fa-info-circle"
-                    onClick={() => this.updateModal("gender")}
+          {this.props.nameReq && this.props.countReq && (
+            <div className="row mr-0 justify-content-center mx-auto">
+              <div className="form-inline col-md-5 my-2 mx-auto px-0">
+                <div className="checkbox">
+                  <input
+                    className="my-0 align-self-center"
+                    type="checkbox"
+                    onChange={(e) => this.setState({ male: !this.state.male })}
+                    checked={this.state.male}
                   />
-                </button>
-              </sup>
-            </div>
-            <div className="form-inline col-md-5 mt-xs-2 mt-md-0">
-              <div className="form-group ml-1">
-                <label className="mb-0 mx-auto">Min Length</label>
-                <input
-                  className="form-control form-control-sm mx-auto my-0 number"
-                  type="number"
-                  min="1"
-                  max={this.state.maxLength}
-                  placeholder={this.state.minLength}
-                  onChange={(e) =>
-                    this.setState({ minLength: parseInt(e.target.value) })
-                  }
-                />
-              </div>
-              <div className="form-group ml-1">
-                <label className="mb-0 mx-auto">Max Length</label>
-                <input
-                  className="form-control form-control-sm mx-auto my-0 number"
-                  type="number"
-                  min={this.state.minLength}
-                  max="15"
-                  placeholder={this.state.maxLength}
-                  onChange={(e) =>
-                    this.setState({ maxLength: parseInt(e.target.value) })
-                  }
-                />
-              </div>
-              <sup className="mx-0">
-                <button type="button" className="info text-white mx-0">
-                  <i
-                    className="fas fa-info-circle"
-                    onClick={() => this.updateModal("charCount")}
+                </div>
+                <div className="my-0 mx-2 ">Male</div>
+                <div className="checkbox">
+                  <input
+                    className="my-0 align-self-center"
+                    type="checkbox"
+                    onChange={(e) =>
+                      this.setState({ female: !this.state.female })
+                    }
+                    checked={this.state.female}
                   />
-                </button>
-              </sup>
+                </div>
+                <div className="my-0 mx-2 ">Female</div>
+                <div className="mx-0 small align-self-center">
+                  <button type="button" className="info text-white mx-0">
+                    <i
+                      className="fas fa-info-circle"
+                      onClick={() => this.updateModal("gender")}
+                    />
+                  </button>
+                </div>
+              </div>
+              <div className="form-inline col-md-5 my-2 px-0">
+                <div className="form-group ml-1 mb-0 mr-2">
+                  <label className="mb-0 pr-1">Min Length:</label>
+                  <input
+                    className="form-control m-0 number"
+                    type="number"
+                    min="1"
+                    max={this.state.maxLength}
+                    value={this.state.minLength}
+                    placeholder={this.state.minLength}
+                    onChange={(e) =>
+                      this.setState({ minLength: parseInt(e.target.value) })
+                    }
+                  />
+                </div>
+                <div className="form-group ml-1 mb-0 mr-2">
+                  <label className="mb-0 pr-1">Max Length:</label>
+                  <input
+                    className="form-control m-0 number"
+                    type="number"
+                    min={this.state.minLength}
+                    max="15"
+                    value={this.state.maxLength}
+                    placeholder={this.state.maxLength}
+                    onChange={(e) =>
+                      this.setState({ maxLength: parseInt(e.target.value) })
+                    }
+                  />
+                </div>
+                <div className="mx-0 small align-self-center">
+                  <button type="button" className="info text-white mx-0">
+                    <i
+                      className="fas fa-info-circle"
+                      onClick={() => this.updateModal("charCount")}
+                    />
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </form>
         <div className="text-center row justify-content-center mx-auto">
-          <div className="col-md-4 px-0">
-            {this.state.letterrows.map((r) => (
-              <LetterForm
-                key={r}
-                nth={r}
-                className={r}
-                inputs={
-                  this.state.letterInputs[r] && this.state.letterInputs[r].$like
-                    ? this.state.letterInputs[r].$like
-                    : this.state.letterInputs[r] &&
-                      this.state.letterInputs[r].$notlike
-                    ? this.state.letterInputs[r].$notlike
-                    : "Letter(s)"
-                }
-                errorMessage={this.state.letterErrorMessage[r]}
-                inputClass={this.state.letterInputClasses[r]}
-                dropdownClass={this.state.letterDropdownClasses[r]}
-                appendOutput={this.grabLetterInput}
-                removeLetterRow={this.removeLetterRow}
-                updateModal={this.updateModal}
-                first={this.state.letterrows[0]}
-                length={this.state.letterrows.length}
-                clearBorders={this.clearLetterBorders}
-                marg={(r) ? 15 : 0}
-              />
-            ))}
-            <button
-              className="link-button"
-              onClick={this.handleClickLetter}
-            >
-              + More Letter Search Terms
-            </button>
-          </div>
-          <div className="col-md-8 px-0">
-            {this.state.numberrows.map((r) => (
-              <NumberForm
-                key={r}
-                nth={r}
-                className={r}
-                inputs={this.state.numberInputs[r]}
-                errorMessage={this.state.numberErrorMessage[r]}
-                dropdownClassA={this.state.numberDropdownClassesA[r]}
-                dropdownClassB={this.state.numberDropdownClassesB[r]}
-                appendOutput={this.grabNumberInput}
-                male={this.state.male}
-                female={this.state.female}
-                removeNumberRow={this.removeNumberRow}
-                updateModal={this.updateModal}
-                first={this.state.numberrows[0]}
-                length={this.state.numberrows.length}
-                marg={(r) ? 15 : 0}
-              />
-            ))}
-            <button
-              className="link-button"
-              onClick={this.handleClickNumber}
-            >
-              + More Number Search Terms
-            </button>
-          </div>
+          {this.props.nameReq && (
+            <div className="col-md-4 px-0">
+              {this.state.letterrows.map((r) => (
+                <LetterForm
+                  key={r}
+                  nth={r}
+                  className={r}
+                  inputs={
+                    this.state.letterInputs[r] &&
+                    this.state.letterInputs[r].$like
+                      ? this.state.letterInputs[r].$like
+                      : this.state.letterInputs[r] &&
+                        this.state.letterInputs[r].$notlike
+                      ? this.state.letterInputs[r].$notlike
+                      : "Letter(s)"
+                  }
+                  errorMessage={this.state.letterErrorMessage[r]}
+                  inputClass={this.state.letterInputClasses[r]}
+                  dropdownClass={this.state.letterDropdownClasses[r]}
+                  appendOutput={this.grabLetterInput}
+                  removeLetterRow={this.removeLetterRow}
+                  updateModal={this.updateModal}
+                  first={this.state.letterrows[0]}
+                  length={this.state.letterrows.length}
+                  clearBorders={this.clearLetterBorders}
+                  marg={r ? 20 : 0}
+                />
+              ))}
+              <button
+                className="link-button my-2"
+                onClick={this.handleClickLetter}
+              >
+                + More Letter Search Terms
+              </button>
+            </div>
+          )}
+          {this.props.countReq && (
+            <div className="col-md-8 px-0">
+              {this.state.numberrows.map((r) => (
+                <NumberForm
+                  key={r}
+                  nth={r}
+                  className={r}
+                  inputs={this.state.numberInputs[r]}
+                  errorMessage={this.state.numberErrorMessage[r]}
+                  dropdownClassA={this.state.numberDropdownClassesA[r]}
+                  dropdownClassB={this.state.numberDropdownClassesB[r]}
+                  appendOutput={this.grabNumberInput}
+                  male={this.state.male}
+                  female={this.state.female}
+                  removeNumberRow={this.removeNumberRow}
+                  updateModal={this.updateModal}
+                  first={this.state.numberrows[0]}
+                  length={this.state.numberrows.length}
+                  marg={r ? 15 : 0}
+                />
+              ))}
+              <button
+                className="link-button my-2"
+                onClick={this.handleClickNumber}
+              >
+                + More Number Search Terms
+              </button>
+            </div>
+          )}
         </div>
-        <div className="row justify-content-center col-12 mx-auto">
+        <div className="row justify-content-center col-12 mx-auto my-2">
           <button
             type="button"
-            className="btn btn-secondary px-1 submit"
+            className="btn btn-secondary px-1 submit my-auto"
             onClick={(e) => this.checkErroroneousInputs()}
           >
             Submit
@@ -983,10 +992,10 @@ class App extends Component {
           {this.state.totalCount <= 1 ? (
             <h4> </h4>
           ) : (
-            <form className="form-inline">
+            <form className="form-inline my-auto">
               <div>
                 <button
-                  className={`btn btn-secondary dropdown-toggle px-1`}
+                  className={`btn btn-secondary dropdown-toggle px-1 my-auto`}
                   type="button"
                   id="dropdownMenuButton"
                   data-toggle="dropdown"
@@ -1044,7 +1053,7 @@ class App extends Component {
               this.state.sort === "Least - Most Popular" ? (
                 <div>
                   <button
-                    className={`btn btn-secondary dropdown-toggle px-1`}
+                    className={`btn btn-secondary dropdown-toggle px-1 my-auto`}
                     type="button"
                     id="dropdownMenuButton"
                     data-toggle="dropdown"

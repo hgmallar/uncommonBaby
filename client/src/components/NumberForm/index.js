@@ -242,10 +242,10 @@ class NumberForm extends Component {
         <div
           className="row justify-content-center mx-auto"
         >
-          <form className="form-inline number-form mb-0">
-            <div className="dropdown ml-1">
+          <form className="form-inline number-form mb-0 mr-2">
+            <div className="ml-1 my-auto">
               <button
-                className={`btn btn-secondary dropdown-toggle ml-0 px-1 ${this.props.dropdownClassA}`}
+                className={`btn btn-secondary dropdown-toggle ml-0 px-1 my-0 ${this.props.dropdownClassA}`}
                 type="button"
                 id="dropdownMenuButton"
                 data-toggle="dropdown"
@@ -368,9 +368,9 @@ class NumberForm extends Component {
               </div>
             </div>
 
-            <div className="dropdown ml-1">
+            <div className="ml-1 my-auto">
               <button
-                className={`btn btn-secondary dropdown-toggle ml-0 px-1 ${this.props.dropdownClassB}`}
+                className={`btn btn-secondary dropdown-toggle ml-0 px-1 my-0 ${this.props.dropdownClassB}`}
                 type="button"
                 id="dropdownMenuButton"
                 data-toggle="dropdown"
@@ -435,7 +435,7 @@ class NumberForm extends Component {
           ) ? (
             <button
               type="button"
-              className="close text-white ml-2"
+              className="close text-white ml-1"
               style={{ paddingRight: this.props.marg }}
               onClick={this.hideForm}
             >
@@ -446,14 +446,14 @@ class NumberForm extends Component {
             <div />
           )}
           {this.props.first === this.props.nth ? (
-            <sup>
-              <button type="button" className="info text-white pr-0 pl-1">
+            <div className="align-self-center">
+              <button type="button" className="info text-white pr-0 pl-1 small ">
                 <i
                   className="fas fa-info-circle"
                   onClick={() => this.props.updateModal("number")}
                 />
               </button>
-            </sup>
+            </div>
           ) : (
             <div />
           )}
