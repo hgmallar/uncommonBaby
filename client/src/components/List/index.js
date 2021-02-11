@@ -8,20 +8,20 @@ class List extends Component {
     return (
       <div className="col-12">
         <ol>
-          {newArray.map(result => (
+          {newArray.map((result) => (
             <li key={result.id}>
               <h4
-                onClick={e =>
+                onClick={(e) =>
                   this.props.nameClicked(result.Name, result.Gender, e)
                 }
-                className="text-center"
+                className="name"
               >
                 {result.Name}{" "}
                 {result.Gender === "M"
                   ? "- male"
                   : result.Gender === "F"
                   ? "- female"
-                  : "- both"}
+                  : ""}
               </h4>
             </li>
           ))}

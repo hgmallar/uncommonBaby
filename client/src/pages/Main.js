@@ -6,6 +6,8 @@ import NumberForm from "../components/NumberForm";
 import Modal from "../components/Modal";
 import API from "../utils/API";
 
+import myData from "../components/NumberForm/max_values_full.json";
+
 class App extends Component {
   state = {
     showModal: false,
@@ -14,12 +16,8 @@ class App extends Component {
     minLength: 1,
     maxLength: 15,
     isLoading: false,
-    letterrows: [0],
-    numberrows: [0],
-    letterRowLength: 0,
-    numberRowLength: 0,
     results: [],
-    letterInputs: [],
+    letterInputs: ["Letter(s)"],
     letterInputClasses: [],
     letterDropdownClasses: [],
     numberInputs: [{ Count_AllTime: { $between: [0, 5173828] } }],
@@ -42,6 +40,105 @@ class App extends Component {
     rank: 0,
     dataArr1: [],
     dataArr2: [],
+    sortArray: [
+      {
+        id: 0,
+        value: "AllTime",
+        label: "All Time",
+      },
+      {
+        id: 1,
+        value: "188x",
+        label: "1880s",
+      },
+      {
+        id: 2,
+        value: "189x",
+        label: "1890s",
+      },
+      {
+        id: 3,
+        value: "190x",
+        label: "1900s",
+      },
+      {
+        id: 4,
+        value: "191x",
+        label: "1910s",
+      },
+      {
+        id: 5,
+        value: "192x",
+        label: "1920s",
+      },
+      {
+        id: 6,
+        value: "193x",
+        label: "1930s",
+      },
+      {
+        id: 7,
+        value: "194x",
+        label: "1940s",
+      },
+      {
+        id: 8,
+        value: "195x",
+        label: "1950s",
+      },
+      {
+        id: 9,
+        value: "196x",
+        label: "1960s",
+      },
+      {
+        id: 10,
+        value: "197x",
+        label: "1970s",
+      },
+      {
+        id: 11,
+        value: "198x",
+        label: "1980s",
+      },
+      {
+        id: 12,
+        value: "199x",
+        label: "1990s",
+      },
+      {
+        id: 13,
+        value: "200x",
+        label: "2000s",
+      },
+      {
+        id: 14,
+        value: "201x",
+        label: "2010s",
+      },
+    ],
+    sortOptsArray: [
+      {
+        id: 0,
+        value: "A - Z",
+      },
+      {
+        id: 1,
+        value: "Z - A",
+      },
+      {
+        id: 2,
+        value: "Most - Least Popular",
+      },
+      {
+        id: 3,
+        value: "Least - Most Popular",
+      },
+      {
+        id: 4,
+        value: "Random",
+      },
+    ],
   };
 
   componentDidMount() {
@@ -52,7 +149,6 @@ class App extends Component {
     let letterInputClass = [];
     let letterDropdownClass = [];
     let letterError = [];
-    let letterRow = [0];
     const { savedQuery } = this.props.match.params;
     let savedQueryEncode = encodeURI(savedQuery);
     let savedQueryDecode = decodeURI(savedQueryEncode);
@@ -61,7 +157,6 @@ class App extends Component {
       let letters = fields[0].split(",");
       for (let i = 0; i < letters.length; i++) {
         if (letters[i]) {
-          letterRow[i] = i;
           if (letters[i][0] !== "!") {
             lettersArr[i] = { $like: letters[i] };
           } else {
@@ -90,19 +185,13 @@ class App extends Component {
         let numbersArr = fields[4];
         numbers = JSON.parse(numbersArr);
       }
-      let numberRow = [];
       let numDD = [];
       let numErr = [];
       for (let i = 0; i < numbers.length; i++) {
         if (numbers[i]) {
-          numberRow[i] = i;
           numDD[i] = "no-border";
           numErr[i] = "";
         }
-      }
-      let letterArrLen = lettersArr.length - 1;
-      if (!lettersArr) {
-        letterArrLen = 0;
       }
       let sortDD = "Most - Least Popular";
       if (
@@ -135,15 +224,11 @@ class App extends Component {
         female: female,
         minLength: parseInt(fields[2]),
         maxLength: parseInt(fields[3]),
-        letterrows: letterRow,
         letterInputs: lettersArr,
-        letterRowLength: letterArrLen,
         letterDropdownClasses: letterDropdownClass,
         letterInputClasses: letterInputClass,
         letterErrorMessage: letterError,
         numberInputs: numbers,
-        numberRowLength: numbers.length,
-        numberrows: numberRow,
         numberDropdownClassesA: numDD,
         numberDropdownClassesB: numDD,
         numberErrorMessage: numErr,
@@ -161,7 +246,6 @@ class App extends Component {
         limit: parseInt(fields[5]),
         sort: JSON.parse(fields[6]),
       };
-      console.log(query);
       API.findNames(query)
         .then((res) => {
           if (res.data.count >= 20) {
@@ -253,42 +337,34 @@ class App extends Component {
   };
 
   handleClickLetter = () => {
-    let rows = this.state.letterrows;
-    //let index = this.state.letterRowLength + 1;
-    let index = this.state.letterrows.length;
-    rows.push(index);
-    this.setState({ letterrows: rows, letterRowLength: index });
+    let rows = this.state.letterInputs;
+    rows.push("Letter(s)");
+    this.setState({ letterInputs: rows });
   };
 
   grabLetterInput = (index, output) => {
-    let realIndex = index;
-    for (let i = 0; i < this.state.letterrows.length; i++) {
-      if (index === this.state.letterrows[i]) {
-        realIndex = i;
-      }
-    }
     let newArray = this.state.letterInputs;
-    newArray[realIndex] = output;
+    newArray[index] = output;
     this.setState({ letterInputs: newArray });
   };
 
   handleClickNumber = () => {
-    let rows = this.state.numberrows;
-    //let index = this.state.numberRowLength + 1;
-    let index = this.state.numberrows.length;
-    rows.push(index);
-    this.setState({ numberrows: rows, numberRowLength: index });
+    let numInputs = this.state.numberInputs;
+    let max = 5173828;
+    if (this.state.female && !this.state.male) {
+      max = myData["Count"]["AllTime"]["F"];
+    } else if (!this.state.female && this.state.male) {
+      max = myData["Count"]["AllTime"]["M"];
+    } else if (!this.state.female && this.state.male) {
+      max = myData["Count"]["AllTime"]["MF"];
+    }
+    numInputs.push({ Count_AllTime: { $between: [0, max] } });
+    this.setState({ numberInputs: numInputs });
   };
 
   grabNumberInput = (index, output) => {
-    let realIndex = index;
-    for (let i = 0; i < this.state.numberrows.length; i++) {
-      if (index === this.state.numberrows[i]) {
-        realIndex = i;
-      }
-    }
     let newArray = this.state.numberInputs;
-    newArray[realIndex] = output;
+    newArray[index] = output;
     let sortDisp = Object.getOwnPropertyNames(newArray[0])[0].split("_")[1];
     let display = "All Time";
     if (sortDisp !== "AllTime") {
@@ -305,7 +381,6 @@ class App extends Component {
     let submit = true;
     let errorArray = [];
     let letterInput = this.state.letterInputs;
-    //let letterRow = this.state.letterrows;
     let nullRows = [];
     let letterInputClass = this.state.letterInputClasses;
     let letterDropdowns = this.state.letterDropdownClasses;
@@ -315,176 +390,166 @@ class App extends Component {
     let numberError = this.state.numberErrorMessage;
     //loop through letterInputs
     for (let i = 0; i < this.state.letterInputs.length; i++) {
-      if (this.state.letterInputs[i]) {
+      if (
+        this.state.letterInputs[i] &&
+        this.state.letterInputs[i] !== "Letter(s)"
+      ) {
         if (
-          this.state.letterInputs[i].$like &&
+          (this.state.letterInputs[i].$like ||
+            this.state.letterInputs[i].$notlike) &&
           (this.state.letterInputs[i].$like === "%%" ||
             this.state.letterInputs[i].$like === "%" ||
             this.state.letterInputs[i].$like === "%Letter(s)%" ||
             this.state.letterInputs[i].$like === "Letter(s)%" ||
-            this.state.letterInputs[i].$like === "%Letter(s)")
+            this.state.letterInputs[i].$like === "%Letter(s)" ||
+            this.state.letterInputs[i].$notlike === "!%%" ||
+            this.state.letterInputs[i].$notlike === "!%" ||
+            this.state.letterInputs[i].$notlike === "!%Letter(s)%" ||
+            this.state.letterInputs[i].$notlike === "Letter(s)%!" ||
+            this.state.letterInputs[i].$notlike === "!%Letter(s)")
         ) {
           //change border of letter-input-#
           submit = false;
-          let index = this.state.letterrows[i];
-          letterDropdowns[index] = "no-border";
-          letterInputClass[index] = "red-border";
-          letterError[index] = "*Input a value.*";
+          letterDropdowns[i] = "no-border";
+          letterInputClass[i] = "red-border";
+          letterError[i] = "*Input a letter.*";
         } else if (this.state.letterInputs[i] === "string") {
           //change border of dropdown-toggle-#
           submit = false;
-          letterInputClass[this.state.letterrows[i]] = "no-border";
-          letterDropdowns[this.state.letterrows[i]] = "red-border";
-          letterError[this.state.letterrows[i]] = "*Make a selection.*";
+          letterInputClass[i] = "no-border";
+          letterDropdowns[i] = "red-border";
+          letterError[i] = "*Make a selection.*";
         } else {
-          letterInputClass[this.state.letterrows[i]] = "no-border";
-          letterDropdowns[this.state.letterrows[i]] = "no-border";
-          letterError[this.state.letterrows[i]] = "";
-        }
-      } else {
-        nullRows.push(i);
-      }
-      //check for 2 of the same inputs, or 2 begins withs, or 2 ends with, or starts with/ends with/contains string and does not start with/end with/contain string
-      if (i + 1 < this.state.letterInputs.length) {
-        let iString = this.state.letterInputs[i][
-          Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
-        ];
-        let antiString = "";
-        let startString = "";
-        let endString = "";
-        let dncString = "";
-        if (iString.includes("!")) {
-          antiString = iString.replace(/!/g, "");
-          if (iString[1] === "%" && iString.substr(-1) === "%") {
-            startString = antiString.replace(/%/g, "") + "%";
-            endString = "%" + antiString.replace(/%/g, "");
-          }
-        } else {
-          antiString = "!" + iString;
-          dncString = "!%" + iString.replace(/%/g, "") + "%";
-        }
-        for (let j = i + 1; j < this.state.letterInputs.length; j++) {
-          if (
-            this.state.letterInputs[i] &&
-            this.state.letterInputs[j] &&
-            this.state.letterInputs[j][
-              Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
-            ][0] !== "%Letter(s)%" &&
-            this.state.letterInputs[j] !== "string"
-          ) {
-            if (
-              (Object.getOwnPropertyNames(this.state.letterInputs[i])[0] ===
-                Object.getOwnPropertyNames(this.state.letterInputs[j])[0] &&
-                this.state.letterInputs[i][
-                  Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
-                ] ===
-                  this.state.letterInputs[j][
-                    Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
-                  ]) ||
-              (this.state.letterInputs[i][
-                Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
-              ][0] !== "%" &&
+          letterInputClass[i] = "no-border";
+          letterDropdowns[i] = "no-border";
+          letterError[i] = "";
+          //check for 2 of the same inputs, or 2 begins withs, or 2 ends with, or starts with/ends with/contains string and does not start with/end with/contain string
+          if (i + 1 < this.state.letterInputs.length) {
+            let iString = this.state.letterInputs[i][
+              Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
+            ];
+            let antiString = "";
+            let startString = "";
+            let endString = "";
+            let dncString = "";
+            if (iString.includes("!")) {
+              antiString = iString.replace(/!/g, "");
+              if (iString[1] === "%" && iString.substr(-1) === "%") {
+                startString = antiString.replace(/%/g, "") + "%";
+                endString = "%" + antiString.replace(/%/g, "");
+              }
+            } else {
+              antiString = "!" + iString;
+              dncString = "!%" + iString.replace(/%/g, "") + "%";
+            }
+            for (let j = i + 1; j < this.state.letterInputs.length; j++) {
+              if (
+                this.state.letterInputs[i] &&
+                this.state.letterInputs[i] !== "Letter(s)" &&
+                this.state.letterInputs[j] &&
+                this.state.letterInputs[j] !== "Letter(s)" &&
                 this.state.letterInputs[j][
                   Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
-                ][0] !== "%" &&
-                this.state.letterInputs[i][
-                  Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
-                ][0] !== "!" &&
-                this.state.letterInputs[j][
-                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
-                ][0] !== "!") ||
-              (this.state.letterInputs[i][
-                Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
-              ].substr(-1) !== "%" &&
-                this.state.letterInputs[j][
-                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
-                ].substr(-1) !== "%") ||
-              antiString ===
-                this.state.letterInputs[j][
-                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
-                ] ||
-              (startString &&
-                this.state.letterInputs[j][
-                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
-                ] === startString) ||
-              (endString &&
-                this.state.letterInputs[j][
-                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
-                ] === endString) ||
-              (dncString &&
-                this.state.letterInputs[j][
-                  Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
-                ] === dncString)
-            ) {
-              errorArray.push(this.state.letterrows[i]);
-              errorArray.push(this.state.letterrows[j]);
-              submit = false;
+                ][0] !== "%Letter(s)%" &&
+                this.state.letterInputs[j] !== "string"
+              ) {
+                if (
+                  (Object.getOwnPropertyNames(this.state.letterInputs[i])[0] ===
+                    Object.getOwnPropertyNames(this.state.letterInputs[j])[0] &&
+                    this.state.letterInputs[i][
+                      Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
+                    ] ===
+                      this.state.letterInputs[j][
+                        Object.getOwnPropertyNames(
+                          this.state.letterInputs[j]
+                        )[0]
+                      ]) ||
+                  (this.state.letterInputs[i][
+                    Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
+                  ][0] !== "%" &&
+                    this.state.letterInputs[j][
+                      Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                    ][0] !== "%" &&
+                    this.state.letterInputs[i][
+                      Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
+                    ][0] !== "!" &&
+                    this.state.letterInputs[j][
+                      Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                    ][0] !== "!") ||
+                  (this.state.letterInputs[i][
+                    Object.getOwnPropertyNames(this.state.letterInputs[i])[0]
+                  ].substr(-1) !== "%" &&
+                    this.state.letterInputs[j][
+                      Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                    ].substr(-1) !== "%") ||
+                  antiString ===
+                    this.state.letterInputs[j][
+                      Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                    ] ||
+                  (startString &&
+                    this.state.letterInputs[j][
+                      Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                    ] === startString) ||
+                  (endString &&
+                    this.state.letterInputs[j][
+                      Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                    ] === endString) ||
+                  (dncString &&
+                    this.state.letterInputs[j][
+                      Object.getOwnPropertyNames(this.state.letterInputs[j])[0]
+                    ] === dncString)
+                ) {
+                  errorArray.push(i);
+                  errorArray.push(j);
+                  submit = false;
+                }
+              }
             }
           }
         }
+      } else {
+        nullRows.push(i);
       }
       if (errorArray) {
         for (let k = 0; k < errorArray.length; k++) {
           letterInputClass[errorArray[k]] = "red-border";
           letterDropdowns[errorArray[k]] = "red-border";
-          letterError[errorArray[k]] = "*Incorrect Input.*";
+          letterError[errorArray[k]] = "*Incorrect Inputs.*";
         }
       }
     }
     for (let i = nullRows.length - 1; i >= 0; i--) {
       letterInput.splice(nullRows[i], 1);
-      //letterRow.splice(nullRows[i], 1);
+      letterInputClass.splice(nullRows[i], 1);
+      letterDropdowns.splice(nullRows[i], 1);
+      letterError.splice(nullRows[i], 1);
     }
 
     //loop through numberInputs
     errorArray = [];
-    for (let i = 0; i < this.state.numberInputs.length; i++) {
-      if (this.state.numberInputs[i]) {
-        if (
-          Object.getOwnPropertyNames(this.state.numberInputs[i]).length === 0
-        ) {
-          submit = false;
-          dropdownB[this.state.numberrows[i]] = "red-border";
-          numberError[this.state.numberrows[i]] = "*Make a selection.*";
-        } else if (
-          Object.getOwnPropertyNames(this.state.numberInputs[i])[0] ===
-            "Rank_Year(s)" ||
-          Object.getOwnPropertyNames(this.state.numberInputs[i])[0] ===
-            "Count_Year(s)"
-        ) {
-          submit = false;
-          dropdownA[this.state.numberrows[i]] = "red-border";
-          numberError[this.state.numberrows[i]] = "*Make a selection.*";
-        } else {
-          dropdownA[this.state.numberrows[i]] = "no-border";
-          dropdownB[this.state.numberrows[i]] = "no-border";
-          numberError[this.state.numberrows[i]] = "";
-        }
-      }
+    for (let i = this.state.numberInputs.length - 1; i > 0; i--) {
       //check for 2 of the same inputs
-      if (i + 1 < this.state.numberInputs.length) {
-        for (let j = i + 1; j < this.state.numberInputs.length; j++) {
-          if (this.state.numberInputs[i] && this.state.numberInputs[j]) {
-            if (
-              Object.getOwnPropertyNames(this.state.numberInputs[i])[0] ===
-                Object.getOwnPropertyNames(this.state.numberInputs[j])[0] &&
-              Object.getOwnPropertyNames(this.state.numberInputs[i])[0]
-            ) {
-              errorArray.push(this.state.numberrows[i]);
-              errorArray.push(this.state.numberrows[j]);
-              submit = false;
-            }
-          }
-        }
-      }
-      if (errorArray) {
-        for (let k = 0; k < errorArray.length; k++) {
-          dropdownA[errorArray[k]] = "red-border";
-          dropdownB[errorArray[k]] = "red-border";
-          numberError[errorArray[k]] = "*Make a selection.*";
+      let keyI = Object.keys(this.state.numberInputs[i])[0];
+      let startI = this.state.numberInputs[i][
+        Object.keys(this.state.numberInputs[i])[0]
+      ].$between[0];
+      let endI = this.state.numberInputs[i][
+        Object.keys(this.state.numberInputs[i])[0]
+      ].$between[1];
+      for (let j = i - 1; j >= 0; j--) {
+        let keyJ = Object.keys(this.state.numberInputs[j])[0];
+        let startJ = this.state.numberInputs[j][
+          Object.keys(this.state.numberInputs[j])[0]
+        ].$between[0];
+        let endJ = this.state.numberInputs[j][
+          Object.keys(this.state.numberInputs[j])[0]
+        ].$between[1];
+        if (keyI === keyJ && startI === startJ && endI === endJ) {
+          this.removeNumberRow(i);
         }
       }
     }
+
     let newResults = this.state.results;
     let count = this.state.totalCount;
     if (!submit) {
@@ -496,7 +561,6 @@ class App extends Component {
       letterDropdownClasses: letterDropdowns,
       letterErrorMessage: letterError,
       letterInputs: letterInput,
-      //letterrows: letterRow,
       numberDropdownClassesA: dropdownA,
       numberDropdownClassesB: dropdownB,
       numberErrorMessage: numberError,
@@ -558,51 +622,34 @@ class App extends Component {
     } else if (this.state.sort === "Random") {
       sortQuery = [["RAND", Math.floor(Math.random() * 1000)]];
     }
-    let queryGender = "B";
     let lettersArr = this.state.letterInputs;
+    let queryGender = "B";
+    if (this.state.female && !this.state.male) {
+      queryGender = "F";
+    } else if (!this.state.female && this.state.male) {
+      queryGender = "M";
+    } else if (this.state.female && this.state.male) {
+      queryGender = "MF";
+    }
+    let numberQuery = [];
+    if (this.state.numberInputs.length) {
+      numberQuery = this.state.numberInputs;
+    } else {
+      numberQuery = [{ Count_AllTime: { $between: [0, 5173828] } }];
+    }
+    let genderArr = [queryGender];
+    if (queryGender === "MF") {
+      genderArr = ["M", "F"];
+    }
     let query = {
       letters: lettersArr,
-      gender: ["B"],
+      gender: genderArr,
       min: this.state.minLength,
       max: this.state.maxLength,
-      numbers: this.state.numberInputs,
+      numbers: numberQuery,
       limit: moreResults,
       sort: sortQuery,
     };
-    if (this.state.female && !this.state.male) {
-      query = {
-        letters: lettersArr,
-        gender: ["F"],
-        min: this.state.minLength,
-        max: this.state.maxLength,
-        numbers: this.state.numberInputs,
-        limit: moreResults,
-        sort: sortQuery,
-      };
-      queryGender = "F";
-    } else if (!this.state.female && this.state.male) {
-      query = {
-        letters: lettersArr,
-        gender: ["M"],
-        min: this.state.minLength,
-        max: this.state.maxLength,
-        numbers: this.state.numberInputs,
-        limit: moreResults,
-        sort: sortQuery,
-      };
-      queryGender = "M";
-    } else if (this.state.female && this.state.male) {
-      query = {
-        letters: lettersArr,
-        gender: ["F", "M"],
-        min: this.state.minLength,
-        max: this.state.maxLength,
-        numbers: this.state.numberInputs,
-        limit: moreResults,
-        sort: sortQuery,
-      };
-      queryGender = "MF";
-    }
     let queryLetter = "";
     for (let i = 0; i < this.state.letterInputs.length; i++) {
       if (this.state.letterInputs[i].$like) {
@@ -621,13 +668,26 @@ class App extends Component {
       "&" +
       this.state.maxLength +
       "&" +
-      JSON.stringify(this.state.numberInputs) +
+      JSON.stringify(numberQuery) +
       "&" +
       moreResults +
       "&" +
       JSON.stringify(sortQuery);
     queryLink = encodeURI(queryLink);
-    this.props.history.push("/" + encodeURI(queryLink));
+    let path = "/" + encodeURI(queryLink);
+    let count = this.props.location.state
+      ? this.props.location.state.countReq
+      : this.props.countReq;
+    let name = this.props.location.state
+      ? this.props.location.state.nameReq
+      : this.props.nameReq;
+    this.props.history.push({
+      pathname: path,
+      state: {
+        nameReq: name,
+        countReq: count,
+      },
+    });
     API.findNames(query)
       .then((res) => {
         if (res.data.count >= 20) {
@@ -675,72 +735,54 @@ class App extends Component {
   };
 
   removeLetterRow = (index) => {
-    let realIndex = index;
-    for (let j = 0; j < this.state.letterrows.length; j++) {
-      if (this.state.letterrows[j] === index) {
-        realIndex = j;
-      }
-    }
-    // let newInputClasses = this.state.letterInputClasses;
-    // newInputClasses.splice(realIndex, 1);
-    // let newErrorMessage = this.state.letterErrorMessage;
-    // newErrorMessage.splice(realIndex, 1);
-    // let newDropdownClasses = this.state.letterDropdownClasses;
-    // newDropdownClasses.splice(realIndex, 1);
+    let newInputClasses = this.state.letterInputClasses;
+    newInputClasses.splice(index, 1);
+    let newErrorMessage = this.state.letterErrorMessage;
+    newErrorMessage.splice(index, 1);
+    let newDropdownClasses = this.state.letterDropdownClasses;
+    newDropdownClasses.splice(index, 1);
     let newArray = this.state.letterInputs;
-    newArray.splice(realIndex, 1);
-    let newRows = this.state.letterrows;
-    //newRows.splice(realIndex, 1);
-    newRows.pop();
-    for (let i = 0; i < newRows.length; i++) {
-      newRows[i] = i;
-    }
+    newArray.splice(index, 1);
     this.setState({
-      //letterDropdownClasses: newDropdownClasses,
-      //letterErrorMessage: newErrorMessage,
-      //letterInputClasses: newInputClasses,
+      letterDropdownClasses: newDropdownClasses,
+      letterErrorMessage: newErrorMessage,
+      letterInputClasses: newInputClasses,
       letterInputs: newArray,
-      letterrows: newRows,
     });
-    //this.handleSubmit(20, this.state.moreResults);
   };
 
   removeNumberRow = (index) => {
-    let realIndex = index;
-    for (let i = 0; i < this.state.numberrows.length; i++) {
-      if (this.state.numberrows[i] === index) {
-        realIndex = i;
-      }
-    }
+    let newErrorMsgs = this.state.numberErrorMessage;
+    newErrorMsgs.splice(index, 1);
+    let newDropA = this.state.numberDropdownClassesA;
+    newDropA.splice(index, 1);
+    let newDropB = this.state.numberDropdownClassesB;
+    newDropB.splice(index, 1);
     let newArray = this.state.numberInputs;
-    newArray.splice(realIndex, 1);
-    let newRows = this.state.numberrows;
-    //newRows.splice(realIndex, 1);
-    newRows.pop();
-    for (let i = 0; i < newRows.length; i++) {
-      newRows[i] = i;
+    newArray.splice(index, 1);
+    let sortDisp = "AllTime";
+    if (newArray[0]) {
+      sortDisp = Object.getOwnPropertyNames(newArray[0])[0].split("_")[1];
     }
-    let sortDisp = Object.getOwnPropertyNames(newArray[0])[0].split("_")[1];
     let display = "All Time";
     if (sortDisp !== "AllTime") {
       display = `${sortDisp.split("x")[0]}0s`;
     }
     this.setState({
+      numberErrorMessage: newErrorMsgs,
+      numberDropdownClassesA: newDropA,
+      numberDropdownClassesB: newDropB,
       numberInputs: newArray,
-      numberrows: newRows,
       sortExtra: sortDisp,
       sortDisplay: display,
     });
-    //this.handleSubmit(20, this.state.moreResults);
   };
 
-  updateDropdownOptions = (input, evt) => {
-    evt.preventDefault();
+  updateDropdownOptions = (input) => {
     this.setState({ sort: input });
   };
 
-  updateDropdownOptionsTwo = (input, evt) => {
-    evt.preventDefault();
+  updateDropdownOptionsTwo = (input) => {
     let display = "All Time";
     if (input !== "AllTime") {
       display = `${input.split("x")[0]}0s`;
@@ -830,109 +872,133 @@ class App extends Component {
   };
 
   render() {
+    const countReq = this.props.location.state
+      ? this.props.location.state.countReq
+      : this.props.countReq;
+    const nameReq = this.props.location.state
+      ? this.props.location.state.nameReq
+      : this.props.nameReq;
     return (
       <Wrapper>
         <form className="justify-content-center mx-0 px-0 text-center align-items-center">
-          {this.props.nameReq && this.props.countReq && (
-            <div className="row mr-0 justify-content-center mx-auto">
-              <div className="form-inline col-md-5 my-2 mx-auto px-0">
-                <div className="checkbox">
-                  <input
-                    className="my-0 align-self-center"
-                    type="checkbox"
-                    onChange={(e) => this.setState({ male: !this.state.male })}
-                    checked={this.state.male}
-                  />
-                </div>
-                <div className="my-0 mx-2 ">Male</div>
-                <div className="checkbox">
-                  <input
-                    className="my-0 align-self-center"
-                    type="checkbox"
-                    onChange={(e) =>
-                      this.setState({ female: !this.state.female })
-                    }
-                    checked={this.state.female}
-                  />
-                </div>
-                <div className="my-0 mx-2 ">Female</div>
-                <div className="mx-0 small align-self-center">
-                  <button type="button" className="info text-white mx-0">
-                    <i
-                      className="fas fa-info-circle"
-                      onClick={() => this.updateModal("gender")}
+          {nameReq && countReq && (
+            <>
+              <div className="row mr-0 justify-content-center mx-auto">
+                <div className="form-inline my-2 mx-auto px-0">
+                  <div className="checkbox">
+                    <input
+                      className="my-0 align-self-center"
+                      type="checkbox"
+                      onChange={(e) =>
+                        this.setState({ male: !this.state.male })
+                      }
+                      checked={this.state.male}
                     />
-                  </button>
+                  </div>
+                  <div className="my-0 mx-2 ">Male</div>
+                  <div className="checkbox">
+                    <input
+                      className="my-0 align-self-center"
+                      type="checkbox"
+                      onChange={(e) =>
+                        this.setState({ female: !this.state.female })
+                      }
+                      checked={this.state.female}
+                    />
+                  </div>
+                  <div className="my-0 mx-2 ">Female</div>
+                  <div className="mx-0 small align-self-center">
+                    <button type="button" className="info text-white mx-0">
+                      <i
+                        className="fas fa-info-circle"
+                        onClick={() => this.updateModal("gender")}
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div className="form-inline col-md-5 my-2 px-0">
-                <div className="form-group ml-1 mb-0 mr-2">
-                  <label className="mb-0 pr-1">Min Length:</label>
-                  <input
-                    className="form-control m-0 number"
-                    type="number"
-                    min="1"
-                    max={this.state.maxLength}
-                    value={this.state.minLength}
-                    placeholder={this.state.minLength}
-                    onChange={(e) =>
-                      this.setState({ minLength: parseInt(e.target.value) })
-                    }
-                  />
-                </div>
-                <div className="form-group ml-1 mb-0 mr-2">
-                  <label className="mb-0 pr-1">Max Length:</label>
-                  <input
-                    className="form-control m-0 number"
-                    type="number"
-                    min={this.state.minLength}
-                    max="15"
-                    value={this.state.maxLength}
-                    placeholder={this.state.maxLength}
-                    onChange={(e) =>
-                      this.setState({ maxLength: parseInt(e.target.value) })
-                    }
-                  />
-                </div>
-                <div className="mx-0 small align-self-center">
-                  <button type="button" className="info text-white mx-0">
-                    <i
-                      className="fas fa-info-circle"
-                      onClick={() => this.updateModal("charCount")}
+              <div className="row mr-0 justify-content-center mx-auto">
+                <div className="form-inline px-0">
+                  <div className="form-inline ml-1 my-2 mr-4">
+                    <label className="mb-0 pr-1 my-auto">Min Length:</label>
+                    <input
+                      className="form-control m-0 number"
+                      type="number"
+                      min="1"
+                      max={this.state.maxLength}
+                      value={this.state.minLength}
+                      placeholder={this.state.minLength}
+                      onChange={(e) => {
+                        if (
+                          e.target.value &&
+                          e.target.value <= this.state.maxLength
+                        ) {
+                          this.setState({
+                            minLength: parseInt(e.target.value),
+                          });
+                        }
+                      }}
                     />
-                  </button>
+                  </div>
+                  <div className="form-inline ml-1 my-2 mr-2">
+                    <label className="mb-0 pr-1 my-auto">Max Length:</label>
+                    <input
+                      className="form-control m-0 number"
+                      type="number"
+                      min={this.state.minLength}
+                      max="15"
+                      value={this.state.maxLength}
+                      placeholder={this.state.maxLength}
+                      onChange={(e) => {
+                        if (
+                          e.target.value &&
+                          e.target.value >= this.state.minLength
+                        ) {
+                          this.setState({
+                            maxLength: parseInt(e.target.value),
+                          });
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="mx-0 small align-self-center">
+                    <button type="button" className="info text-white mx-0">
+                      <i
+                        className="fas fa-info-circle"
+                        onClick={() => this.updateModal("charCount")}
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </>
           )}
         </form>
         <div className="text-center row justify-content-center mx-auto">
-          {this.props.nameReq && (
+          {nameReq && (
             <div className="col-md-4 px-0">
-              {this.state.letterrows.map((r) => (
+              {this.state.letterInputs.map((output, index) => (
                 <LetterForm
-                  key={r}
-                  nth={r}
-                  className={r}
+                  key={index}
+                  nth={index}
                   inputs={
-                    this.state.letterInputs[r] &&
-                    this.state.letterInputs[r].$like
-                      ? this.state.letterInputs[r].$like
-                      : this.state.letterInputs[r] &&
-                        this.state.letterInputs[r].$notlike
-                      ? this.state.letterInputs[r].$notlike
+                    this.state.letterInputs[index] &&
+                    this.state.letterInputs[index].$like
+                      ? this.state.letterInputs[index].$like
+                      : this.state.letterInputs[index] &&
+                        this.state.letterInputs[index].$notlike
+                      ? this.state.letterInputs[index].$notlike
                       : "Letter(s)"
                   }
-                  errorMessage={this.state.letterErrorMessage[r]}
-                  inputClass={this.state.letterInputClasses[r]}
-                  dropdownClass={this.state.letterDropdownClasses[r]}
+                  errorMessage={this.state.letterErrorMessage[index]}
+                  inputClass={this.state.letterInputClasses[index]}
+                  dropdownClass={this.state.letterDropdownClasses[index]}
                   appendOutput={this.grabLetterInput}
                   removeLetterRow={this.removeLetterRow}
                   updateModal={this.updateModal}
-                  first={this.state.letterrows[0]}
-                  length={this.state.letterrows.length}
+                  length={this.state.letterInputs.length}
                   clearBorders={this.clearLetterBorders}
-                  marg={r ? 20 : 0}
+                  marg={index ? 20 : 0}
                 />
               ))}
               <button
@@ -943,25 +1009,23 @@ class App extends Component {
               </button>
             </div>
           )}
-          {this.props.countReq && (
+          {countReq && (
             <div className="col-md-8 px-0">
-              {this.state.numberrows.map((r) => (
+              {this.state.numberInputs.map((output, index) => (
                 <NumberForm
-                  key={r}
-                  nth={r}
-                  className={r}
-                  inputs={this.state.numberInputs[r]}
-                  errorMessage={this.state.numberErrorMessage[r]}
-                  dropdownClassA={this.state.numberDropdownClassesA[r]}
-                  dropdownClassB={this.state.numberDropdownClassesB[r]}
+                  key={index}
+                  nth={index}
+                  inputs={this.state.numberInputs[index]}
+                  errorMessage={this.state.numberErrorMessage[index]}
+                  dropdownClassA={this.state.numberDropdownClassesA[index]}
+                  dropdownClassB={this.state.numberDropdownClassesB[index]}
                   appendOutput={this.grabNumberInput}
                   male={this.state.male}
                   female={this.state.female}
                   removeNumberRow={this.removeNumberRow}
                   updateModal={this.updateModal}
-                  first={this.state.numberrows[0]}
-                  length={this.state.numberrows.length}
-                  marg={r ? 15 : 0}
+                  length={this.state.numberInputs.length}
+                  marg={index ? 15 : 0}
                 />
               ))}
               <button
@@ -976,23 +1040,16 @@ class App extends Component {
         <div className="row justify-content-center col-12 mx-auto my-2">
           <button
             type="button"
-            className="btn btn-secondary px-1 submit my-auto"
+            className="btn btn-secondary px-1 submit mb-2"
             onClick={(e) => this.checkErroroneousInputs()}
           >
             Submit
           </button>
-          {this.state.totalCount < 0 ? (
-            <h4> </h4>
-          ) : (
-            <h4 className="ml-2 my-auto text-white">
-              {" "}
-              {this.state.totalCount}
-            </h4>
+          {this.state.totalCount >= 0 && (
+            <h4 className="ml-2 text-white mb-2">{this.state.totalCount}</h4>
           )}
-          {this.state.totalCount <= 1 ? (
-            <h4> </h4>
-          ) : (
-            <form className="form-inline my-auto">
+          {this.state.totalCount > 1 && (
+            <form className="form-inline mb-2">
               <div>
                 <button
                   className={`btn btn-secondary dropdown-toggle px-1 my-auto`}
@@ -1008,49 +1065,20 @@ class App extends Component {
                   className="dropdown-menu"
                   aria-labelledby="dropdownMenuButton"
                 >
-                  <button
-                    className="dropdown-item"
-                    href="#"
-                    onClick={(e) => this.updateDropdownOptions("A - Z", e)}
-                  >
-                    A - Z
-                  </button>
-                  <button
-                    className="dropdown-item"
-                    href="#"
-                    onClick={(e) => this.updateDropdownOptions("Z - A", e)}
-                  >
-                    Z - A
-                  </button>
-                  <button
-                    className="dropdown-item"
-                    href="#"
-                    onClick={(e) =>
-                      this.updateDropdownOptions("Most - Least Popular", e)
-                    }
-                  >
-                    Most - Least Popular
-                  </button>
-                  <button
-                    className="dropdown-item"
-                    href="#"
-                    onClick={(e) =>
-                      this.updateDropdownOptions("Least - Most Popular", e)
-                    }
-                  >
-                    Least - Most Popular
-                  </button>
-                  <button
-                    className="dropdown-item"
-                    href="#"
-                    onClick={(e) => this.updateDropdownOptions("Random", e)}
-                  >
-                    Random
-                  </button>
+                  {this.state.sortOptsArray.map((item) => (
+                    <button
+                      type="button"
+                      className="dropdown-item"
+                      href="#"
+                      onClick={() => this.updateDropdownOptions(item.value)}
+                    >
+                      {item.value}
+                    </button>
+                  ))}
                 </div>
               </div>
-              {this.state.sort === "Most - Least Popular" ||
-              this.state.sort === "Least - Most Popular" ? (
+              {(this.state.sort === "Most - Least Popular" ||
+                this.state.sort === "Least - Most Popular") && (
                 <div>
                   <button
                     className={`btn btn-secondary dropdown-toggle px-1 my-auto`}
@@ -1066,117 +1094,20 @@ class App extends Component {
                     className="dropdown-menu"
                     aria-labelledby="dropdownMenuButton"
                   >
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) =>
-                        this.updateDropdownOptionsTwo("AllTime", e)
-                      }
-                    >
-                      All Time
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) => this.updateDropdownOptionsTwo("188x", e)}
-                    >
-                      1880s
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) => this.updateDropdownOptionsTwo("189x", e)}
-                    >
-                      1890s
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) => this.updateDropdownOptionsTwo("190x", e)}
-                    >
-                      1900s
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) => this.updateDropdownOptionsTwo("191x", e)}
-                    >
-                      1910s
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) => this.updateDropdownOptionsTwo("192x", e)}
-                    >
-                      1920s
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) => this.updateDropdownOptionsTwo("193x", e)}
-                    >
-                      1930s
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) => this.updateDropdownOptionsTwo("194x", e)}
-                    >
-                      1940s
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) => this.updateDropdownOptionsTwo("195x", e)}
-                    >
-                      1950s
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) => this.updateDropdownOptionsTwo("196x", e)}
-                    >
-                      1960s
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) => this.updateDropdownOptionsTwo("197x", e)}
-                    >
-                      1970s
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) => this.updateDropdownOptionsTwo("198x", e)}
-                    >
-                      1980s
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) => this.updateDropdownOptionsTwo("199x", e)}
-                    >
-                      1990s
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) => this.updateDropdownOptionsTwo("200x", e)}
-                    >
-                      2000s
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      href="#"
-                      onClick={(e) => this.updateDropdownOptionsTwo("201x", e)}
-                    >
-                      2010s
-                    </button>
+                    {this.state.sortArray.map((item) => (
+                      <button
+                        type="button"
+                        className="dropdown-item"
+                        href="#"
+                        onClick={() =>
+                          this.updateDropdownOptionsTwo(item.value)
+                        }
+                      >
+                        {item.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
-              ) : (
-                <div />
               )}
             </form>
           )}

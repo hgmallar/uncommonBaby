@@ -7,11 +7,36 @@ class LetterForm extends Component {
     letterOptions: "Letter Options",
     dropdown: "Letter Options",
     input: "Letter(s)",
-    output: ""
+    output: "",
+    itemArray: [
+      {
+        id: 0,
+        title: "Contains",
+      },
+      {
+        id: 1,
+        title: "Does Not Contain",
+      },
+      {
+        id: 2,
+        title: "Starts With",
+      },
+      {
+        id: 3,
+        title: "Does Not Start With",
+      },
+      {
+        id: 4,
+        title: "Ends With",
+      },
+      {
+        id: 5,
+        title: "Does Not End With",
+      },
+    ],
   };
 
-  updateLetterOptions = (letterInput, evt) => {
-    evt.preventDefault();
+  updateLetterOptions = (letterInput) => {
     let output = "";
     if (letterInput === "Contains") {
       output = { $like: "%" + this.state.input + "%" };
@@ -29,12 +54,12 @@ class LetterForm extends Component {
     this.setState({
       letterOptions: letterInput,
       dropdown: letterInput,
-      output: output
+      output: output,
     });
-    this.props.appendOutput(this.props.className, output);
+    this.props.appendOutput(this.props.nth, output);
   };
 
-  updateOutput = evt => {
+  updateOutput = (evt) => {
     let input = evt.target.value;
     if (input === "Letter(s)") {
       input = "";
@@ -54,27 +79,22 @@ class LetterForm extends Component {
       output = { $notlike: "!%" + input };
     }
     this.setState({ input: input, output: output });
-    this.props.appendOutput(this.props.className, output);
+    this.props.appendOutput(this.props.nth, output);
   };
 
   hideForm = (e, r) => {
-    if (this.props.length > 1) {
-      this.props.removeLetterRow(this.props.className);
-    } else {
-      this.setState({
-        letterOptions: "Letter Options",
-        dropdown: "Letter Options",
-        input: "Letter(s)",
-        output: ""
-      });
-      this.props.appendOutput(this.props.className, "");
-      this.props.clearBorders(r);
-    }
+    this.props.removeLetterRow(this.props.nth);
   };
 
-  componentDidUpdate = prevProps => {
+  componentDidUpdate = (prevProps) => {
     if (prevProps.inputs !== this.props.inputs) {
       this.componentMount();
+    }
+    if (
+      prevProps.inputs !== this.props.inputs &&
+      this.props.inputs === "Letter(s)"
+    ) {
+      this.setState({ input: this.props.inputs, dropdown: "Letter Options" });
     }
   };
 
@@ -118,130 +138,75 @@ class LetterForm extends Component {
     }
   };
 
+  handleKeyPress(e) {
+    if (e.keyCode === 13) {
+      e.target.blur();
+      //Write you validation logic here
+    }
+  }
+
   render() {
     return (
       <div className="max-width my-2">
         <div className="row justify-content-center mx-auto">
           <form className="form-inline letters mb-0">
             <div className="ml-1">
-              {this.state.dropdown !== "Letter Options" ? (
-                <button
-                  className={`btn btn-secondary dropdown dropdown-toggle ml-0 px-1 pb-2 my-0 ${
-                    this.props.dropdownClass
-                  }`}
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  {this.state.dropdown}
-                </button>
-              ) : (
-                <button
-                  className={`btn btn-secondary dropdown dropdown-toggle ml-0 px-1 pb-2 grey my-0`}
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  {this.state.dropdown}
-                </button>
-              )}
+              <button
+                className={
+                  this.state.dropdown !== "Letter Options"
+                    ? `btn btn-secondary dropdown-letters dropdown-toggle ml-0 px-1 pb-2 my-0 ${this.props.dropdownClass}`
+                    : `btn btn-secondary dropdown-letters dropdown-toggle ml-0 px-1 pb-2 grey my-0 ${this.props.dropdownClass}`
+                }
+                type="button"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {this.state.dropdown}
+              </button>
               <div
                 className="dropdown-menu"
                 aria-labelledby="dropdownMenuButton"
               >
-                <button
-                  className="dropdown-item"
-                  href="#"
-                  onClick={e => this.updateLetterOptions("Contains", e)}
-                >
-                  Contains
-                </button>
-                <button
-                  className="dropdown-item"
-                  href="#"
-                  onClick={e => this.updateLetterOptions("Does Not Contain", e)}
-                >
-                  Does Not Contain
-                </button>
-                <button
-                  className="dropdown-item"
-                  href="#"
-                  onClick={e => this.updateLetterOptions("Starts With", e)}
-                >
-                  Starts With
-                </button>
-                <button
-                  className="dropdown-item"
-                  href="#"
-                  onClick={e =>
-                    this.updateLetterOptions("Does Not Start With", e)
-                  }
-                >
-                  Does Not Start With
-                </button>
-                <button
-                  className="dropdown-item"
-                  href="#"
-                  onClick={e => this.updateLetterOptions("Ends With", e)}
-                >
-                  Ends With
-                </button>
-                <button
-                  className="dropdown-item"
-                  href="#"
-                  onClick={e =>
-                    this.updateLetterOptions("Does Not End With", e)
-                  }
-                >
-                  Does Not End With
-                </button>
+                {this.state.itemArray.map((item) => (
+                  <button
+                    type="button"
+                    className="dropdown-item"
+                    href="#"
+                    key={item.id}
+                    onClick={() => this.updateLetterOptions(item.title)}
+                  >
+                    {item.title}
+                  </button>
+                ))}
               </div>
             </div>
-
             <label className="ml-1 my-auto">
-              {this.state.input !== "Letter(s)" ? (
-                <input
-                  type="text"
-                  className={`form-control letter-input letter-input-${
-                    this.props.className
-                  } ${this.props.inputClass}`}
-                  onChange={e => this.updateOutput(e)}
-                  onClick={e => (e.target.value = "")}
-                  value={this.state.input}
-                />
-              ) : (
-                <input
-                  type="text"
-                  className={`form-control letter-input grey letter-input-${
-                    this.props.className
-                  } ${this.props.inputClass}`}
-                  onChange={e => this.updateOutput(e)}
-                  onClick={e => (e.target.value = "")}
-                  value={this.state.input}
-                />
-              )}
+              <input
+                type="text"
+                onKeyDown={(e) => this.handleKeyPress(e)}
+                className={
+                  this.state.input !== "Letter(s)"
+                    ? `form-control letter-input letter-input-${this.props.nth} ${this.props.inputClass}`
+                    : `form-control letter-input grey letter-input-${this.props.nth} ${this.props.inputClass}`
+                }
+                onChange={(e) => this.updateOutput(e)}
+                onClick={(e) => (e.target.value = "")}
+                value={this.state.input}
+              />
             </label>
           </form>
-          {this.props.length > 1 ||
-          (this.state.dropdown !== "Letter Options" ||
-            this.state.input !== "Letter(s)") ? (
-            <button
-              type="button"
-              className="close text-white ml-1 small"
-              style={{ paddingRight: this.props.marg }}
-              onClick={e => this.hideForm(e, this.props.nth)}
-            >
-              {" "}
-              &times;
-            </button>
-          ) : (
-            <div />
-          )}
-          {this.props.first === this.props.nth ? (
+          <button
+            type="button"
+            className="close text-white ml-1 small"
+            style={{ paddingRight: this.props.marg }}
+            onClick={(e) => this.hideForm(e, this.props.nth)}
+          >
+            {" "}
+            &times;
+          </button>
+          {this.props.nth === 0 && (
             <div className="mx-0 small align-self-center">
               <button type="button" className="info text-white mx-0 pr-0 pl-1">
                 <i
@@ -250,11 +215,9 @@ class LetterForm extends Component {
                 />
               </button>
             </div>
-          ) : (
-            <div />
           )}
         </div>
-        <div className="red-text">{this.props.errorMessage}</div>
+        <div className="red-text small">{this.props.errorMessage}</div>
       </div>
     );
   }

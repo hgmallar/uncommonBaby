@@ -1,6 +1,6 @@
 {
-  "short_name": "Unpopular Baby App",
-  "name": "Unpopular Baby",
+  "short_name": "Unpopular Baby",
+  "name": "Unpopular Baby Names",
   "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#000000",

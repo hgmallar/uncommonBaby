@@ -12,7 +12,7 @@ class Contact extends Component {
   state = {
     displayErrors: false,
     showModal: false,
-    modalMessages: []
+    modalMessages: [],
   };
 
   handleClose = () => {
@@ -23,7 +23,7 @@ class Contact extends Component {
       modalMessages: [],
       name: "",
       count: 0,
-      rank: 0
+      rank: 0,
     });
   };
 
@@ -34,6 +34,7 @@ class Contact extends Component {
   handleSubmit(event) {
     event.preventDefault();
     if (!event.target.checkValidity()) {
+      event.target.reportValidity();
       this.setState({ displayErrors: true });
       return;
     } else {
@@ -48,20 +49,20 @@ class Contact extends Component {
         name: data.get("name"),
         email: data.get("email"),
         reason: "Contact from Unpopular Baby Website",
-        comments: data.get("comments")
+        comments: data.get("comments"),
       };
 
       API.send(query)
-        .then(response => {
+        .then((response) => {
           if (response.data.msg === "success") {
             this.setState({
               modalMessages: [
                 {
                   cat: "",
-                  message: "Message sent!"
-                }
+                  message: "Message sent!",
+                },
               ],
-              showModal: true
+              showModal: true,
             });
             this.resetForm();
           } else if (response.data.msg === "fail") {
@@ -69,14 +70,14 @@ class Contact extends Component {
               modalMessages: [
                 {
                   cat: "",
-                  message: "Message failed to send."
-                }
+                  message: "Message failed to send.",
+                },
               ],
-              showModal: true
+              showModal: true,
             });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log("contact error: ");
           console.log(err);
         });
@@ -90,7 +91,7 @@ class Contact extends Component {
       <Wrapper>
         <div className="container">
           <div className="row mx-auto">
-            <div className="col-md-9 mx-auto">
+            <div className="col-md-9 mx-auto mt-2">
               <form
                 id="contact-form"
                 onSubmit={this.handleSubmit}
@@ -101,27 +102,27 @@ class Contact extends Component {
                     : "form-group mx-auto"
                 }
               >
-                <label>Name: </label>
+                <label className="mb-0">Name: </label>
                 <input
                   type="text"
                   name="name"
-                  className="form-control inputs"
+                  className="form-control inputs mb-3"
                   placeholder="Enter name"
                   required
                 />
-                <label>Email address: </label>
+                <label className="mb-0">Email address: </label>
                 <input
                   type="email"
                   name="email"
-                  className="form-control inputs"
+                  className="form-control inputs mb-3"
                   placeholder="Enter email"
                   required
                 />
-                <label>Questions/Comments: </label>
+                <label className="mb-0">Questions/Comments: </label>
                 <textarea
                   name="comments"
                   type="text"
-                  className="form-control inputs"
+                  className="form-control inputs mb-3"
                   rows="5"
                   placeholder="Questions/Comments/Requests"
                   required

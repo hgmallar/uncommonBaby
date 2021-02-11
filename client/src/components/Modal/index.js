@@ -11,7 +11,7 @@ class Modal extends Component {
 
   render() {
     const showHideStyle = this.props.show ? "block" : "none";
-    const gender = this.props.gender === "M" ? " - Male" : this.props.gender === "F" ? " - Female" : " - Both";
+    const gender = this.props.gender === "M" ? " - Male" : this.props.gender === "F" ? " - Female" : "";
     const heading = this.props.title
       ? this.props.title
       : `${this.props.name}${gender}`;

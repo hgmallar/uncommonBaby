@@ -37,13 +37,9 @@ input[type="checkbox"]:checked:after {
   width: 100%;
 }
 
-.red-border {
-  border: 2px solid rgb(204, 15, 103) !important;
-}
-
 .red-text {
   font-weight: bold;
-  color: rgb(204, 15, 103);
+  color: rgb(150, 0, 71);
 }
 
 .no-border {
@@ -86,6 +82,10 @@ body {
   color: #547980 !important;
 }
 
+.btn:hover {
+  border-width: 2px;
+}
+
 .letter-input {
   width: 85px !important;
   margin: 0 !important;
@@ -94,7 +94,8 @@ body {
   color: #547980 !important;
 }
 
-.letter-input:focus {
+.letter-input:focus,
+.inputs:focus {
   border: 3px solid #9de0ad !important;
   box-shadow: none;
 }
@@ -149,7 +150,8 @@ a:active {
 .input-range {
   min-width: 200px !important;
   margin-left: 10px !important;
-  width: 85% !important;
+  margin-right: 10px !important;
+  width: calc(95% - 50px) !important;
 }
 
 .link-button {
@@ -168,8 +170,8 @@ a:active {
 }
 
 .number-form {
-  width: 90%;
-  max-width: 90%;
+  width: 95%;
+  max-width: 95%;
 }
 
 .form-inline {
@@ -324,8 +326,20 @@ li {
   width: calc(100% - 20px);
 }
 
+.red-border {
+  border: 2px solid rgb(150, 0, 71) !important;
+}
+
 .displayErrors input:invalid {
-  border: 2px solid rgb(204, 15, 103);
+  border: 2px solid rgb(150, 0, 71);
+}
+
+.displayErrors textarea:invalid {
+  border: 2px solid rgb(150, 0, 71);
+}
+
+.name:hover {
+  text-decoration: underline;
 }
 
 @media only screen and (min-width: 0px) and (max-width: 600px) {

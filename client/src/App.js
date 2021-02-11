@@ -47,7 +47,9 @@ class App extends Component {
             <Route
               path="/:savedQuery"
               render={(props) => (
-                <Main {...props} nameReq={true} countReq={true} />
+                <Main
+                  {...props}
+                />
               )}
             />
             <Route component={ErrorPage} />
