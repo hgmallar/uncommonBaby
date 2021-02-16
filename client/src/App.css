@@ -226,11 +226,21 @@ li {
   border-color: #e5fcc2;
 }
 
-.submit:hover,
-.submit:visited,
-.submit:active,
-.submit:link,
-.submit:focus {
+.btn-width {
+  width: 120px;
+}
+
+.save {
+  background-color: #e5fcc2;
+  opacity: 0.8;
+  border-color: #e5fcc2;
+}
+
+.submit:hover, .save:hover, 
+.submit:visited, .save:visited, 
+.submit:active, .save:active, 
+.submit:link, .save:link,
+.submit:focus, .save:focus {
   background-color: #e5fcc2 !important;
   border-color: #e5fcc2 !important;
 }

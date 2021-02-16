@@ -48,7 +48,7 @@ class App extends Component {
               path="/:savedQuery"
               render={(props) => (
                 <Main
-                  {...props}
+                  {...props} nameReq={true} countReq={true}
                 />
               )}
             />

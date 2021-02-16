@@ -5,6 +5,7 @@ import LetterForm from "../components/LetterForm";
 import NumberForm from "../components/NumberForm";
 import Modal from "../components/Modal";
 import API from "../utils/API";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import myData from "../components/NumberForm/max_values_full.json";
 
@@ -150,7 +151,9 @@ class App extends Component {
     let letterDropdownClass = [];
     let letterError = [];
     const { savedQuery } = this.props.match.params;
+    console.log(savedQuery);
     let savedQueryEncode = encodeURI(savedQuery);
+    console.log(savedQueryEncode);
     let savedQueryDecode = decodeURI(savedQueryEncode);
     if (savedQuery) {
       let fields = savedQueryDecode.split("&");
@@ -236,6 +239,7 @@ class App extends Component {
         sort: sortDD,
         sortExtra: sortDisp,
         sortDisplay: display,
+        query: `https://www.unpopularbaby.com/${savedQueryEncode}`,
       });
       let query = {
         letters: lettersArr,
@@ -674,7 +678,9 @@ class App extends Component {
       "&" +
       JSON.stringify(sortQuery);
     queryLink = encodeURI(queryLink);
+    console.log(queryLink);
     let path = "/" + encodeURI(queryLink);
+    console.log(path);
     let count = this.props.location.state
       ? this.props.location.state.countReq
       : this.props.countReq;
@@ -696,6 +702,7 @@ class App extends Component {
             results: res.data.rows,
             isLoading: true,
             seed: query.seed,
+            query: `https://www.unpopularbaby.com/${queryLink}`,
           });
         } else {
           this.setState({
@@ -703,6 +710,7 @@ class App extends Component {
             results: res.data.rows,
             isLoading: false,
             seed: query.seed,
+            query: `https://www.unpopularbaby.com/${queryLink}`,
           });
         }
       })
@@ -1040,13 +1048,24 @@ class App extends Component {
         <div className="row justify-content-center col-12 mx-auto my-2">
           <button
             type="button"
-            className="btn btn-secondary px-1 submit mb-2"
+            className="btn btn-secondary px-1 submit btn-width mb-2"
             onClick={(e) => this.checkErroroneousInputs()}
           >
-            Submit
+            SUBMIT
           </button>
           {this.state.totalCount >= 0 && (
-            <h4 className="ml-2 text-white mb-2">{this.state.totalCount}</h4>
+            <>
+              <h4 className="ml-2 text-white mb-2">{this.state.totalCount}</h4>
+              <CopyToClipboard text={this.state.query}>
+                <button
+                  type="button"
+                  className="btn btn-secondary px-1 save btn-width mb-2"
+                  onClick={(e) => this.checkErroroneousInputs()}
+                >
+                  Save Search
+                </button>
+              </CopyToClipboard>
+            </>
           )}
           {this.state.totalCount > 1 && (
             <form className="form-inline mb-2">
@@ -1065,8 +1084,9 @@ class App extends Component {
                   className="dropdown-menu"
                   aria-labelledby="dropdownMenuButton"
                 >
-                  {this.state.sortOptsArray.map((item) => (
+                  {this.state.sortOptsArray.map((item, index) => (
                     <button
+                      key={index}
                       type="button"
                       className="dropdown-item"
                       href="#"
@@ -1094,8 +1114,9 @@ class App extends Component {
                     className="dropdown-menu"
                     aria-labelledby="dropdownMenuButton"
                   >
-                    {this.state.sortArray.map((item) => (
+                    {this.state.sortArray.map((item, index) => (
                       <button
+                        key={index}
                         type="button"
                         className="dropdown-item"
                         href="#"

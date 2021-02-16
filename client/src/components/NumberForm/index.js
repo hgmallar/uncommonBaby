@@ -284,14 +284,6 @@ class NumberForm extends Component {
   };
 
   hideForm = () => {
-    let gender = "B";
-    if (this.props.male && !this.props.female) {
-      gender = "M";
-    } else if (!this.props.male && this.props.female) {
-      gender = "F";
-    } else if (this.props.male && this.props.female) {
-      gender = "MF";
-    }
     this.props.removeNumberRow(this.props.nth);
   };
 
@@ -302,14 +294,6 @@ class NumberForm extends Component {
   };
 
   render() {
-    let gender = "B";
-    if (this.props.male && !this.props.female) {
-      gender = "M";
-    } else if (!this.props.male && this.props.female) {
-      gender = "F";
-    } else if (this.props.male && this.props.female) {
-      gender = "MF";
-    }
     return (
       <div className="max-width">
         <div className="row justify-content-center mx-auto">
@@ -329,8 +313,9 @@ class NumberForm extends Component {
                 className="dropdown-menu"
                 aria-labelledby="dropdownMenuButton"
               >
-                {this.state.decadeArray.map((item) => (
+                {this.state.decadeArray.map((item, index) => (
                   <button
+                    key={index}
                     type="button"
                     className="dropdown-item"
                     href="#"
@@ -359,8 +344,9 @@ class NumberForm extends Component {
                 className="dropdown-menu"
                 aria-labelledby="dropdownMenuButton"
               >
-                {this.state.optionsArray.map((item) => (
+                {this.state.optionsArray.map((item, index) => (
                   <button
+                    key={index}
                     type="button"
                     className="dropdown-item"
                     href="#"
