@@ -1060,7 +1060,6 @@ class App extends Component {
                 <button
                   type="button"
                   className="btn btn-secondary px-1 save btn-width mb-2"
-                  onClick={(e) => this.checkErroroneousInputs()}
                 >
                   Save Search
                 </button>
