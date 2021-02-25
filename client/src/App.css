@@ -8,6 +8,18 @@
   left: 0;
 }
 
+.player-wrapper {
+  position: relative;
+  max-width: 50%;
+  padding-top: 28.125% /* Player ratio: 100 / (1280 / 720) */
+}
+
+.react-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 input[type="checkbox"] {
   position: relative;
   cursor: pointer;
