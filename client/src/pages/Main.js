@@ -881,6 +881,34 @@ class App extends Component {
     });
   };
 
+  updateMale = async () => {
+    await this.setState({ male: !this.state.male });
+    this.checkErroroneousInputs();
+  };
+
+  updateFemale = async () => {
+    await this.setState({ female: !this.state.female });
+    this.checkErroroneousInputs();
+  };
+
+  updateMinLength = async (evt) => {
+    if (evt.target.value && evt.target.value <= this.state.maxLength) {
+      await this.setState({
+        minLength: parseInt(evt.target.value),
+      });
+      this.checkErroroneousInputs();
+    }
+  };
+
+  updateMaxLength = async (evt) => {
+    if (evt.target.value && evt.target.value >= this.state.minLength) {
+      await this.setState({
+        maxLength: parseInt(evt.target.value),
+      });
+      this.checkErroroneousInputs();
+    }
+  };
+
   render() {
     const countReq = this.props.location.state
       ? this.props.location.state.countReq
@@ -899,9 +927,7 @@ class App extends Component {
                     <input
                       className="my-0 align-self-center"
                       type="checkbox"
-                      onChange={(e) =>
-                        this.setState({ male: !this.state.male })
-                      }
+                      onChange={() => this.updateMale()}
                       checked={this.state.male}
                     />
                   </div>
@@ -910,9 +936,7 @@ class App extends Component {
                     <input
                       className="my-0 align-self-center"
                       type="checkbox"
-                      onChange={(e) =>
-                        this.setState({ female: !this.state.female })
-                      }
+                      onChange={() => this.updateFemale()}
                       checked={this.state.female}
                     />
                   </div>
@@ -938,16 +962,7 @@ class App extends Component {
                       max={this.state.maxLength}
                       value={this.state.minLength}
                       placeholder={this.state.minLength}
-                      onChange={(e) => {
-                        if (
-                          e.target.value &&
-                          e.target.value <= this.state.maxLength
-                        ) {
-                          this.setState({
-                            minLength: parseInt(e.target.value),
-                          });
-                        }
-                      }}
+                      onChange={(e) => this.updateMinLength(e)}
                     />
                   </div>
                   <div className="form-inline ml-1 my-2 mr-2">
@@ -959,16 +974,7 @@ class App extends Component {
                       max="15"
                       value={this.state.maxLength}
                       placeholder={this.state.maxLength}
-                      onChange={(e) => {
-                        if (
-                          e.target.value &&
-                          e.target.value >= this.state.minLength
-                        ) {
-                          this.setState({
-                            maxLength: parseInt(e.target.value),
-                          });
-                        }
-                      }}
+                      onChange={(e) => this.updateMaxLength(e)}
                     />
                   </div>
                   <div className="mx-0 small align-self-center">
@@ -1009,6 +1015,7 @@ class App extends Component {
                   length={this.state.letterInputs.length}
                   clearBorders={this.clearLetterBorders}
                   marg={index ? 20 : 0}
+                  checkErroroneousInputs={this.checkErroroneousInputs}
                 />
               ))}
               <button
@@ -1036,6 +1043,7 @@ class App extends Component {
                   updateModal={this.updateModal}
                   length={this.state.numberInputs.length}
                   marg={index ? 15 : 0}
+                  checkErroroneousInputs={this.checkErroroneousInputs}
                 />
               ))}
               <button

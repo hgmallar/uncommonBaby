@@ -212,8 +212,9 @@ class NumberForm extends Component {
     }
   };
 
-  updateNumericalOptions = (input, input2) => {
-    this.updateNumbers(input, input2, this.props.male, this.props.female);
+  updateNumericalOptions = async (input, input2) => {
+    await this.updateNumbers(input, input2, this.props.male, this.props.female);
+    this.props.checkErroroneousInputs();
   };
 
   checkSliderMinMax = (min, max, input, startMin, startMax, outputVal) => {
@@ -268,7 +269,7 @@ class NumberForm extends Component {
     }
   };
 
-  updateYearOptions = (input1, input2) => {
+  updateYearOptions = async (input1, input2) => {
     let outputVal = {};
     if (this.state.numericalOptions !== "Numerical Options") {
       let query = this.state.numericalOptions + "_" + input2;
@@ -276,15 +277,18 @@ class NumberForm extends Component {
         [query]: { $between: [this.state.value.min, this.state.value.max] },
       };
     }
-    this.setState({ years: input1, yearCol: input2, output: outputVal });
-    this.props.appendOutput(this.props.nth, outputVal);
+    await this.setState({ years: input1, yearCol: input2, output: outputVal });
+    await this.props.appendOutput(this.props.nth, outputVal);
     if (this.state.numericalOptions !== "Numerical Options") {
       this.updateNumericalOptions(this.state.numericalOptions, input2);
+    } else {
+      this.props.checkErroroneousInputs();
     }
   };
 
-  hideForm = () => {
-    this.props.removeNumberRow(this.props.nth);
+  hideForm = async () => {
+    await this.props.removeNumberRow(this.props.nth);
+    this.props.checkErroroneousInputs();
   };
 
   getEndpoints = (key, gender) => {
@@ -379,6 +383,7 @@ class NumberForm extends Component {
                 this.setState({ value: value, output: outputVal });
                 this.props.appendOutput(this.props.nth, outputVal);
               }}
+              onChangeComplete={() => this.props.checkErroroneousInputs()}
             />
             <button
               type="button"

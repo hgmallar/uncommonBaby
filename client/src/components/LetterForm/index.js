@@ -36,7 +36,7 @@ class LetterForm extends Component {
     ],
   };
 
-  updateLetterOptions = (letterInput) => {
+  updateLetterOptions = async (letterInput) => {
     let output = "";
     if (letterInput === "Contains") {
       output = { $like: "%" + this.state.input + "%" };
@@ -51,15 +51,16 @@ class LetterForm extends Component {
     } else if (letterInput === "Does Not End With") {
       output = { $notlike: "!%" + this.state.input };
     }
-    this.setState({
+    await this.setState({
       letterOptions: letterInput,
       dropdown: letterInput,
       output: output,
     });
-    this.props.appendOutput(this.props.nth, output);
+    await this.props.appendOutput(this.props.nth, output);
+    this.props.checkErroroneousInputs();
   };
 
-  updateOutput = (evt) => {
+  updateOutput = async (evt) => {
     let input = evt.target.value;
     if (input === "Letter(s)") {
       input = "";
@@ -78,12 +79,14 @@ class LetterForm extends Component {
     } else if (this.state.dropdown === "Does Not End With") {
       output = { $notlike: "!%" + input };
     }
-    this.setState({ input: input, output: output });
-    this.props.appendOutput(this.props.nth, output);
+    await this.setState({ input: input, output: output });
+    await this.props.appendOutput(this.props.nth, output);
+    this.props.checkErroroneousInputs();
   };
 
-  hideForm = (e, r) => {
-    this.props.removeLetterRow(this.props.nth);
+  hideForm = async (e, r) => {
+    await this.props.removeLetterRow(this.props.nth);
+    this.props.checkErroroneousInputs();
   };
 
   componentDidUpdate = (prevProps) => {
