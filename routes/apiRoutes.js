@@ -7,8 +7,9 @@
 // Requiring our models
 var db = require("../models");
 
-var Sequelize = require("sequelize");
-const { and, or, like, notLike, between } = Sequelize.Op;
+const { Sequelize } = require("sequelize");
+
+const { Op } = require("sequelize");
 
 var nodemailer = require("nodemailer");
 
@@ -203,21 +204,21 @@ module.exports = function (app) {
         if (letterArr[i].includes("!")) {
           let newString = letterArr[i].replace("!", "");
           letters.push({
-            [notLike]: newString,
+            [Op.notLike]: newString,
           });
         } else {
-          letters.push({ [like]: letterArr[i] });
+          letters.push({ [Op.like]: letterArr[i] });
         }
       }
       let whereObj = {
         Name: {
-          [and]: letters,
+          [Op.and]: letters,
         },
         Gender: {
-          [or]: genderArr,
+          [Op.or]: genderArr,
         },
         where: {
-          [and]: [
+          [Op.and]: [
             Sequelize.where(
               Sequelize.fn("char_length", Sequelize.col("Name")),
               ">=",
@@ -238,7 +239,7 @@ module.exports = function (app) {
         for (let j = 0; j < value.length; j++) {
           value[j] = parseInt(value[j]);
         }
-        whereObj[key] = { [between]: value };
+        whereObj[key] = { [Op.between]: value };
       }
       db.Name.findAndCountAll({
         where: whereObj,
@@ -259,22 +260,22 @@ module.exports = function (app) {
     let letters = [];
     for (let i = 0; i < req.body.letters.length; i++) {
       if (req.body.letters[i].$like) {
-        letters.push({ [like]: req.body.letters[i].$like });
+        letters.push({ [Op.like]: req.body.letters[i].$like });
       } else {
         letters.push({
-          [notLike]: req.body.letters[i].$notlike.replace("!", ""),
+          [Op.notLike]: req.body.letters[i].$notlike.replace("!", ""),
         });
       }
     }
     let whereObj = {
       Name: {
-        [and]: letters,
+        [Op.and]: letters,
       },
       Gender: {
-        [or]: req.body.gender,
+        [Op.or]: req.body.gender,
       },
       where: {
-        [and]: [
+        [Op.and]: [
           Sequelize.where(
             Sequelize.fn("char_length", Sequelize.col("Name")),
             ">=",
@@ -292,7 +293,7 @@ module.exports = function (app) {
       let key = Object.keys(req.body.numbers[i])[0];
       let value = Object.values(req.body.numbers[i])[0];
       let secondval = Object.values(value)[0];
-      whereObj[key] = { [between]: secondval };
+      whereObj[key] = { [Op.between]: secondval };
     }
     let sort = req.body.sort;
     if (req.body.sort[0][0] === "RAND") {

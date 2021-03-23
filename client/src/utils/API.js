@@ -2,19 +2,19 @@ import axios from "axios";
 
 export default {
   findNames: function(query) {
-    console.log(`query1: ${query}`);
+    console.log(`findNames query: ${query}`);
     return axios.post("/names", query);
   },
   findName: function(query) {
-    console.log(`query: ${query}`);
+    console.log(`findName query: ${query}`);
     return axios.post("/name", query);
   },
   send: function(query) {
-    console.log("Sending" + query);
+    console.log("send" + query);
     return axios.post("/api/send", query);
   },
   getNames: function() {
-    console.log("HERE");
+    console.log("getNames query");
     return axios.get("/api/names");
   },
 };

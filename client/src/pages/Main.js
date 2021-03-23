@@ -151,9 +151,7 @@ class App extends Component {
     let letterDropdownClass = [];
     let letterError = [];
     const { savedQuery } = this.props.match.params;
-    console.log(savedQuery);
     let savedQueryEncode = encodeURI(savedQuery);
-    console.log(savedQueryEncode);
     let savedQueryDecode = decodeURI(savedQueryEncode);
     if (savedQuery) {
       let fields = savedQueryDecode.split("&");
@@ -678,9 +676,7 @@ class App extends Component {
       "&" +
       JSON.stringify(sortQuery);
     queryLink = encodeURI(queryLink);
-    console.log(queryLink);
     let path = "/" + encodeURI(queryLink);
-    console.log(path);
     let count = this.props.location.state
       ? this.props.location.state.countReq
       : this.props.countReq;

@@ -270,15 +270,7 @@ class NumberForm extends Component {
   };
 
   updateYearOptions = async (input1, input2) => {
-    let outputVal = {};
-    if (this.state.numericalOptions !== "Numerical Options") {
-      let query = this.state.numericalOptions + "_" + input2;
-      outputVal = {
-        [query]: { $between: [this.state.value.min, this.state.value.max] },
-      };
-    }
-    await this.setState({ years: input1, yearCol: input2, output: outputVal });
-    await this.props.appendOutput(this.props.nth, outputVal);
+    await this.setState({ years: input1, yearCol: input2 });
     if (this.state.numericalOptions !== "Numerical Options") {
       this.updateNumericalOptions(this.state.numericalOptions, input2);
     } else {
