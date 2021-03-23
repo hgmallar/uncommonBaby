@@ -786,16 +786,18 @@ class App extends Component {
     });
   };
 
-  updateDropdownOptions = (input) => {
-    this.setState({ sort: input });
+  updateDropdownOptions = async (input) => {
+    await this.setState({ sort: input });
+    this.checkErroroneousInputs();
   };
 
-  updateDropdownOptionsTwo = (input) => {
+  updateDropdownOptionsTwo = async (input) => {
     let display = "All Time";
     if (input !== "AllTime") {
       display = `${input.split("x")[0]}0s`;
     }
-    this.setState({ sortDisplay: display, sortExtra: input });
+    await this.setState({ sortDisplay: display, sortExtra: input });
+    this.checkErroroneousInputs();
   };
 
   nameClicked = (name, gender, evt) => {
